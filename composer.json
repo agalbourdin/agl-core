@@ -1,15 +1,14 @@
 {
-	"name"             : "agl/core",
-	"type"             : "framework",
+	"name"             : "agl/agl",
+	"type"             : "library",
 	"description"      : "AGL Core module and More container.",
 	"keywords"         : [ "agl", "framework" ],
 	"homepage"         : "http://www.agl.io/",
 	"license"          : "MIT",
-	"minimum-stability": "dev",
 	"require"          : {
 		"php": ">=5.3.0"
 	},
 	"suggest"          : {
-		"ext-apc": "Improve performance by caching config, blocks and views."
+		"ext-apc": "Improve performance by caching configuration values, blocks and views."
 	}
 }
