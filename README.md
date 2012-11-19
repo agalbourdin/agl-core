@@ -1,4 +1,6 @@
-core
-====
+AGL Core
+========
 
-*DEV* Core module for AGL.
+**DEV**
+
+AGL Core module and More container.
