@@ -112,7 +112,7 @@ class Controller
                     . \Agl::PHP_EXT;
 
         if (file_exists($viewPath)) {
-            $className = ucfirst($module) . ucfirst($view) . \Agl\Core\Mvc\View\ViewInterface::APP_VIEW_SUFFIX;
+            $className    = ucfirst($module) . ucfirst($view) . \Agl\Core\Mvc\View\ViewInterface::APP_VIEW_SUFFIX;
             $viewInstance = \Agl::getInstance($className);
         } else {
             $viewInstance = new \Agl\Core\Mvc\View\View();
@@ -148,15 +148,16 @@ class Controller
 			$cacheConfig = \Agl::app()->getConfig('@layout/modules/' . $module . '/' . $view . '/cache/' . $action);
 		}
 
-		$configCacheTtlName     = \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TTL_NAME;
-		$configCacheTypeName    = \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_NAME;
+		if (is_array($cacheConfig)) {
+			$configCacheTtlName  = \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TTL_NAME;
+			$configCacheTypeName = \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_NAME;
 
-		if ($cacheConfig and is_array($cacheConfig)) {
 			$ttl = (isset($cacheConfig[$configCacheTtlName]) and ctype_digit($cacheConfig[$configCacheTtlName])) ? (int)$cacheConfig[$configCacheTtlName] : 0;
 
 			$type = (isset($cacheConfig[$configCacheTypeName])) ? $cacheConfig[$configCacheTypeName] : \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_STATIC;
 
 			$configKeySeparator = \Agl\Core\Cache\File\FileInterface::CACHE_FILE_SEPARATOR;
+
 			$configKey = \Agl\Core\Mvc\View\ViewInterface::CACHE_FILE_PREFIX . $module . $configKeySeparator . $view . $configKeySeparator . $action;
 
 			if (\Agl::isModuleLoaded(\Agl::AGL_MORE_POOL . '/locale/locale')) {
@@ -165,6 +166,9 @@ class Controller
 
 			if ($type == \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
 				$configKey .= $configKeySeparator . \Agl\Core\Data\String::rewrite($request->getReq());
+				if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+					$configKey .= $configKeySeparator . 'ajax';
+				}
 			}
 
 			if (\Agl\Core\Cache\Apc\Apc::isApcEnabled()) {

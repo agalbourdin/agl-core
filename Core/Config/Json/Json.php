@@ -2,10 +2,10 @@
 namespace Agl\Core\Config\Json;
 
 /**
- * Access the INI configuration files.
+ * Access the JSON configuration files.
  *
  * @category Agl_Core
- * @package Agl_Core_Config_Ini
+ * @package Agl_Core_Config_Json
  * @version 0.1.0
  */
 
@@ -175,7 +175,7 @@ class Json
     }
 
     /**
-     * Retrieve a value in the Agl INI configuration file.
+     * Retrieve a value in the Agl JSON configuration file.
      *
      * @param string $pPath The configuration path to retrieve
      * @param array $pForceGlobalArray Return the results in a multidimensional

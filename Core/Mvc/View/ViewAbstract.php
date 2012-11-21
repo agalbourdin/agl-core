@@ -198,8 +198,8 @@ abstract class ViewAbstract
 		$cacheEnabled = \Agl\Core\Mvc\Block\BlockAbstract::isCacheEnabled($blockConfig);
 
 		if ($cacheEnabled) {
-			$apcEnabled   = \Agl\Core\Cache\Apc\Apc::isApcEnabled();
-			$cache = \Agl\Core\Mvc\Block\BlockAbstract::getCacheInstance($blockConfig);
+			$apcEnabled = \Agl\Core\Cache\Apc\Apc::isApcEnabled();
+			$cache      = \Agl\Core\Mvc\Block\BlockAbstract::getCacheInstance($blockConfig);
 
 			if ($apcEnabled) {
 				$content = \Agl\Core\Cache\Apc\Apc::get($cache[0]);

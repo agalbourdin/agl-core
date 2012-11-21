@@ -106,7 +106,7 @@ class Loader
                          . $fileName
                          . \Agl::PHP_EXT;
 
-            if (file_exists($modelPath)) {
+            if (is_readable($modelPath)) {
                 return self::getInstance($className, array($pModel, $pFields));
             } else {
                 return new \Agl\Core\Mvc\Model\Model($pModel, $pFields);
@@ -121,7 +121,6 @@ class Loader
      *
      * @param string $pClass
      * @return mixed
-     * @todo Cache
      */
     public static function helper($pClass)
     {
@@ -144,7 +143,7 @@ class Loader
                          . ucfirst($classArr[1])
                          . \Agl::PHP_EXT;
 
-            if (file_exists($helperPath)) {
+            if (is_readable($helperPath)) {
                 return self::getSingleton($className);
             } else {
                 throw new \Agl\Exception("Helper does not exists or isn't readable ('$pClass')");

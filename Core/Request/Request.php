@@ -12,6 +12,12 @@ namespace Agl\Core\Request;
 class Request
 {
 	/**
+	 * HTTP Status Codes.
+	 */
+	const HTTP_CODE_REDIRECT_PERMANENT   = 301;
+	const HTTP_CODE_REDIRECT_TEMPORARILY = 302;
+
+	/**
 	 * Default module.
 	 */
 	const DEFAULT_MODULE = 'home';
@@ -290,9 +296,9 @@ class Request
 	 *
 	 * @param string $pPath
 	 * @param array $pParams
-	 * @param int $pType Type of redirection (301, 302...)
+	 * @param int $pType Type of redirection
 	 */
-	public function redirect($pPath = '', array $pParams = array(), $pType = 302)
+	public function redirect($pPath = '', array $pParams = array(), $pType = self::HTTP_CODE_REDIRECT_TEMPORARILY)
 	{
 		\Agl::validateParams(array(
 			'StrictString' => $pPath,
