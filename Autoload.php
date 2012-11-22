@@ -65,16 +65,7 @@ class Autoload
             '/'
         );
 
-        $path = str_replace($toReplace, $replaceBy, $pClassName);
-        if (strpos($path, \Agl::AGL_CORE_DIR) === 0) {
-            $path = \AGL::AGL_COMPOSER_CORE_PACKAGE
-                    . DS
-                    . $path;
-        } else if (preg_match('#^' .  \Agl::AGL_MORE_DIR . '/([a-zA-Z0-9]+)(.*)$#', $path, $matches)) {
-            $path = sprintf(\AGL::AGL_COMPOSER_MORE_PACKAGE, strtolower($matches[1])) . $matches[2];
-        }
-
-        return $path;
+        return str_replace($toReplace, $replaceBy, $pClassName);
     }
 
     /**

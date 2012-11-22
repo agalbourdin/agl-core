@@ -27,9 +27,6 @@ final class Agl
     /**
      * Available protocols and dirs.
      */
-    const AGL_COMPOSER_CORE_PACKAGE = 'core';
-    const AGL_COMPOSER_MORE_PACKAGE = 'more-%s';
-
     const AGL_CORE_DIR              = 'Core';
     const AGL_MORE_DIR              = 'More';
     const AGL_LIB_DIR               = 'Lib';
