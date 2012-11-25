@@ -21,11 +21,8 @@ abstract class BlockAbstract
 	/**
      * Create and get an instance of Raw Cache.
      *
-     * @param string $pBlock Block identifier
      * @param array $pBlockConfig Block configuration
      * @return Raw|array
-     * @todo Fusion/uniform with setCacheInstance method of
-     * \Agl\Core\Mvc\Controller\Controller
      */
     public static function getCacheInstance(array $pBlockConfig)
     {
@@ -47,8 +44,8 @@ abstract class BlockAbstract
 
 		if ($type == \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
 			$configKey .= $configKeySeparator . \Agl\Core\Data\String::rewrite($request->getReq());
-			if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-				$configKey .= $configKeySeparator . 'ajax';
+			if ($request->isAjax()) {
+				$configKey .= $configKeySeparator . \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_KEY_AJAX;
 			}
 		}
 

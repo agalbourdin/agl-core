@@ -82,8 +82,6 @@ class Router
 		if (! method_exists($this->_controller, $this->_actionMethod)) {
 			throw new Exception("Invalid action '$this->_actionMethod' requested to controller");
 		}
-
-		$this->_controller->setCacheInstance();
 	}
 
 	/**

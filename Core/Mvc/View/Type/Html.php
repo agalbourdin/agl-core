@@ -49,6 +49,21 @@ class Html
 	const FILE_EXT = '.phtml';
 
 	/**
+     * CSS file extension.
+     */
+    const CSS_EXT = '.css';
+
+    /**
+     * CSS file extension.
+     */
+    const LESSCSS_EXT = '.less';
+
+    /**
+     * JS file extension.
+     */
+    const JS_EXT = '.js';
+
+	/**
 	 * The list of the CSS files to include into the HTML page.
 	 *
 	 * @var array
@@ -151,7 +166,12 @@ class Html
 			} else {
 				$filePath = $css;
 			}
-			$cssTags[] = '<link href="' . $filePath . '" rel="stylesheet" type="text/css" media="all">';
+
+			if (strpos($filePath, self::LESSCSS_EXT) === false) {
+				$cssTags[] = '<link href="' . $filePath . '" rel="stylesheet" type="text/css">';
+			} else {
+				$cssTags[] = '<link href="' . $filePath . '" rel="stylesheet/less" type="text/css">';
+			}
 		}
 
 		$pBuffer = str_replace(self::getCssMarker(), implode("\n", $cssTags) . "\n", $pBuffer);

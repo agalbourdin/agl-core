@@ -15,7 +15,7 @@ class Json
     /**
      * Global configuration file
      */
-    const MAIN_CONFIG_FILE = 'config.json';
+    const MAIN_CONFIG_FILE = 'config';
 
     /**
      * The XML extension used by the configuration files.
@@ -69,6 +69,13 @@ class Json
     private $_apcEnabled = NULL;
 
     /**
+     * Environment prefix to use to load configuration files.
+     *
+     * @var string
+     */
+    private $_envPrefix = '';
+
+    /**
      * Create / Get an instance of Array Cache.
      *
      * @return Arr
@@ -87,6 +94,11 @@ class Json
      */
     public function __construct()
     {
+        $envPrefixName = \Agl\Core\Config\ConfigInterface::ENV_PREFIX_NAME;
+        if (isset($_SERVER[$envPrefixName])) {
+            $this->_envPrefix = $_SERVER[$envPrefixName] . \Agl\Core\Config\ConfigInterface::ENV_PREFIX_SEPARATOR;
+        }
+
         $this->_cacheEnabled = \Agl::app()->isCacheEnabled();
 
         if ($this->_cacheEnabled) {
@@ -122,10 +134,13 @@ class Json
         if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . \Agl::AGL_CORE_DIR . '|' . \Agl::AGL_MORE_DIR . ')/([a-z0-9]+)\]#i', $path, $matches)) {
             $file .= strtolower($matches[1])
                     . DS
+                    . $this->_envPrefix
                     . $matches[2]
                     . self::CONFIG_EXT;
         } else {
-            $file .= self::MAIN_CONFIG_FILE;
+            $file .= $this->_envPrefix
+                    . self::MAIN_CONFIG_FILE
+                    . self::CONFIG_EXT;
         }
 
         if (! isset($this->_instance[$file])) {

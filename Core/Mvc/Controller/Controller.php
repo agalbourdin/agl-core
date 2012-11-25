@@ -32,30 +32,25 @@ class Controller
 	const APP_PHP_CONTROLLER_DIR = 'Controller';
 
 	/**
-	 * The cache instance if required.
-	 *
-	 * @var null|Raw
-	 */
-	protected $_cacheInstance = NULL;
-
-	/**
 	 * Render the view page.
 	 *
 	 * @return Controller
 	 */
 	protected function _renderView()
 	{
-		if ($this->_cacheInstance) {
+		$cacheInstance = $this->getCacheInstance();
+
+		if ($cacheInstance) {
 			$apcEnabled = \Agl\Core\Cache\Apc\Apc::isApcEnabled();
 
 			if ($apcEnabled) {
-				$content = \Agl\Core\Cache\Apc\Apc::get($this->_cacheInstance[0]);
+				$content = \Agl\Core\Cache\Apc\Apc::get($cacheInstance[0]);
 	            if ($content !== false) {
 	            	echo $content;
 	                return $this;
 	            }
 			} else {
-	            $content = $this->_cacheInstance->getContent();
+	            $content = $cacheInstance->getContent();
 	            if ($content) {
 	                echo $content;
 	                return $this;
@@ -65,7 +60,7 @@ class Controller
 
         $viewModel = $this->_setView();
 
-        if ($this->_cacheInstance) {
+        if ($cacheInstance) {
         	ob_start();
 		}
 
@@ -73,13 +68,13 @@ class Controller
 			->startBuffer()
 			->render();
 
-		if ($this->_cacheInstance) {
+		if ($cacheInstance) {
         	$content = ob_get_clean();
 
         	if ($apcEnabled) {
-        		\Agl\Core\Cache\Apc\Apc::set($this->_cacheInstance[0], $content, $this->_cacheInstance[1]);
+        		\Agl\Core\Cache\Apc\Apc::set($cacheInstance[0], $content, $cacheInstance[1]);
         	} else {
-        		$this->_cacheInstance
+        		$cacheInstance
 	                ->setContent($content)
 	                ->save();
         	}
@@ -130,12 +125,12 @@ class Controller
 	 * Tha cache key is composed of the module, the view and the actions names,
 	 * and of the locale code and the request string if required.
 	 *
-	 * @return ViewAbstract
+	 * @return null|Raw|array
 	 */
-	public function setCacheInstance()
+	public function getCacheInstance()
 	{
 		if (! \Agl::app()->isCacheEnabled()) {
-			return $this;
+			return NULL;
 		}
 
 		$request     = \Agl::getRequest();
@@ -166,19 +161,19 @@ class Controller
 
 			if ($type == \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
 				$configKey .= $configKeySeparator . \Agl\Core\Data\String::rewrite($request->getReq());
-				if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-					$configKey .= $configKeySeparator . 'ajax';
+				if ($request->isAjax()) {
+					$configKey .= $configKeySeparator . \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_KEY_AJAX;
 				}
 			}
 
 			if (\Agl\Core\Cache\Apc\Apc::isApcEnabled()) {
-				$this->_cacheInstance = array($configKey, $ttl);
+				return array($configKey, $ttl);
 			} else {
-				$this->_cacheInstance = new \Agl\Core\Cache\File\Format\Raw($configKey, $ttl);
+				return new \Agl\Core\Cache\File\Format\Raw($configKey, $ttl);
 			}
 		}
 
-		return $this;
+		return NULL;
 	}
 
 	/**

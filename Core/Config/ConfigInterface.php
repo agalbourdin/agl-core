@@ -24,6 +24,17 @@ interface ConfigInterface
     const CONFIG_CACHE_TYPE_STATIC  = 'static';
     const CONFIG_CACHE_TYPE_DYNAMIC = 'dynamic';
 
+    /**
+     * Environment prefix name in the $_SERVER array (optional).
+     */
+    const ENV_PREFIX_NAME           = 'AGL_ENV';
+    const ENV_PREFIX_SEPARATOR      = '_';
+
+    /**
+     * Ajax tag for config keys.
+     */
+    const CONFIG_CACHE_KEY_AJAX     = 'ajax';
+
     public function __construct();
     public static function getCacheSingleton();
     public function getConfig($pPath);

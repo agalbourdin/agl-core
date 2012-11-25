@@ -308,4 +308,14 @@ class Request
 		header('Location: ' . \Agl::getUrl($pPath, $pParams), true, $pType);
 		exit;
 	}
+
+	/**
+	 * Indicate if a request was made by Ajax.
+	 *
+	 * @return bool
+	 */
+	public function isAjax()
+	{
+		return (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) ? true : false;
+	}
 }
