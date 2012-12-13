@@ -3,7 +3,7 @@
  * Checking the PHP version.
  */
 if (version_compare(phpversion(), '5.3.0', '<')) {
-    echo 'Invalid PHP Version.';
+    echo 'Invalid PHP Version (' . phpversion() . ' < 5.3.0)';
     exit;
 }
 
@@ -22,9 +22,9 @@ umask(0);
 /**
  * Require the main AGL class.
  */
-require('Agl.php');
+require(__DIR__ . DS . 'Agl.php');
 
 /**
- * Create an alias for the main class.
+ * Run AGL.
  */
-class_alias('Agl\Agl', 'Agl');
+\Agl\Agl::run(AGL_CACHE_ENABLED, AGL_DEBUG_MODE);

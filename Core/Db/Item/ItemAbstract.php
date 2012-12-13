@@ -82,7 +82,11 @@ abstract class ItemAbstract
             if (isset($matches[1]) and is_string($matches[1])
                 and ! empty($matches[1]) and isset($pArgs[0])) {
                 $attribute = \Agl\Core\Data\String::fromCamelCase($matches[1]);
-                return $this->_loadByAttribute($attribute, $pArgs[0]);
+                if (! isset($pArgs[1])) {
+                    return $this->_loadByAttribute($attribute, $pArgs[0]);
+                }
+
+                return $this->_loadByAttribute($attribute, $pArgs[0], $pArgs[1]);
             }
         }
 
@@ -184,11 +188,16 @@ abstract class ItemAbstract
      *
      * @param string $pAttribute
      * @param mixed $pValue
+     * @param null|array $pOrder Order the select query
      * @return ItemAbstract
      */
-    protected function _loadByAttribute($pAttribute, $pValue)
+    protected function _loadByAttribute($pAttribute, $pValue, $pOrder = NULL)
     {
         $select = new \Agl\Core\Db\Query\Select\Select($this->_dbContainer);
+
+        if ($pOrder !== NULL) {
+            $select->addOrder($pOrder);
+        }
 
         $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
         $conditions->add(
@@ -248,43 +257,36 @@ abstract class ItemAbstract
             $id = $pId;
         }
 
-        $select = new \Agl\Core\Db\Query\Select\Select($this->_dbContainer);
-
-        $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
-        $conditions->add(
-            \Agl\Core\Db\Item\ItemInterface::IDFIELD,
-            $conditions::EQUAL,
-            $id->getOrig()
-        );
-
-        $select->loadConditions($conditions);
-
-        $select->findOne();
-        if ($select->count()) {
-            $fields            = $select->fetch(0);
-            $this->_fields     = $fields;
-            $this->_origFields = $fields;
-            $this->setId($id);
-        }
-
-        return $this;
+        return $this->_loadByAttribute(\Agl\Core\Db\Item\ItemInterface::IDFIELD, $id->getOrig());
     }
 
     /**
      * Load an item with conditions filtering.
      *
      * @param Conditions $pConditions
+     * @param null|array $pOrder Order the select query
      * @return type
      */
-    /*public function load(\Agl\Core\Db\Query\Conditions\Conditions $pConditions)
+    public function load(\Agl\Core\Db\Query\Conditions\Conditions $pConditions, $pOrder = NULL)
     {
         $select = new \Agl\Core\Db\Query\Select\Select($this->_dbContainer);
 
-        $select->loadConditions($pConditions);
-        $result = $select->findOne();
+        if ($pOrder !== NULL) {
+            $select->addOrder($pOrder);
+        }
 
-        return $result;
-    }*/
+        $select->loadConditions($pConditions);
+
+        $select->findOne();
+        if ($select->count()) {
+            $fields            = $select->fetch(0);
+            $this->_fields     = $fields;
+            $this->_origFields = $fields;
+            $this->setId($this->_fields[$this->getIdField()]);
+        }
+
+        return $this;
+    }
 
     /**
      * Set the Item ID.
@@ -295,7 +297,13 @@ abstract class ItemAbstract
     public function setId($pValue)
     {
         $idField = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . \Agl\Core\Db\Item\ItemInterface::IDFIELD;
-        $id = new \Agl\Core\Db\Id\Id($pValue);
+
+        if (! $pValue instanceof \Agl\Core\Db\Id\Id) {
+            $id = new \Agl\Core\Db\Id\Id($pValue);
+        } else {
+            $id = $pValue;
+        }
+
         $this->_fields[$idField] = $id;
         return $this;
     }

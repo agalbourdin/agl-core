@@ -43,18 +43,6 @@ abstract class UpdateAbstract
     }
 
     /**
-     * Load conditions to filter the query (additionnally to the item ID).
-     *
-     * @param Conditions $pConditions
-     * @return UpdateAbstract
-     */
-    public function loadConditions(\Agl\Core\Db\Query\Conditions\Conditions $pConditions)
-    {
-        $this->_conditions = $pConditions;
-        return $this;
-    }
-
-    /**
      * Return an array of the fields to update (compared to origFields).
      *
      * @return array
@@ -92,5 +80,17 @@ abstract class UpdateAbstract
         }
 
         return $toDelete;
+    }
+
+    /**
+     * Load conditions to filter the query (additionnally to the item ID).
+     *
+     * @param Conditions $pConditions
+     * @return UpdateAbstract
+     */
+    public function loadConditions(\Agl\Core\Db\Query\Conditions\Conditions $pConditions)
+    {
+        $this->_conditions = $pConditions;
+        return $this;
     }
 }

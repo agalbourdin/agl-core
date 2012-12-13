@@ -11,6 +11,11 @@ namespace Agl\Core\Db\Query\Select;
 
 interface SelectInterface
 {
+    /**
+     * Order RANDOM keyword.
+     */
+    const ORDER_RAND = 'RAND';
+
     public function __construct($pDbContainer);
     public function addFields(array $pFields);
     public function addOrder(array $pFields);

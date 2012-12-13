@@ -115,7 +115,7 @@ class Controller
 
         $viewInstance->setFile($module . DS . $view);
 
-        \Agl::register('view', $viewInstance);
+        \Agl\Core\Registry\Registry::set('view', $viewInstance);
 
         return $viewInstance;
 	}

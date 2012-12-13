@@ -77,7 +77,7 @@ class Request
 	public function __construct($pRequestUri)
 	{
 		if (! $pRequestUri) {
-			throw new \Agl\Exception('Request URI is not available');
+			return $this;
 		}
 
 		$this->_requestUri = $pRequestUri;

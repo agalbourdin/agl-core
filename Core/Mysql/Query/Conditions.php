@@ -30,12 +30,6 @@ class Conditions
     const INSET    = 'FIND_IN_SET(%s, %s)';
 
     /**
-     * Accepted group types.
-     */
-    const TYPE_AND = 'AND';
-    const TYPE_OR  = 'OR';
-
-    /**
      * Prepare the conditions for PDO.
      *
      * @param string $pField

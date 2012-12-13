@@ -4,10 +4,11 @@ namespace Agl;
 /**
  * Include the required application class and initialize the Autoload.
  */
-require('Autoload.php');
+
+require(__DIR__ . DS . 'Autoload.php');
 new Autoload();
 
-require('Exception.php');
+require(__DIR__ . DS . 'Exception.php');
 
 /**
  * Mother application class.
@@ -106,7 +107,6 @@ final class Agl
     {
         if (self::$_instance === NULL) {
             self::$_instance = new self($pCache, $pDebug);
-            //self::$_instance->_init();
         } else {
             throw new Exception("The application has already been initialized - use app() to get access to it");
         }
@@ -129,25 +129,13 @@ final class Agl
     }
 
     /**
-     * Call the validation class to validate an associative array of types and
-     * values.
-     *
-     * @param array $pParams
-     * @return bool
-     */
-    public static function validate(array $pParams)
-    {
-        return \Agl\Core\Data\Validation::validate($pParams);
-    }
-
-    /**
      * Create and return a new Tree.
      *
      * @param string $pCollection The type of the collection to use to create
      * the tree
      * @return Tree
      */
-    public static function newTree(\Agl\Core\Db\Item\Item $pItem)
+    public static function getTree(\Agl\Core\Db\Item\Item $pItem)
     {
         $tree = new \Agl\Core\Db\Tree\Tree($pItem->getDbContainer());
         $tree->setMainItem($pItem);
@@ -160,7 +148,7 @@ final class Agl
      * @param string $pCollection The type of the collection to create
      * @return Collection
      */
-    public static function newCollection($pCollection)
+    public static function getCollection($pCollection)
     {
         return new \Agl\Core\Db\Collection\Collection($pCollection);
     }
@@ -173,40 +161,6 @@ final class Agl
     public static function newConditions()
     {
         return new \Agl\Core\Db\Query\Conditions\Conditions();
-    }
-
-    /**
-     * Add an entrey to the registry.
-     *
-     * @param string $pKey
-     * @param mixed $value
-     * @return bool
-     */
-    public static function register($pKey, $pValue)
-    {
-        return \Agl\Core\Registry\Registry::register($pKey, $pValue);
-    }
-
-    /**
-     * Unregister an entry from the registry.
-     *
-     * @param string $pKey
-     * @return bool
-     */
-    public static function unregister($pKey)
-    {
-        return \Agl\Core\Registry\Registry::unregister($pKey);
-    }
-
-    /**
-     * Get a value from the registry.
-     *
-     * @param string $pKey
-     * @return mixed
-     */
-    public static function registry($pKey)
-    {
-        return \Agl\Core\Registry\Registry::registry($pKey);
     }
 
     /**
@@ -251,7 +205,7 @@ final class Agl
      * @param string $pClass
      * @return mixed
      */
-    public static function helper($pClass)
+    public static function getHelper($pClass)
     {
         return \Agl\Core\Loader\Loader::helper($pClass);
     }
@@ -278,13 +232,13 @@ final class Agl
     }
 
     /**
-     * Get the application's ACL as a singleton.
+     * Get the application's Authentication class as a singleton.
      *
-     * @return Acl
+     * @return Auth
      */
-    public static function getAcl()
+    public static function auth()
     {
-        return self::getSingleton(self::AGL_CORE_DIR . '/acl/acl');
+        return self::getSingleton(self::AGL_CORE_DIR . '/acl/auth');
     }
 
     /**

@@ -12,5 +12,6 @@ namespace Agl\Core\Db\Query\Update;
 interface UpdateInterface
 {
     public function __construct(\Agl\Core\Db\Item\Item $pItem);
+    public function loadConditions(\Agl\Core\Db\Query\Conditions\Conditions $pConditions);
     public function commit();
 }

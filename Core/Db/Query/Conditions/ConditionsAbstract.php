@@ -32,12 +32,11 @@ abstract class ConditionsAbstract
      */
     public function __construct($pType = NULL)
     {
-        $self = get_class($this);
         if ($pType === NULL) {
-            $pType = $self::TYPE_AND;
+            $pType = \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND;
         }
 
-        if ($pType != $self::TYPE_AND and $pType != $self::TYPE_OR) {
+        if ($pType != \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND and $pType != \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_OR) {
             throw new \Agl\Exception("Condition type unknown");
         }
 
@@ -54,8 +53,14 @@ abstract class ConditionsAbstract
      */
     public function add($pField, $pType, $pValue = NULL)
     {
-        $self = get_class($this);
-        if ($self::EQUAL == $pType) {
+        if ($pField == \Agl\Core\Db\Item\ItemInterface::IDFIELD) {
+            if (! $pValue instanceof \Agl\Core\Db\Id\Id) {
+                $id = new \Agl\Core\Db\Id\Id($pValue);
+                $pValue = $id->getOrig();
+            }
+        }
+
+        if (\Agl\Core\Db\Query\Conditions\Conditions::EQUAL == $pType) {
             $this->_conditions[$pField] = $pValue;
         } else {
             $this->_conditions[$pField] = array(
@@ -77,7 +82,7 @@ abstract class ConditionsAbstract
     public function addGroup()
     {
         $conditions = func_get_args();
-        $arr = array();
+        $arr        = array();
 
         foreach ($conditions as $condition) {
             if (is_array($condition) and count($condition) >= 2) {
@@ -121,7 +126,8 @@ abstract class ConditionsAbstract
      */
     public function getSubType()
     {
-        $self = get_class($this);
-        return ($this->_type == $self::TYPE_AND) ? $self::TYPE_OR : $self::TYPE_AND;
+        return ($this->_type == \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND) ?
+            \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_OR :
+            \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND;
     }
 }

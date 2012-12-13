@@ -17,6 +17,19 @@ class Autoload
     const AGL_POOL = 'Agl';
 
     /**
+     * Class aliases. Allow the use of a short class name instead of the full
+     * name with namespace.
+     *
+     * @var array
+     */
+    private static $_aliases = array(
+        'Agl'        => '\Agl\Agl',
+        'Conditions' => '\Agl\Core\Db\Query\Conditions\Conditions',
+        'Registry'   => '\Agl\Core\Registry\Registry',
+        'Validation' => '\Agl\Core\Data\Validation'
+    );
+
+    /**
      * Register the autoload methods.
      *
      * @return Autoload
@@ -33,8 +46,12 @@ class Autoload
      */
     private function _load($pClassName)
     {
+        if (array_key_exists($pClassName, self::$_aliases)) {
+            return class_alias(self::$_aliases[$pClassName], $pClassName);
+        }
+
         if (strpos($pClassName, self::AGL_POOL) === 0) {
-            $path = self::_loadFromAgl($pClassName);
+            $path     = self::_loadFromAgl($pClassName);
             $realPath = BP . $path . \Agl::PHP_EXT;
         } else {
             $realPath = self::_loadFromApp($pClassName);

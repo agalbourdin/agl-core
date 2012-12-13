@@ -9,7 +9,7 @@ namespace Agl\Core\Mvc\Block;
  * @version 0.1.0
  */
 
-$view = \Agl::registry('view');
+$view = \Agl\Core\Registry\Registry::get('view');
 
 switch($view->getType()) {
     case \Agl\Core\Mvc\View\ViewInterface::TYPE_HTML:

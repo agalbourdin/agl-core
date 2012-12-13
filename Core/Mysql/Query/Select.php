@@ -38,8 +38,13 @@ class Select
     private function _formatOrder()
     {
         $orders = array();
-        foreach ($this->_order as $field => $order) {
-            $orders[] = "`$field` $order";
+
+        if (isset($this->_order[\Agl\Core\Db\Query\Select\SelectInterface::ORDER_RAND])) {
+            $orders[] = 'RAND()';
+        } else {
+            foreach ($this->_order as $field => $order) {
+                $orders[] = "`$field` $order";
+            }
         }
 
         return ' ORDER BY ' . implode(', ', $orders);

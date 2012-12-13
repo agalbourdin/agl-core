@@ -72,14 +72,14 @@ class Loader
         }
 
         $registryKey = '_singleton/' . strtolower($pClass);
-        $instance    = \Agl::registry($registryKey);
+        $instance    = \Agl\Core\Registry\Registry::get($registryKey);
         if (! $instance) {
             $instance = self::getInstance($pClass, $pArgs);
             if ($instance === NULL) {
                 return NULL;
             }
 
-            \Agl::register($registryKey, $instance);
+            \Agl\Core\Registry\Registry::set($registryKey, $instance);
         }
 
         return $instance;
@@ -95,7 +95,7 @@ class Loader
     public static function getModel($pModel, array $pFields = array())
     {
         $className = ucfirst($pModel) . \Agl\Core\Mvc\Model\ModelInterface::APP_MODEL_SUFFIX;
-        $fileName = ucfirst($pModel);
+        $fileName  = ucfirst($pModel);
 
         if (\Agl::isInitialized()) {
             $modelPath = \Agl::app()->getPath()

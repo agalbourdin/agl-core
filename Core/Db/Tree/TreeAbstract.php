@@ -361,7 +361,9 @@ abstract class TreeAbstract
         if ($this->hasChilds()) {
             $this->loadDirectChilds($pConditions, $pLimit, $pOrder);
             while ($item = $this->getNext()) {
-                $tree = \Agl::newTree($item);
+                $tree = new \Agl\Core\Db\Tree\Tree($item->getDbContainer());
+                $tree->setMainItem($item);
+
                 if ($tree->hasChilds()) {
                     $arr[] = array(
                         'item' => $item,

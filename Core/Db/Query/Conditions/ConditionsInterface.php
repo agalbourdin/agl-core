@@ -11,6 +11,12 @@ namespace Agl\Core\Db\Query\Conditions;
 
 interface ConditionsInterface
 {
+	/**
+     * Accepted group types.
+     */
+    const TYPE_AND = 'AND';
+    const TYPE_OR  = 'OR';
+
 	public function __construct($pType = NULL);
     public function add($pField, $pType, $pValue = NULL);
     public function addGroup();

@@ -25,7 +25,7 @@ class Registry
      * @param mixed $value
      * @return bool
      */
-    public static function register($pKey, $pValue)
+    public static function set($pKey, $pValue)
     {
         if (array_key_exists($pKey, self::$_registry)) {
             throw new \Agl\Exception("The registry key '$pKey' already exists");
@@ -35,12 +35,27 @@ class Registry
     }
 
     /**
-     * Unregister an entry from the registry.
+     * Get a value from the registry.
+     *
+     * @param string $pKey
+     * @return mixed
+     */
+    public static function get($pKey)
+    {
+        if (array_key_exists($pKey, self::$_registry)) {
+            return self::$_registry[$pKey];
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Delete an entry from the registry.
      *
      * @param string $pKey
      * @return bool
      */
-    public static function unregister($pKey)
+    public static function delete($pKey)
     {
         if (! array_key_exists($pKey, self::$_registry)) {
             throw new \Agl\Exception("The registry key '$pKey' doesn't exist");
@@ -53,20 +68,5 @@ class Registry
         unset(self::$_registry[$pKey]);
 
         return true;
-    }
-
-    /**
-     * Get a value from the registry.
-     *
-     * @param string $pKey
-     * @return mixed
-     */
-    public static function registry($pKey)
-    {
-        if (array_key_exists($pKey, self::$_registry)) {
-            return self::$_registry[$pKey];
-        }
-
-        return NULL;
     }
 }

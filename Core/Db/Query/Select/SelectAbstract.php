@@ -112,6 +112,11 @@ abstract class SelectAbstract
      */
     public function addOrder(array $pFields)
     {
+        if (in_array(\Agl\Core\Db\Query\Select\SelectInterface::ORDER_RAND, $pFields)) {
+            $this->_order[\Agl\Core\Db\Query\Select\SelectInterface::ORDER_RAND] = true;
+            return $this;
+        }
+
         $orders = array(
             \Agl\Core\Db\Query\Select\Select::ORDER_ASC,
             \Agl\Core\Db\Query\Select\Select::ORDER_DESC

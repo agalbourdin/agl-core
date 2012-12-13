@@ -68,7 +68,11 @@ abstract class CollectionAbstract
             if (isset($matches[1]) and is_string($matches[1])
                 and ! empty($matches[1]) and isset($pArgs[0])) {
                 $attribute = \Agl\Core\Data\String::fromCamelCase($matches[1]);
-                return $this->_loadByAttribute($attribute, $pArgs[0]);
+                if (! isset($pArgs[1])) {
+                    return $this->_loadByAttribute($attribute, $pArgs[0]);
+                }
+
+                return $this->_loadByAttribute($attribute, $pArgs[0], $pArgs[1]);
             }
         }
 
@@ -80,14 +84,16 @@ abstract class CollectionAbstract
      *
      * @param string $pAttribute
      * @param mixed $pValue
+     * @param null|array Order the select query
      * @return CollectionAbstract
      */
-    protected function _loadByAttribute($pAttribute, $pValue)
+    protected function _loadByAttribute($pAttribute, $pValue, $pOrder = NULL)
     {
         $select = new \Agl\Core\Db\Query\Select\Select($this->_dbContainer);
-        /*$select->addFields(array(
-            \Agl\Core\Db\Item\ItemInterface::IDFIELD => true
-        ));*/
+
+        if ($pOrder !== NULL) {
+            $select->addOrder($pOrder);
+        }
 
         $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
         $conditions->add(
