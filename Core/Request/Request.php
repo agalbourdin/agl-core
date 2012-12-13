@@ -82,7 +82,7 @@ class Request
 
 		$this->_requestUri = $pRequestUri;
 
-		\Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_SET_REQUEST_BEFORE, array(
+		\Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_SET_REQUEST_BEFORE, array(
 			'request'     => $this,
 			'request_uri' => &$this->_requestUri
 		));
@@ -93,7 +93,7 @@ class Request
 			->_setView()
 			->_setParams();
 
-		\Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_SET_REQUEST_AFTER, array(
+		\Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_SET_REQUEST_AFTER, array(
 			'request'     => $this,
 			'request_uri' => $this->_requestUri
 		));

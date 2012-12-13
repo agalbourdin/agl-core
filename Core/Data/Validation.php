@@ -34,7 +34,7 @@ class Validation
      * @param array $pParams Associative array (type => value)
      * @return bool
      */
-    public static function validate(array $pParams)
+    public static function check(array $pParams)
     {
         foreach ($pParams as $type => $value) {
             $func = '_validate' . $type;

@@ -25,7 +25,7 @@ class Exception
         if (\Agl::isInitialized() and \Agl::app()->isDebugMode()) {
             parent::__construct($pMessage, $pCode, $pPrevious);
         } else {
-            \Agl::log($pMessage);
+            \Agl\Core\Debug\Debug::log($pMessage);
             $this->_aglError();
         }
     }

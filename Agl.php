@@ -121,7 +121,7 @@ final class Agl
      */
     public static function validateParams(array $pParams)
     {
-        if (! \Agl\Core\Data\Validation::validate($pParams)) {
+        if (! \Agl\Core\Data\Validation::check($pParams)) {
             throw new \Agl\Exception("Validation failed for data '" . json_encode($pParams) . "'");
         }
 
@@ -239,28 +239,6 @@ final class Agl
     public static function auth()
     {
         return self::getSingleton(self::AGL_CORE_DIR . '/acl/auth');
-    }
-
-    /**
-     * Dispatch the event $pName.
-     *
-     * @param type $pName Name of the event to dispatch
-     * @param type array $pArgs Arguments to pass to the event
-     * @return bool
-     */
-    public static function dispatchEvent($pName, array $pArgs = array())
-    {
-        return \Agl\Core\Observer\Observer::dispatch($pName, $pArgs);
-    }
-
-    /**
-     * Log a message to the syslog.
-     *
-     * @return bool
-     */
-    public static function log($pMessage)
-    {
-        return \Agl\Core\Debug\Debug::log($pMessage);
     }
 
     /**

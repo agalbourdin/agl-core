@@ -107,7 +107,7 @@ abstract class ViewAbstract
 	        return (\Agl::app()->isDebugMode()) ? "Fatal error: $error[message] in $error[file] on line $error[line]" : 'An error occured.';
 	    }
 
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_VIEW_RENDER_BUFFER_BEFORE, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_VIEW_RENDER_BUFFER_BEFORE, array(
 			'view'   => $this,
 			'buffer' => &$pBuffer
 		));

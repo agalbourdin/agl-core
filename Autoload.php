@@ -25,6 +25,7 @@ class Autoload
     private static $_aliases = array(
         'Agl'        => '\Agl\Agl',
         'Conditions' => '\Agl\Core\Db\Query\Conditions\Conditions',
+        'Debug'      => '\Agl\Core\Debug\Debug',
         'Registry'   => '\Agl\Core\Registry\Registry',
         'Validation' => '\Agl\Core\Data\Validation'
     );
@@ -59,7 +60,6 @@ class Autoload
 
         if ($realPath) {
             require($realPath);
-            return $realPath;
         } else {
             throw new Exception("$pClassName not found, real path empty");
         }
@@ -93,28 +93,16 @@ class Autoload
      */
     private static function _loadFromApp($pClassName)
     {
-        $classNameArr     = explode('_', \Agl\Core\Data\String::fromCamelCase($pClassName));
-        $appPath          = \Agl::app()->getPath();
-        $phpModelDir      = \Agl\Core\Mvc\Model\ModelInterface::APP_PHP_MODEL_DIR;
-        $phpHelperDir     = \Agl\Core\Mvc\Model\ModelInterface::APP_PHP_HELPER_DIR;
-        $phpControllerDir = \Agl\Core\Mvc\Controller\Controller::APP_PHP_CONTROLLER_DIR;
-        $phpViewDir       = \Agl\Core\Mvc\View\ViewInterface::APP_PHP_VIEW_DIR;
-        $phpBlockDir      = \Agl\Core\Mvc\Block\BlockInterface::APP_PHP_BLOCK_DIR;
-        $phpDir           = \Agl::APP_PHP_DIR;
-        $phpExt           = \Agl::PHP_EXT;
+        $classNameArr = explode('_', \Agl\Core\Data\String::fromCamelCase($pClassName));
+        $classNameArr = array_map('ucfirst', $classNameArr);
+        $pool         = array_pop($classNameArr);
 
-        if (isset($classNameArr[1]) and strcasecmp($classNameArr[1], $phpModelDir) == 0) {
-            return $appPath . $phpDir . DS . $phpModelDir . DS . ucfirst($classNameArr[0]) . $phpExt;
-        } else if (isset($classNameArr[2]) and strcasecmp($classNameArr[2], $phpHelperDir) == 0) {
-            return $appPath . $phpDir . DS . $phpHelperDir .  DS . ucfirst($classNameArr[0]) . DS . ucfirst($classNameArr[1]) . $phpExt;
-        } else if (isset($classNameArr[2]) and strcasecmp($classNameArr[2], $phpControllerDir) == 0) {
-            return $appPath . $phpDir . DS . $phpControllerDir .  DS . ucfirst($classNameArr[0]) . DS . ucfirst($classNameArr[1]) . $phpExt;
-        } else if (isset($classNameArr[2]) and strcasecmp($classNameArr[2], $phpViewDir) == 0) {
-            return $appPath . $phpDir . DS . $phpViewDir .  DS . ucfirst($classNameArr[0]) . DS . ucfirst($classNameArr[1]) . $phpExt;
-        } else if (isset($classNameArr[2]) and strcasecmp($classNameArr[2], $phpBlockDir) == 0) {
-            return $appPath . $phpDir . DS . $phpBlockDir . DS . ucfirst($classNameArr[0]) . DS . ucfirst($classNameArr[1]) . $phpExt;
-        }
-
-        return '';
+        return \Agl::app()->getPath()
+               . \Agl::APP_PHP_DIR
+               . DS
+               . $pool
+               . DS
+               . implode(DS, $classNameArr)
+               . \Agl::PHP_EXT;
     }
 }

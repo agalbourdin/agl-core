@@ -110,7 +110,7 @@ class Router
 	 */
 	public function route()
 	{
-		\Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ROUTER_ROUTE_BEFORE, array(
+		\Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ROUTER_ROUTE_BEFORE, array(
 			'router' => $this
 		));
 

@@ -45,9 +45,7 @@ class Auth
 	 */
 	public function loginById($pId)
 	{
-		return $this->login(array(
-			\Agl\Core\Db\Item\ItemInterface::IDFIELD => $pId
-		));
+		return $this->login(array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => $pId));
     }
 
     /**
@@ -60,11 +58,12 @@ class Auth
 	{
 		$this->logout();
 
+		$conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
 		foreach ($pFields as $field => $value) {
-			$this->_user->filter($field, \Agl\Core\Db\Query\Conditions\Conditions::EQUAL, $value);
+			$conditions->add($field, \Agl\Core\Db\Query\Conditions\Conditions::EQUAL, $value);
 		}
 
-		$this->_user->load();
+		$this->_user->load($conditions);
 		if ($this->isLogged()) {
 			$session = \Agl::getSession();
 			$session->setUserId($this->_user->getId());
@@ -95,5 +94,15 @@ class Auth
 	public function isLogged()
 	{
 		return ($this->_user->getId()) ? true : false;
+	}
+
+	/**
+	 * Return the current User.
+	 *
+	 * @return Model
+	 */
+	public function getUser()
+	{
+		return $this->_user;
 	}
 }

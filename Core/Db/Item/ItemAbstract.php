@@ -225,7 +225,7 @@ abstract class ItemAbstract
      */
     protected function _insert()
     {
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ITEM_INSERT_BEFORE, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ITEM_INSERT_BEFORE, array(
             'item' => $this
         ));
 
@@ -236,7 +236,7 @@ abstract class ItemAbstract
         $this->setId($insert->getId());
         $this->_origFields = $this->_fields;
 
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ITEM_INSERT_AFTER, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ITEM_INSERT_AFTER, array(
             'item' => $this
         ));
 
@@ -391,7 +391,7 @@ abstract class ItemAbstract
      */
     public function save($pConditions = NULL)
     {
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ITEM_SAVE_BEFORE, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ITEM_SAVE_BEFORE, array(
             'item' => $this
         ));
 
@@ -410,7 +410,7 @@ abstract class ItemAbstract
 
         $this->_origFields = $this->_fields;
 
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ITEM_SAVE_AFTER, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ITEM_SAVE_AFTER, array(
             'item' => $this
         ));
 
@@ -424,14 +424,14 @@ abstract class ItemAbstract
      */
     public function delete()
     {
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ITEM_DELETE_BEFORE, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ITEM_DELETE_BEFORE, array(
             'item' => $this
         ));
 
         $delete = new \Agl\Core\Db\Query\Delete\Delete($this);
         $delete->commit();
 
-        \Agl::dispatchEvent(\Agl\Core\Observer\Observer::EVENT_ITEM_DELETE_AFTER, array(
+        \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_ITEM_DELETE_AFTER, array(
             'item' => $this
         ));
 
