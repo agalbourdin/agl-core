@@ -58,7 +58,7 @@ class Autoload
             $realPath = self::_loadFromApp($pClassName);
         }
 
-        if ($realPath) {
+        if ($realPath and is_readable($realPath)) {
             require($realPath);
         } else {
             throw new Exception("$pClassName not found, real path empty");

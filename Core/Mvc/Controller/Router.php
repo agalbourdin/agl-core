@@ -98,7 +98,7 @@ class Router
 			$aclConfig = \Agl::app()->getConfig('@layout/modules/' . $this->_module . '/' . $this->_view . '/acl/' . $this->_action);
 		}
 
-    	if ($aclConfig and ! \Agl::getSingleton(self::AGL_CORE_DIR . '/acl/acl')->isAllowed('admin', $aclConfig)) {
+    	if ($aclConfig and ! \Agl::getSingleton(self::AGL_CORE_DIR . '/auth/acl')->isAllowed('admin', $aclConfig)) {
     		throw new \Agl\Exception("Invalid ACL to request the action '" . $this->_action . "'");
         }
 

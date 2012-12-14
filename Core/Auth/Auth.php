@@ -1,12 +1,12 @@
 <?php
-namespace Agl\Core\Acl;
+namespace Agl\Core\Auth;
 
 /**
  * Authentication management.
  * Log users in and out with session.
  *
  * @category Agl_Core
- * @package Agl_Core_Acl
+ * @package Agl_Core_Auth
  * @version 0.1.0
  */
 

@@ -238,7 +238,7 @@ final class Agl
      */
     public static function auth()
     {
-        return self::getSingleton(self::AGL_CORE_DIR . '/acl/auth');
+        return self::getSingleton(self::AGL_CORE_DIR . '/auth/auth');
     }
 
     /**

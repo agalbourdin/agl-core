@@ -1,11 +1,11 @@
 <?php
-namespace Agl\Core\Acl;
+namespace Agl\Core\Auth;
 
 /**
  * Access Control List Management.
  *
  * @category Agl_Core
- * @package Agl_Core_Acl
+ * @package Agl_Core_Auth
  * @version 0.1.0
  */
 

@@ -164,7 +164,6 @@ class Json
     {
         if (! array_key_exists($pPath, $this->_cache)) {
             $json = $this->_getInstance($pPath);
-
             $path = str_replace('@app/', '', $pPath);
             $path = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)/#', '', $path);
             $pathArr = explode('/', $path);
