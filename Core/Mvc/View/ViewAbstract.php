@@ -60,7 +60,7 @@ abstract class ViewAbstract
 		return ROOT
 			   . \Agl::APP_PUBLIC_DIR
 			   . DS
-			   . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_SKIN_DIR
+			   . static::APP_HTTP_SKIN_DIR
 			   . DS
 			   . \Agl::app()->getConfig('@app/global/theme')
 			   . DS;
@@ -124,17 +124,19 @@ abstract class ViewAbstract
 	 */
 	public function render()
 	{
-		$this->_viewPath = \Agl::app()->getPath()
-				           . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_TEMPLATE_DIR
-				           . DS
-		                   . \Agl::app()->getConfig('@app/global/theme')
-				           . DS
-				           . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_VIEW_DIR
-				           . DS
-				           . $this->_file;
+		$this->_viewPath = $this->getViewPath();
 
 		if (! is_readable($this->_viewPath)) {
-			throw new \Agl\Core\Mvc\Controller\Exception("View file '" . $this->_viewPath . "' doesn't exists");
+			$this->setHttpHeader(static::HEADER_404);
+			$template404 = \Agl::app()->getConfig('@layout/errors/404');
+			if ($template404) {
+				$this->setFile($template404);
+				$this->_viewPath = $this->getViewPath();
+			}
+
+			if (! $template404 or ! is_readable($this->_viewPath)) {
+				throw new \Agl\Exception("View file '" . $this->_viewPath . "' doesn't exists");
+			}
 		}
 
 		$module   = \Agl::getRequest()->getModule();
@@ -148,7 +150,7 @@ abstract class ViewAbstract
 		$this->_type = $template['type'];
 
 		$template = \Agl::app()->getPath()
-			        . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_TEMPLATE_DIR
+			        . static::APP_HTTP_TEMPLATE_DIR
 			        . DS
            			. \Agl::app()->getConfig('@app/global/theme')
 			        . DS
@@ -260,5 +262,30 @@ abstract class ViewAbstract
 	public function getType()
 	{
 		return $this->_type;
+	}
+
+	/**
+	 * Return the absolute path to the current view template file.
+	 *
+	 * @return string
+	 */
+	public function getViewPath()
+	{
+		return \Agl::app()->getPath()
+	           . static::APP_HTTP_TEMPLATE_DIR
+	           . DS
+               . \Agl::app()->getConfig('@app/global/theme')
+	           . DS
+	           . static::APP_HTTP_VIEW_DIR
+	           . DS
+	           . $this->_file;
+	}
+
+	/**
+	 * Set HTTP header (404, 401...)
+	 */
+	public function setHttpHeader($pHeader)
+	{
+		header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
 	}
 }

@@ -53,6 +53,11 @@ interface ViewInterface
     const CACHE_FILE_PREFIX = 'view_';
 
     /**
+     * 404 HTTP header.
+     */
+    const HEADER_404 = '404 Not Found';
+
+    /**
      * HTTP layouts directory.
      */
     const APP_HTTP_TEMPLATE_DIR = 'app/template';
