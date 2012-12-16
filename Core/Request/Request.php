@@ -300,11 +300,6 @@ class Request
 	 */
 	public function redirect($pPath = '', array $pParams = array(), $pType = self::HTTP_CODE_REDIRECT_TEMPORARILY)
 	{
-		\Agl::validateParams(array(
-			'StrictString' => $pPath,
-			'Int'          => $pType
-        ));
-
 		header('Location: ' . \Agl::getUrl($pPath, $pParams), true, $pType);
 		exit;
 	}

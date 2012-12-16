@@ -12,14 +12,9 @@ namespace Agl\Core\Auth;
 class Acl
 {
 	/**
-	 * ID field name in the Acl configuration file.
-	 */
-	const CONFIG_FIELD_ID = 'id';
-
-	/**
 	 * Resource field name in the Acl configuration file.
 	 */
-	const CONFIG_FIELD_RESOURCE = 'resource';
+	const CONFIG_FIELD_RESOURCE = 'resources';
 
 	/**
 	 * Inherit field name in the Acl configuration file.
@@ -48,25 +43,25 @@ class Acl
 	 */
 	private function _loadRoles()
 	{
-		$aclConfig = \Agl::app()->getConfig('@module[' . \Agl::AGL_CORE_POOL . '/acl]/role', true);
-		foreach ($aclConfig as $acl) {
-			if (! is_array($acl)) {
-				continue;
-			}
-
-			if (isset($acl[self::CONFIG_FIELD_RESOURCE])) {
-				if (is_array($acl[self::CONFIG_FIELD_RESOURCE])) {
-					$this->_roles[$acl[self::CONFIG_FIELD_ID]] = $acl[self::CONFIG_FIELD_RESOURCE];
+		$aclConfig = \Agl::app()->getConfig('@module[' . \Agl::AGL_CORE_POOL . '/acl]');
+		if (is_array($aclConfig)) {
+			foreach ($aclConfig as $role => $acl) {
+				if (isset($acl[self::CONFIG_FIELD_RESOURCE])
+					and is_array($acl[self::CONFIG_FIELD_RESOURCE])) {
+					$this->_roles[$role] = $acl[self::CONFIG_FIELD_RESOURCE];
 				} else {
-					$this->_roles[$acl[self::CONFIG_FIELD_ID]] = array($acl[self::CONFIG_FIELD_RESOURCE]);
+					$this->_roles[$role] = array();
 				}
-			} else {
-				$this->_roles[$acl[self::CONFIG_FIELD_ID]] = array();
-			}
 
-			if (isset($acl[self::CONFIG_FIELD_INHERIT])
-				and isset($this->_roles[$acl[self::CONFIG_FIELD_INHERIT]])) {
-				$this->_roles[$acl[self::CONFIG_FIELD_ID]] = array_merge($this->_roles[$acl[self::CONFIG_FIELD_ID]], $this->_roles[$acl[self::CONFIG_FIELD_INHERIT]]);
+				if (isset($acl[self::CONFIG_FIELD_INHERIT])
+					and is_array($acl[self::CONFIG_FIELD_INHERIT])) {
+					foreach ($acl[self::CONFIG_FIELD_INHERIT] as $inherit) {
+						if (isset($aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE])
+							and is_array($aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE])) {
+							$this->_roles[$role] = array_merge($this->_roles[$role], $aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE]);
+						}
+					}
+				}
 			}
 		}
 
@@ -75,34 +70,37 @@ class Acl
 
 	/**
 	 * Check if the role exists and if the resource is available with this role.
-	 * The resource parameter should be an array with a "resource" key.
-	 * $pResource['resource'] can be a string or an array of strings to validate
-	 * multiple resources.
 	 *
-	 * @param string $pRole Identifiant du rôle
-	 * @param array $pResource Resource(s) à vérifier
+	 * @param string $pRole Role identifier
+	 * @param array $pResource Required resources
 	 */
 	public function isAllowed($pRole, array $pResource)
 	{
-		\Agl::validateParams(array(
-            'StrictString' => $pRole
-        ));
+    	foreach ($pResource as $resource) {
+    		if (! isset($this->_roles[$pRole]) or ! in_array($resource, $this->_roles[$pRole])) {
+    			return false;
+    		}
+    	}
 
-        if (! isset($pResource[self::CONFIG_FIELD_RESOURCE])) {
-        	return false;
-        }
+    	return true;
+	}
 
-        if (is_string($pResource[self::CONFIG_FIELD_RESOURCE])) {
-        	return (isset($this->_roles[$pRole]) and in_array($pResource[self::CONFIG_FIELD_RESOURCE], $this->_roles[$pRole]));
-        } else if (is_array($pResource[self::CONFIG_FIELD_RESOURCE])) {
-        	foreach ($pResource[self::CONFIG_FIELD_RESOURCE] as $resource) {
-        		if (! isset($this->_roles[$pRole]) or ! in_array($resource, $this->_roles[$pRole])) {
-        			return false;
-        		}
-        	}
-        	return true;
-        }
+	public function renderError()
+	{
+		$file = \Agl::app()->getConfig('@layout/errors/403');
+		if (\Agl::app()->isDebugMode() or ! $file) {
+			throw new \Agl\Exception("Invalid ACL to access the view");
+		}
 
-        return false;
+		$path = \Agl::app()->getPath()
+		        . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_TEMPLATE_DIR
+		        . DS
+                . \Agl::app()->getConfig('@app/global/theme')
+		        . DS
+		        . $file;
+
+		header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+		require($path);
+		exit;
 	}
 }

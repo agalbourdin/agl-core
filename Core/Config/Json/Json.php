@@ -163,21 +163,27 @@ class Json
     private function _getConfigValues($pPath, $pForceGlobalArray)
     {
         if (! array_key_exists($pPath, $this->_cache)) {
-            $json = $this->_getInstance($pPath);
-            $path = str_replace('@app/', '', $pPath);
-            $path = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)/#', '', $path);
-            $pathArr = explode('/', $path);
+            $json    = $this->_getInstance($pPath);
+            $path    = str_replace('@app/', '', $pPath);
+            $path    = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)(/)?#', '', $path);
             $content = $json->getContent();
-            $nbKeys = count($pathArr) - 1;
-            foreach($pathArr as $i => $key) {
-                if (! isset($content[$key])) {
-                    $this->_cache[$pPath] = NULL;
-                    break;
-                } else if ($i < $nbKeys) {
-                    $content = $content[$key];
-                } else if ($i == $nbKeys) {
-                    $this->_cache[$pPath] = $content[$key];
+
+            if ($path) {
+                $pathArr = explode('/', $path);
+                $nbKeys  = count($pathArr) - 1;
+
+                foreach($pathArr as $i => $key) {
+                    if (! isset($content[$key])) {
+                        $this->_cache[$pPath] = NULL;
+                        break;
+                    } else if ($i < $nbKeys) {
+                        $content = $content[$key];
+                    } else if ($i == $nbKeys) {
+                        $this->_cache[$pPath] = $content[$key];
+                    }
                 }
+            } else {
+                $this->_cache[$pPath] = $content;
             }
 
             if ($pForceGlobalArray and (! is_array($this->_cache[$pPath]) or (is_array($this->_cache[$pPath]) and ! array_key_exists(0, $this->_cache[$pPath])))) {

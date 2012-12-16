@@ -18,6 +18,8 @@ class Exception
 	 */
 	protected function _aglError()
 	{
+		//\Agl::getRequest()->redirect('home/index');
+
 		$file = \Agl::app()->getConfig('@layout/errors/404');
 		if (! $file) {
 			parent::_aglError();
