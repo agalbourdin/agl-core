@@ -58,7 +58,7 @@ class Item
      */
     public function getJoins($pDbContainer)
     {
-        $joinsField = $this->getField(\Agl\Core\Db\Item\ItemInterface::JOINS_FIELD_PREFIX . $pDbContainer);
+        $joinsField = $this->getField(static::JOINS_FIELD_PREFIX . $pDbContainer);
 
         if (! $joinsField) {
             return array();
@@ -87,7 +87,7 @@ class Item
 
         $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
         $conditions->add(
-            \Agl\Core\Db\Item\ItemInterface::JOINS_FIELD_PREFIX . $this->_dbContainer,
+            static::JOINS_FIELD_PREFIX . $this->_dbContainer,
             $conditions::INSET,
             $id
         );

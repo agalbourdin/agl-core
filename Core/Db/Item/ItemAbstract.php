@@ -101,7 +101,7 @@ abstract class ItemAbstract
      */
     public function __get($pVar)
     {
-        $attribute = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . \Agl\Core\Data\String::fromCamelCase($pVar);
+        $attribute = $this->_dbContainer . static::PREFIX_SEPARATOR . \Agl\Core\Data\String::fromCamelCase($pVar);
 
         if (isset($this->_fields[$attribute])) {
             return $this->_fields[$attribute];
@@ -119,7 +119,7 @@ abstract class ItemAbstract
      */
     public function __set($pVar, $pValue)
     {
-        $attribute = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . \Agl\Core\Data\String::fromCamelCase($pVar);
+        $attribute = $this->_dbContainer . static::PREFIX_SEPARATOR . \Agl\Core\Data\String::fromCamelCase($pVar);
         /*if ($attribute == $this->getIdField()) {
             $this->setId($pValue);
         }*/
@@ -141,7 +141,7 @@ abstract class ItemAbstract
      */
     public function __unset($pVar)
     {
-        $attribute = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . \Agl\Core\Data\String::fromCamelCase($pVar);
+        $attribute = $this->_dbContainer . static::PREFIX_SEPARATOR . \Agl\Core\Data\String::fromCamelCase($pVar);
         if (array_key_exists($attribute, $this->_fields)) {
             unset($this->_fields[$attribute]);
             return true;
@@ -171,10 +171,10 @@ abstract class ItemAbstract
      */
     protected function _prefixFields(array $pFields)
     {
-        $prefix = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR;
+        $prefix = $this->_dbContainer . static::PREFIX_SEPARATOR;
         foreach ($pFields as $key => $value) {
             if (strpos($key, $prefix) === false) {
-                $newKey = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . $key;
+                $newKey           = $prefix . $key;
                 $pFields[$newKey] = $value;
                 unset($pFields[$key]);
             }
@@ -229,7 +229,7 @@ abstract class ItemAbstract
             'item' => $this
         ));
 
-        $this->{\Agl\Core\Db\Item\ItemInterface::DATEADDFIELD} = \Agl\Core\Data\Date::now();
+        $this->{static::DATEADDFIELD} = \Agl\Core\Data\Date::now();
         $insert = new \Agl\Core\Db\Query\Insert\Insert($this->_dbContainer);
         $insert->addFields($this->_fields);
         $insert->commit();
@@ -257,7 +257,7 @@ abstract class ItemAbstract
             $id = $pId;
         }
 
-        return $this->_loadByAttribute(\Agl\Core\Db\Item\ItemInterface::IDFIELD, $id->getOrig());
+        return $this->_loadByAttribute(static::IDFIELD, $id->getOrig());
     }
 
     /**
@@ -296,7 +296,7 @@ abstract class ItemAbstract
      */
     public function setId($pValue)
     {
-        $idField = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . \Agl\Core\Db\Item\ItemInterface::IDFIELD;
+        $idField = $this->_dbContainer . static::PREFIX_SEPARATOR . static::IDFIELD;
 
         if (! $pValue instanceof \Agl\Core\Db\Id\Id) {
             $id = new \Agl\Core\Db\Id\Id($pValue);
@@ -315,7 +315,7 @@ abstract class ItemAbstract
      */
     public function getIdField()
     {
-        return $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . \Agl\Core\Db\Item\ItemInterface::IDFIELD;
+        return $this->_dbContainer . static::PREFIX_SEPARATOR . static::IDFIELD;
     }
 
     /**
@@ -346,7 +346,7 @@ abstract class ItemAbstract
      */
     public function getField($pField)
     {
-        $field = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . $pField;
+        $field = $this->_dbContainer . static::PREFIX_SEPARATOR . $pField;
         if (isset($this->_fields[$field])) {
             return $this->_fields[$field];
         }
@@ -363,7 +363,7 @@ abstract class ItemAbstract
      */
     public function getOrigField($pField)
     {
-        $field = $this->_dbContainer . \Agl\Core\Db\Item\ItemInterface::PREFIX_SEPARATOR . $pField;
+        $field = $this->_dbContainer . static::PREFIX_SEPARATOR . $pField;
 
         if (isset($this->_origFields[$field])) {
             return $this->_origFields[$field];
@@ -395,11 +395,11 @@ abstract class ItemAbstract
             'item' => $this
         ));
 
-        if (! $this->getOrigField(\Agl\Core\Db\Item\ItemInterface::IDFIELD)) {
+        if (! $this->getOrigField(static::IDFIELD)) {
             return $this->_insert();
         }
 
-        $this->{\Agl\Core\Db\Item\ItemInterface::DATEUPDATEFIELD} = \Agl\Core\Data\Date::now();
+        $this->{static::DATEUPDATEFIELD} = \Agl\Core\Data\Date::now();
         $update = new \Agl\Core\Db\Query\Update\Update($this);
 
         if ($pConditions instanceof \Agl\Core\Db\Query\Conditions\Conditions) {
@@ -447,7 +447,7 @@ abstract class ItemAbstract
      */
     public function setJoins($pDbContainer, array $pJoins)
     {
-        return $this->__set(\Agl\Core\Db\Item\ItemInterface::JOINS_FIELD_PREFIX . $pDbContainer, $pJoins);
+        return $this->__set(static::JOINS_FIELD_PREFIX . $pDbContainer, $pJoins);
     }
 
     /**
@@ -458,7 +458,7 @@ abstract class ItemAbstract
      */
     public function unsetJoins($pDbContainer)
     {
-        return $this->__unset(\Agl\Core\Db\Item\ItemInterface::JOINS_FIELD_PREFIX . $pDbContainer);
+        return $this->__unset(static::JOINS_FIELD_PREFIX . $pDbContainer);
     }
 
     /**
@@ -543,7 +543,7 @@ abstract class ItemAbstract
         if (is_array($joins)) {
             $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
             $conditions->add(
-                \Agl\Core\Db\Item\ItemInterface::IDFIELD,
+                static::IDFIELD,
                 $conditions::IN,
                 $joins
             );

@@ -94,9 +94,9 @@ class Json
      */
     public function __construct()
     {
-        $envPrefixName = \Agl\Core\Config\ConfigInterface::ENV_PREFIX_NAME;
+        $envPrefixName = static::ENV_PREFIX_NAME;
         if (isset($_SERVER[$envPrefixName])) {
-            $this->_envPrefix = $_SERVER[$envPrefixName] . \Agl\Core\Config\ConfigInterface::ENV_PREFIX_SEPARATOR;
+            $this->_envPrefix = $_SERVER[$envPrefixName] . static::ENV_PREFIX_SEPARATOR;
         }
 
         $this->_cacheEnabled = \Agl::app()->isCacheEnabled();

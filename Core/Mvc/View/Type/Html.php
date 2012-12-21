@@ -112,7 +112,7 @@ class Html
 	 */
 	public static function getCssMarker()
 	{
-		return '/' . \Agl\Core\Mvc\View\ViewInterface::VIEW_MARKER . self::CSS_MARKER . '/';
+		return '/' . static::VIEW_MARKER . self::CSS_MARKER . '/';
 	}
 
 	/**
@@ -122,7 +122,7 @@ class Html
 	 */
 	public static function getJsMarker()
 	{
-		return '/' . \Agl\Core\Mvc\View\ViewInterface::VIEW_MARKER . self::JS_MARKER . '/';
+		return '/' . static::VIEW_MARKER . self::JS_MARKER . '/';
 	}
 
 	/**
@@ -132,7 +132,7 @@ class Html
 	 */
 	public static function getTitleMarker()
 	{
-		return '/' . \Agl\Core\Mvc\View\ViewInterface::VIEW_MARKER . self::TITLE_MARKER . '/';
+		return '/' . static::VIEW_MARKER . self::TITLE_MARKER . '/';
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Html
 	 */
 	public static function getMetaMarker()
 	{
-		return '/' . \Agl\Core\Mvc\View\ViewInterface::VIEW_MARKER . self::META_MARKER . '/';
+		return '/' . static::VIEW_MARKER . self::META_MARKER . '/';
 	}
 
 	/**
@@ -355,7 +355,7 @@ class Html
 	 */
 	protected function _processMarkers($pBuffer)
 	{
-		$hasMarkers = preg_match_all('#(/' . \Agl\Core\Mvc\View\ViewInterface::VIEW_MARKER . '([A-Z0-9_]+)/)#', $pBuffer, $matches);
+		$hasMarkers = preg_match_all('#(/' . static::VIEW_MARKER . '([A-Z0-9_]+)/)#', $pBuffer, $matches);
 		if ($hasMarkers !== false) {
 			foreach ($matches[2] as $marker) {
 				$method = '_process' . \Agl\Core\Data\String::toCamelCase($marker) . 'Marker';

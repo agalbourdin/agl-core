@@ -33,10 +33,10 @@ abstract class ConditionsAbstract
     public function __construct($pType = NULL)
     {
         if ($pType === NULL) {
-            $pType = \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND;
+            $pType = static::TYPE_AND;
         }
 
-        if ($pType != \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND and $pType != \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_OR) {
+        if ($pType != static::TYPE_AND and $pType != static::TYPE_OR) {
             throw new \Agl\Exception("Condition type unknown");
         }
 
@@ -126,8 +126,16 @@ abstract class ConditionsAbstract
      */
     public function getSubType()
     {
-        return ($this->_type == \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND) ?
-            \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_OR :
-            \Agl\Core\Db\Query\Conditions\ConditionsInterface::TYPE_AND;
+        return ($this->_type == static::TYPE_AND) ? static::TYPE_OR : static::TYPE_AND;
+    }
+
+    /**
+     * Get the number of conditions.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->_conditions);
     }
 }

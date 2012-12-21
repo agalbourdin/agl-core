@@ -35,8 +35,8 @@ abstract class BlockAbstract
 
         $type = (isset($pBlockConfig[$configCacheName]) and is_array($pBlockConfig[$configCacheName]) and isset($pBlockConfig[$configCacheName][$configCacheTypeName])) ? $pBlockConfig[$configCacheName][$configCacheTypeName] : \Agl\Core\Config\ConfigInterface::CONFIG_CACHE_TYPE_STATIC;
 
-        $configKeySeparator = \Agl\Core\Cache\File\FileInterface::CACHE_FILE_SEPARATOR;
-		$configKey = \Agl\Core\Mvc\Block\BlockInterface::CACHE_FILE_PREFIX . $pBlockConfig['id'];
+		$configKeySeparator = \Agl\Core\Cache\File\FileInterface::CACHE_FILE_SEPARATOR;
+		$configKey          = static::CACHE_FILE_PREFIX . $pBlockConfig['id'];
 
 		if (\Agl::isModuleLoaded(\Agl::AGL_MORE_POOL . '/locale/locale')) {
 			$configKey .= $configKeySeparator . \Agl::getSingleton(\Agl::AGL_MORE_POOL . '/locale/locale')->getLanguage();
@@ -117,7 +117,7 @@ abstract class BlockAbstract
 		        . DS
                 . \Agl::app()->getConfig('@app/global/theme')
 		        . DS
-		        . \Agl\Core\Mvc\Block\BlockInterface::APP_HTTP_BLOCK_DIR
+		        . static::APP_HTTP_BLOCK_DIR
 		        . DS
 		        . $this->_file;
 

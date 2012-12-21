@@ -100,8 +100,8 @@ abstract class CountAbstract
         ));
 
         $this->_field = array(
-            \Agl\Core\Db\Query\Count\CountInterface::FIELD_NAME     => $pField,
-            \Agl\Core\Db\Query\Count\CountInterface::FIELD_DISTINCT => $pDistinct
+            static::FIELD_NAME     => $pField,
+            static::FIELD_DISTINCT => $pDistinct
         );
         return $this;
     }

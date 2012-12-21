@@ -67,7 +67,7 @@ class Arr
             return $this->_array[$pKey];
         }
 
-        return \Agl\Core\Cache\File\FileInterface::AGL_CACHE_TAG_NOT_FOUND;
+        return static::AGL_CACHE_TAG_NOT_FOUND;
     }
 
     /**

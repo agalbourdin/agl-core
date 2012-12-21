@@ -133,7 +133,7 @@ abstract class TreeAbstract
 
             $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
             $conditions->add(
-                \Agl\Core\Db\Tree\TreeInterface::PARENTFIELD,
+                static::PARENTFIELD,
                 $conditions::EQUAL,
                 $this->_mainItem->getId()->getOrig()
             );
@@ -189,7 +189,7 @@ abstract class TreeAbstract
                 $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
             }
             $conditions->add(
-                \Agl\Core\Db\Tree\TreeInterface::PARENTFIELD,
+                static::PARENTFIELD,
                 $conditions::IN,
                 $ancestors
             );
@@ -233,7 +233,7 @@ abstract class TreeAbstract
             $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
         }
         $conditions->add(
-            \Agl\Core\Db\Tree\TreeInterface::PARENTFIELD,
+            static::PARENTFIELD,
             $conditions::EQUAL,
             $this->_mainItem->getId()->getOrig()
         );
@@ -289,7 +289,7 @@ abstract class TreeAbstract
 
         $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
         $conditions->add(
-            \Agl\Core\Db\Tree\TreeInterface::PARENTFIELD,
+            static::PARENTFIELD,
             $conditions::EQUAL,
             $this->_mainItem->getId()->getOrig()
         );

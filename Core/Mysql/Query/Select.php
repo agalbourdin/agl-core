@@ -39,7 +39,7 @@ class Select
     {
         $orders = array();
 
-        if (isset($this->_order[\Agl\Core\Db\Query\Select\SelectInterface::ORDER_RAND])) {
+        if (isset($this->_order[static::ORDER_RAND])) {
             $orders[] = 'RAND()';
         } else {
             foreach ($this->_order as $field => $order) {
@@ -90,10 +90,13 @@ class Select
                 SELECT
                     $fields
                 FROM
-                    `" . $this->_dbPrefix . $this->_dbContainer . "`
+                    `" . $this->_dbPrefix . $this->_dbContainer . "`";
+
+            if ($this->_conditions->count()) {
+                $query .= "
                 WHERE
-                    " . $this->_conditions->getPreparedConditions($this->_dbContainer) . "
-            ";
+                    " . $this->_conditions->getPreparedConditions($this->_dbContainer) . "";
+            }
 
             if (! empty($this->_order)) {
                 $query .= $this->_formatOrder();

@@ -59,7 +59,7 @@ class Item
 
         $conditions = new \Agl\Core\Db\Query\Conditions\Conditions();
         $conditions->add(
-            \Agl\Core\Db\Item\ItemInterface::JOINS_FIELD . '.' . $this->_dbContainer,
+            static::JOINS_FIELD . '.' . $this->_dbContainer,
             $conditions::EQUAL,
             $this->getId()->getOrig()
         );

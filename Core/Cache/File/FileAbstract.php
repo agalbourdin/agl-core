@@ -94,7 +94,7 @@ abstract class FileAbstract
         return \Agl::app()->getPath()
                . \AGL::APP_VAR_DIR
                . DS
-               . \Agl\Core\Cache\File\FileInterface::AGL_VAR_CACHE_DIR
+               . static::AGL_VAR_CACHE_DIR
                . \Agl\Core\Data\File::getSubPath(md5($this->getCacheFile()));
     }
 
@@ -106,7 +106,7 @@ abstract class FileAbstract
 	public function getCacheFile()
     {
         return $this->_identifier
-               . \Agl\Core\Cache\File\FileInterface::AGL_VAR_CACHE_EXT;
+               . static::AGL_VAR_CACHE_EXT;
     }
 
     /**

@@ -25,24 +25,29 @@ class Count
                 $field = 'COUNT(1)';
             } else {
                 $field = 'COUNT(';
-                if ($this->_fields[\Agl\Core\Db\Query\Count\CountInterface::FIELD_DISTINCT]) {
+                if ($this->_fields[static::FIELD_DISTINCT]) {
                     $field .= 'DISTINCT(';
                 }
-                $field .= '`' . $this->_fields[\Agl\Core\Db\Query\Count\CountInterface::FIELD_NAME] . '`';
-                if ($this->_fields[\Agl\Core\Db\Query\Count\CountInterface::FIELD_DISTINCT]) {
+                $field .= '`' . $this->_fields[static::FIELD_NAME] . '`';
+                if ($this->_fields[static::FIELD_DISTINCT]) {
                     $field .= ')';
                 }
                 $field = ')';
             }
 
-            $prepared = \Agl::app()->getDb()->getConnection()->prepare("
+            $query = "
                 SELECT
                     $field AS nb
                 FROM
-                    `" . $this->_dbPrefix . $this->_dbContainer . "`
+                    `" . $this->_dbPrefix . $this->_dbContainer . "`";
+
+            if ($this->_conditions->count()) {
+                $query .= "
                 WHERE
-                    " . $this->_conditions->getPreparedConditions($this->_dbContainer) . "
-            ");
+                    " . $this->_conditions->getPreparedConditions($this->_dbContainer) . "";
+            }
+
+            $prepared = \Agl::app()->getDb()->getConnection()->prepare($query);
 
             if ($prepared->execute($this->_conditions->getPreparedValues())) {
                 $result = $prepared->fetchObject();
