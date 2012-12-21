@@ -19,7 +19,7 @@ class Url
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function getUrl($pUrl, array $pParams = array(), $pRelative = true)
+    public static function get($pUrl, array $pParams = array(), $pRelative = true)
     {
         if (strpos($pUrl, '*/') !== false) {
             $request = \Agl::getRequest();
@@ -35,7 +35,7 @@ class Url
             if ($pRelative) {
                 return ROOT;
             }
-            return self::getHostUrl();
+            return self::getHost();
         }
 
         if (strpos($pUrl, \Agl::APP_PUBLIC_DIR) === false) {
@@ -49,20 +49,20 @@ class Url
                 if ($pRelative) {
                     return ROOT . $url;
                 }
-                return self::getHostUrl($url);
+                return self::getHost($url);
             }
 
             $url = $pUrl . DS;
             if ($pRelative) {
                 return ROOT . $url;
             }
-            return self::getHostUrl($url);
+            return self::getHost($url);
         }
 
         if ($pRelative) {
             return ROOT . $pUrl;
         }
-        return self::getHostUrl($pUrl);
+        return self::getHost($pUrl);
     }
 
     /**
@@ -80,7 +80,7 @@ class Url
 
         $params = array_merge($params, $pNewParams);
 
-        return self::getUrl($module . DS . $view, $params);
+        return self::get($module . DS . $view, $params);
     }
 
     /**
@@ -89,9 +89,9 @@ class Url
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function getBaseUrl($pRelative = true)
+    public static function getBase($pRelative = true)
     {
-        return self::getUrl('', array(), $pRelative);
+        return self::get('', array(), $pRelative);
     }
 
     /**
@@ -101,7 +101,7 @@ class Url
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function getSkinUrl($pUrl, $pRelative = true)
+    public static function getSkin($pUrl, $pRelative = true)
     {
         $url = \Agl::APP_PUBLIC_DIR
                . DS
@@ -115,7 +115,7 @@ class Url
             return ROOT . $url;
         }
 
-        return self::getHostUrl($url);
+        return self::getHost($url);
     }
 
     /**
@@ -125,7 +125,7 @@ class Url
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function getPublicUrl($pUrl, $pRelative = true)
+    public static function getPublic($pUrl, $pRelative = true)
     {
         $url = \Agl::APP_PUBLIC_DIR
                . DS
@@ -135,7 +135,7 @@ class Url
             return ROOT . $url;
         }
 
-        return self::getHostUrl($url);
+        return self::getHost($url);
     }
 
     /**
@@ -143,7 +143,7 @@ class Url
      *
      * @return string
      */
-    public static function getHostUrl($pPath = '')
+    public static function getHost($pPath = '')
     {
         return self::getProtocol() . $_SERVER['HTTP_HOST'] . ROOT . $pPath;
     }

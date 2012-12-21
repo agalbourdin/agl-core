@@ -27,6 +27,7 @@ class Autoload
         'Conditions' => '\Agl\Core\Db\Query\Conditions\Conditions',
         'Debug'      => '\Agl\Core\Debug\Debug',
         'Registry'   => '\Agl\Core\Registry\Registry',
+        'Url'        => '\Agl\Core\Url\Url',
         'Validation' => '\Agl\Core\Data\Validation'
     );
 

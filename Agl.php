@@ -236,7 +236,7 @@ final class Agl
      *
      * @return Auth
      */
-    public static function auth()
+    public static function getAuth()
     {
         return self::getSingleton(self::AGL_CORE_DIR . '/auth/auth');
     }
@@ -269,65 +269,6 @@ final class Agl
     public static function isModuleLoaded($pModule)
     {
         return \Agl\Core\Loader\Loader::isModuleLoaded($pModule);
-    }
-
-    /**
-     * Return a formated URL with module, view, action and parameters.
-     *
-     * @param string $pUrl URL to get (module/view)
-     * @param array $pParams Parameters to include into the request
-     * @param bool $pRelative Create a relative URL
-     * @return string
-     */
-    public static function getUrl($pUrl, array $pParams = array(), $pRelative = true)
-    {
-        return \Agl\Core\Url\Url::getUrl($pUrl, $pParams, $pRelative);
-    }
-
-    /**
-     * Return the base URL of the application.
-     *
-     * @param bool $pRelative Create a relative URL
-     * @return string
-     */
-    public static function getBaseUrl($pRelative = true)
-    {
-        return \Agl\Core\Url\Url::getBaseUrl($pRelative);
-    }
-
-    /**
-     * Get the skin base URL.
-     *
-     * @param string $pUrl Relative URL inside the skin directory
-     * @param bool $pRelative Create a relative URL
-     * @return string
-     */
-    public static function getSkinUrl($pUrl, $pRelative = true)
-    {
-        return \Agl\Core\Url\Url::getSkinUrl($pUrl, $pRelative);
-    }
-
-    /**
-     * Get the public base URL.
-     *
-     * @param string $pUrl Relative URL inside the public directory
-     * @param bool $pRelative Create a relative URL
-     * @return string
-     */
-    public static function getPublicUrl($pUrl, $pRelative = true)
-    {
-        return \Agl\Core\Url\Url::getPublicUrl($pUrl, $pRelative);
-    }
-
-    /**
-     * Return the current URL with optional additional params.
-     *
-     * @param array $pParams Parameters to add to the request (additional)
-     * @return string
-     */
-    public static function getCurrentUrl(array $pParams = array())
-    {
-        return \Agl\Core\Url\Url::getCurrent($pParams);
     }
 
     /**
