@@ -60,7 +60,7 @@ abstract class ConditionsAbstract
             }
         }
 
-        if (\Agl\Core\Db\Query\Conditions\Conditions::EQUAL == $pType) {
+        if (static::EQUAL == $pType) {
             $this->_conditions[$pField] = $pValue;
         } else {
             $this->_conditions[$pField] = array(

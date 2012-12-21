@@ -65,8 +65,7 @@ abstract class CollectionAbstract
     public function __call($pMethod, array $pArgs)
     {
         if (preg_match('/^loadBy([a-zA-Z0-9]+)$/', $pMethod, $matches)) {
-            if (isset($matches[1]) and is_string($matches[1])
-                and ! empty($matches[1]) and isset($pArgs[0])) {
+            if (isset($pArgs[0])) {
                 $attribute = \Agl\Core\Data\String::fromCamelCase($matches[1]);
                 if (! isset($pArgs[1])) {
                     return $this->_loadByAttribute($attribute, $pArgs[0]);
@@ -166,6 +165,39 @@ abstract class CollectionAbstract
         $this->resetPointer();
 
         return $this;
+    }
+
+    /**
+     * Load $pNb elements ordered by ID DESC.
+     *
+     * @param int $pNb
+     * @return CollectionAbstract
+     */
+    public function loadLast($pNb)
+    {
+        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_DESC));
+    }
+
+    /**
+     * Load $pNb elements ordered by ID ASC.
+     *
+     * @param int $pNb
+     * @return CollectionAbstract
+     */
+    public function loadFirst($pNb)
+    {
+        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_ASC));
+    }
+
+    /**
+     * Load $pNb elements ordered by RAND().
+     *
+     * @param int $pNb
+     * @return CollectionAbstract
+     */
+    public function loadRandom($pNb)
+    {
+        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_RAND));
     }
 
     /**

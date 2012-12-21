@@ -267,7 +267,7 @@ abstract class ItemAbstract
      * @param null|array $pOrder Order the select query
      * @return type
      */
-    public function load(\Agl\Core\Db\Query\Conditions\Conditions $pConditions, $pOrder = NULL)
+    public function load($pConditions = NULL, $pOrder = NULL)
     {
         $select = new \Agl\Core\Db\Query\Select\Select($this->_dbContainer);
 
@@ -275,7 +275,9 @@ abstract class ItemAbstract
             $select->addOrder($pOrder);
         }
 
-        $select->loadConditions($pConditions);
+        if ($pConditions instanceof \Agl\Core\Db\Query\Conditions\Conditions) {
+            $select->loadConditions($pConditions);
+        }
 
         $select->findOne();
         if ($select->count()) {
@@ -286,6 +288,36 @@ abstract class ItemAbstract
         }
 
         return $this;
+    }
+
+    /**
+     * Load the last inserted element of the item's collection.
+     *
+     * @return ItemAbstract
+     */
+    public function loadLast()
+    {
+        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_DESC));
+    }
+
+    /**
+     * Load the first inserted element of the item's collection.
+     *
+     * @return ItemAbstract
+     */
+    public function loadFirst()
+    {
+        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_ASC));
+    }
+
+    /**
+     * Load a random element.
+     *
+     * @return ItemAbstract
+     */
+    public function loadRandom()
+    {
+        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_RAND));
     }
 
     /**

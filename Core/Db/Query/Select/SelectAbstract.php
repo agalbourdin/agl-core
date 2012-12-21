@@ -118,8 +118,8 @@ abstract class SelectAbstract
         }
 
         $orders = array(
-            \Agl\Core\Db\Query\Select\Select::ORDER_ASC,
-            \Agl\Core\Db\Query\Select\Select::ORDER_DESC
+            static::ORDER_ASC,
+            static::ORDER_DESC
         );
 
         $fields = $this->_prefixFields($pFields);
