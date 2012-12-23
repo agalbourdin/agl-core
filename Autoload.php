@@ -24,11 +24,16 @@ class Autoload
      */
     private static $_aliases = array(
         'Agl'        => '\Agl\Agl',
+        'Block'      => '\Agl\Core\Mvc\Block\Block',
+        'Collection' => '\Agl\Core\Db\Collection\Collection',
         'Conditions' => '\Agl\Core\Db\Query\Conditions\Conditions',
+        'Controller' => '\Agl\Core\Mvc\Controller\Controller',
         'Debug'      => '\Agl\Core\Debug\Debug',
+        'Model'      => '\Agl\Core\Mvc\Model\Model',
         'Registry'   => '\Agl\Core\Registry\Registry',
         'Url'        => '\Agl\Core\Url\Url',
-        'Validation' => '\Agl\Core\Data\Validation'
+        'Validation' => '\Agl\Core\Data\Validation',
+        'View'       => '\Agl\Core\Mvc\View\View'
     );
 
     /**

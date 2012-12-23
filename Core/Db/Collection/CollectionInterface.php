@@ -11,6 +11,16 @@ namespace Agl\Core\Db\Collection;
 
 interface CollectionInterface
 {
+    /**
+     * The suffix used by the application's collection class names.
+     */
+    const APP_SUFFIX = 'Collection';
+
+    /**
+     * The application directory to search a Collection class.
+     */
+    const APP_PHP_DIR = 'Collection';
+
     public function __construct($pDbContainer);
     public function __call($pMethod, array $pArgs);
     public function load($pConditions = NULL, $pLimit = NULL, $pOrder = NULL);

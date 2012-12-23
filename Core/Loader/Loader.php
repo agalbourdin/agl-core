@@ -117,6 +117,36 @@ class Loader
     }
 
     /**
+     * Return an instance of the requested collection.
+     *
+     * @param string $pCollection
+     * @return mixed
+     */
+    public static function getCollection($pCollection)
+    {
+        $className = ucfirst($pCollection) . \Agl\Core\Db\Collection\CollectionInterface::APP_SUFFIX;
+        $fileName  = ucfirst($pCollection);
+
+        if (\Agl::isInitialized()) {
+            $collectionPath = \Agl::app()->getPath()
+                            . \Agl::APP_PHP_DIR
+                            . DS
+                            . \Agl\Core\Db\Collection\CollectionInterface::APP_PHP_DIR
+                            . DS
+                            . $fileName
+                            . \Agl::PHP_EXT;
+
+            if (is_readable($collectionPath)) {
+                return self::getInstance($className, array($pCollection));
+            } else {
+                return new \Agl\Core\Db\Collection\Collection($pCollection);
+            }
+        } else {
+            return new \Agl\Core\Db\Collection\Collection($pCollection);
+        }
+    }
+
+    /**
      * Create a singleton instance of the requested helper class.
      *
      * @param string $pClass

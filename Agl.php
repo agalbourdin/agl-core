@@ -150,7 +150,7 @@ final class Agl
      */
     public static function getCollection($pCollection)
     {
-        return new \Agl\Core\Db\Collection\Collection($pCollection);
+        return \Agl\Core\Loader\Loader::getCollection($pCollection);
     }
 
     /**

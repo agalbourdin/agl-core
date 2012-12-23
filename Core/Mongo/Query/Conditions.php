@@ -29,4 +29,22 @@ class Conditions
     const OPERATOR_OR     = '$or';
     const OPERATOR_NULL   = '$nexists';
     const OPERATOR_NOTNULL   = '$exists';
+
+    /**
+     * Accepted conditions types
+     *
+     * @todo Update types
+     */
+    const EQUAL    = '';
+    const NOTEQUAL = '$ne';
+    const LT       = '$lt';
+    const LTEQ     = '$lte';
+    const GT       = '$gt';
+    const GTEQ     = '$gte';
+    const IN       = '$in';
+    const NOTIN    = '$nin';
+    const REGEX    = '$regex';
+    const NULL     = '$nexists';
+    const NOTNULL  = '$exists';
+    const INSET    = '';
 }

@@ -297,7 +297,7 @@ abstract class ItemAbstract
      */
     public function loadLast()
     {
-        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_DESC));
+        return $this->load(NULL, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_DESC));
     }
 
     /**
@@ -307,7 +307,7 @@ abstract class ItemAbstract
      */
     public function loadFirst()
     {
-        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_ASC));
+        return $this->load(NULL, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_ASC));
     }
 
     /**
@@ -317,7 +317,7 @@ abstract class ItemAbstract
      */
     public function loadRandom()
     {
-        return $this->load(NULL, $pNb, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_RAND));
+        return $this->load(NULL, array(\Agl\Core\Db\Item\ItemInterface::IDFIELD => \Agl\Core\Db\Query\Select\Select::ORDER_RAND));
     }
 
     /**
