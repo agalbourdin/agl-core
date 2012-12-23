@@ -104,7 +104,7 @@ abstract class ViewAbstract
 
         $error = error_get_last();
 	    if ($error) {
-	        return (\Agl::app()->isDebugMode()) ? "Fatal error: $error[message] in $error[file] on line $error[line]" : 'An error occured.';
+	        throw new \Agl\Exception($error['message']);
 	    }
 
         \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_VIEW_RENDER_BUFFER_BEFORE, array(
@@ -195,7 +195,9 @@ abstract class ViewAbstract
 
         $blockConfig = \Agl::app()->getConfig('@layout/blocks/' . $blockPathInfos[1] . '/' . $blockPathInfos[2]);
 
-		\Agl\Core\Mvc\Block\BlockAbstract::checkAcl($blockPathInfos[1], $blockPathInfos[2]);
+		if (! \Agl\Core\Mvc\Block\BlockAbstract::checkAcl($blockPathInfos[1], $blockPathInfos[2])) {
+			return '';
+		}
 
 		$cacheEnabled = \Agl\Core\Mvc\Block\BlockAbstract::isCacheEnabled($blockConfig);
 

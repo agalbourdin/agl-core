@@ -77,9 +77,11 @@ abstract class BlockAbstract
 	 */
 	public static function checkAcl($pGroupId, $pBlockId)
 	{
-        $blockConfig = \Agl::app()->getConfig('@layout/blocks/' . $pGroupId . '/' . $pBlockId);
-		if (is_array($blockConfig) and isset($pBlockConfig['acl']) and ! \Agl::getSingleton(self::AGL_CORE_DIR . '/auth/acl')->isAllowed('admin', $pBlockConfig['acl'])) {
-			throw new \Agl\Exception("Invalid ACL to request the block '" . $pBlockConfig['id'] . "'");
+		$blockConfig = \Agl::app()->getConfig('@layout/blocks/' . $pGroupId . '/' . $pBlockId);
+		$acl         = \Agl::getSingleton(\Agl::AGL_CORE_DIR . '/auth/acl');
+
+		if (is_array($blockConfig) and isset($blockConfig['acl']) and ! $acl->isAllowed('guest', $blockConfig['acl'])) {
+			return false;
 		}
 
         return true;

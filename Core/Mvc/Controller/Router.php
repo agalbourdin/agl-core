@@ -99,8 +99,8 @@ class Router
 		}
 
 		$acl = \Agl::getSingleton(\Agl::AGL_CORE_DIR . '/auth/acl');
-    	if ($aclConfig and ! $acl->isAllowed('admin', $aclConfig)) {
-    		$acl->renderError();
+    	if ($aclConfig and ! $acl->isAllowed('guest', $aclConfig)) {
+    		$acl->requestLogin();
         }
 
         return true;

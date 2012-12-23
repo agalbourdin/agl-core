@@ -58,6 +58,11 @@ interface ViewInterface
     const HEADER_404 = '404 Not Found';
 
     /**
+     * 500 HTTP header.
+     */
+    const HEADER_500 = '500 Internal Server Error';
+
+    /**
      * HTTP layouts directory.
      */
     const APP_HTTP_TEMPLATE_DIR = 'app/template';

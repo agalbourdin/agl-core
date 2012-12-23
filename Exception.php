@@ -25,8 +25,7 @@ class Exception
         if (\Agl::isInitialized() and \Agl::app()->isDebugMode()) {
             parent::__construct($pMessage, $pCode, $pPrevious);
         } else {
-            \Agl\Core\Debug\Debug::log($pMessage);
-            $this->_aglError();
+            $this->_aglError($pMessage);
         }
     }
 
@@ -38,9 +37,27 @@ class Exception
     /**
      * Display a generic error message.
      */
-    protected function _aglError()
+    protected function _aglError($pMessage)
     {
-        echo 'An error occured.';
+        $logId = \Agl\Core\Debug\Debug::log($pMessage);
+
+        if (\Agl::isInitialized()) {
+            $file = \Agl::app()->getConfig('@layout/errors/general');
+            if ($file) {
+                $path = \Agl::app()->getPath()
+                        . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_TEMPLATE_DIR
+                        . DS
+                        . \Agl::app()->getConfig('@app/global/theme')
+                        . DS
+                        . $file;
+                if (is_readable($path)) {
+                    require($path);
+                    exit;
+                }
+            }
+        }
+
+        echo 'An error occured. Logged: ' . $logId;
         exit;
     }
 }

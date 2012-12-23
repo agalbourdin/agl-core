@@ -114,7 +114,10 @@ class Debug
             $message = $pMessage;
         }
 
-        return syslog(LOG_DEBUG, '[agl_' . uniqid() . '] ' . $message);
+        $logId = uniqid();
+        syslog(LOG_DEBUG, '[agl_' . $logId . '] ' . $message);
+
+        return $logId;
     }
 
     /**

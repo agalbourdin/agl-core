@@ -85,22 +85,17 @@ class Acl
     	return true;
 	}
 
-	public function renderError()
+	/**
+	 * Redirect the user to the configured 403 page (login page).
+	 */
+	public function requestLogin()
 	{
-		$file = \Agl::app()->getConfig('@layout/errors/403');
-		if (\Agl::app()->isDebugMode() or ! $file) {
+		$module = \Agl::app()->getConfig('@layout/errors/403');
+		if (\Agl::app()->isDebugMode() or ! $module) {
 			throw new \Agl\Exception("Invalid ACL to access the view");
 		}
 
-		$path = \Agl::app()->getPath()
-		        . \Agl\Core\Mvc\View\ViewInterface::APP_HTTP_TEMPLATE_DIR
-		        . DS
-                . \Agl::app()->getConfig('@app/global/theme')
-		        . DS
-		        . $file;
-
-		header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
-		require($path);
+		\Agl::getRequest()->redirect($module);
 		exit;
 	}
 }
