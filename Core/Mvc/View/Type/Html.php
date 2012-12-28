@@ -44,7 +44,7 @@ class Html
 	const APP_HTTP_JS_DIR = 'js';
 
 	/**
-	 * HTML file extension.
+	 * HTML type: template file extension.
 	 */
 	const FILE_EXT = '.phtml';
 
@@ -254,6 +254,61 @@ class Html
 	}
 
 	/**
+	 * Load CSS files registered in the configuration array $pArray.
+	 *
+	 * @param array $pArray
+	 * @return Html
+	 */
+	private function _loadCssFromArray($pArray)
+	{
+		if (is_array($pArray)) {
+			foreach ($pArray as $css) {
+				$this->_css[] = $css;
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Load JS files registered in the configuration array $pArray.
+	 *
+	 * @param array $pArray
+	 * @return Html
+	 */
+	private function _loadJsFromArray($pArray)
+	{
+		if (is_array($pArray)) {
+			foreach ($pArray as $js) {
+				$this->_js[] = $js;
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Replace the AGL Markers in the buffer before rendering it.
+	 *
+	 * @param $pBuffer string
+	 * @return string
+	 */
+	protected function _prepareRender($pBuffer)
+	{
+		$hasMarkers = preg_match_all('#(/' . static::VIEW_MARKER . '([A-Z0-9_]+)/)#', $pBuffer, $matches);
+		if ($hasMarkers !== false) {
+			foreach ($matches[2] as $marker) {
+				$method = '_process' . \Agl\Core\Data\String::toCamelCase($marker) . 'Marker';
+				if (method_exists($this, $method)) {
+					$this->$method($pBuffer);
+				}
+			}
+		}
+
+		return $pBuffer;
+	}
+
+	/**
 	 * Load the CSS from the configuration of the view and of all the blocks
 	 * that have been included in the view.
 	 *
@@ -311,61 +366,6 @@ class Html
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Load CSS files registered in the configuration array $pArray.
-	 *
-	 * @param array $pArray
-	 * @return Html
-	 */
-	private function _loadCssFromArray($pArray)
-	{
-		if (is_array($pArray)) {
-			foreach ($pArray as $css) {
-				$this->_css[] = $css;
-			}
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Load JS files registered in the configuration array $pArray.
-	 *
-	 * @param array $pArray
-	 * @return Html
-	 */
-	private function _loadJsFromArray($pArray)
-	{
-		if (is_array($pArray)) {
-			foreach ($pArray as $js) {
-				$this->_js[] = $js;
-			}
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Replace the AGL Markers in the buffer before rendering it.
-	 *
-	 * @param $pBuffer string
-	 * @return string
-	 */
-	protected function _processMarkers($pBuffer)
-	{
-		$hasMarkers = preg_match_all('#(/' . static::VIEW_MARKER . '([A-Z0-9_]+)/)#', $pBuffer, $matches);
-		if ($hasMarkers !== false) {
-			foreach ($matches[2] as $marker) {
-				$method = '_process' . \Agl\Core\Data\String::toCamelCase($marker) . 'Marker';
-				if (method_exists($this, $method)) {
-					$this->$method($pBuffer);
-				}
-			}
-		}
-
-		return parent::_processMarkers($pBuffer);
 	}
 
 	/**
@@ -516,16 +516,6 @@ class Html
 
 		$this->_meta[$pId] = '<meta ' . implode(' ', $meta) . '>';
 		return $this;
-	}
-
-	/**
-	 * Get the file extension to use for template files.
-	 *
-	 * @return string
-	 */
-	public function getFileExt()
-	{
-		return self::FILE_EXT;
 	}
 
 	/**

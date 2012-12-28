@@ -105,4 +105,13 @@ class Auth
 	{
 		return $this->_user;
 	}
+
+	public function getRole()
+	{
+		if ($this->_user->getRole()) {
+			return $this->_user->getRole();
+		}
+
+		return \Agl\Core\Auth\Acl::DEFAULT_ROLE;
+	}
 }

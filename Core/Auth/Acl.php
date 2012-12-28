@@ -22,6 +22,11 @@ class Acl
 	const CONFIG_FIELD_INHERIT = 'inherit';
 
 	/**
+	 * Default role for non logged in users.
+	 */
+	const DEFAULT_ROLE = 'guest';
+
+	/**
 	 * Roles and resources are loaded in this array.
 	 *
 	 * @var array

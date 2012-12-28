@@ -40,12 +40,32 @@ abstract class ViewAbstract
 	protected $_type = NULL;
 
 	/**
-	 * Replace the AGL Markers in the buffer before rendering it.
+	 * Set HTTP header (404, 401...).
+	 *
+	 * @param string $pHeader
+	 */
+	public static function setHttpHeader($pHeader)
+	{
+		header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
+	}
+
+	/**
+	 * Set misc. headers (HTML, JSON...).
+	 *
+	 * @param string $pHeader
+	 */
+	public static function setHeader($pHeader)
+	{
+		header($pHeader);
+	}
+
+	/**
+	 * Prepare the rendering depending of the view type.
 	 *
 	 * @param $pBuffer string
 	 * @return string
 	 */
-	protected function _processMarkers($pBuffer)
+	protected function _prepareRender($pBuffer)
 	{
 		return $pBuffer;
 	}
@@ -74,7 +94,7 @@ abstract class ViewAbstract
 	 */
 	public function setFile($pFile)
 	{
-        $this->_file = $pFile . $this->getFileExt();
+        $this->_file = $pFile . static::FILE_EXT;
 
         return $this;
 	}
@@ -91,7 +111,7 @@ abstract class ViewAbstract
 	}
 
 	/**
-	 * Display the buffer after reacing the AGL markers.
+	 * Prepare and display the buffer.
 	 *
 	 * @param string $pBuffer
 	 * @return string
@@ -112,7 +132,7 @@ abstract class ViewAbstract
 			'buffer' => &$pBuffer
 		));
 
-		$pBuffer = $this->_processMarkers($pBuffer);
+		$pBuffer = $this->_prepareRender($pBuffer);
 
 		return $pBuffer;
 	}
@@ -127,7 +147,7 @@ abstract class ViewAbstract
 		$this->_viewPath = $this->getViewPath();
 
 		if (! is_readable($this->_viewPath)) {
-			$this->setHttpHeader(static::HEADER_404);
+			static::setHttpHeader(static::HEADER_404);
 			$template404 = \Agl::app()->getConfig('@layout/errors/404');
 			if ($template404) {
 				$this->setFile($template404);
@@ -149,14 +169,17 @@ abstract class ViewAbstract
 
 		$this->_type = $template['type'];
 
-		$template = \Agl::app()->getPath()
-			        . static::APP_HTTP_TEMPLATE_DIR
-			        . DS
-           			. \Agl::app()->getConfig('@app/global/theme')
-			        . DS
-			        . $template['id']
-			        . $this->getFileExt();
-		require($template);
+		if (isset($template['file'])) {
+			$template = \Agl::app()->getPath()
+				        . static::APP_HTTP_TEMPLATE_DIR
+				        . DS
+	           			. \Agl::app()->getConfig('@app/global/theme')
+				        . DS
+				        . $template['file'];
+			require($template);
+		} else {
+			echo $this->getView();
+		}
 
 		ob_end_flush();
 		return $this;
@@ -238,7 +261,7 @@ abstract class ViewAbstract
         ob_start();
 
         $blockModel
-			->setFile($blockPathInfos[1] . DS . $blockPathInfos[2] . $this->getFileExt())
+			->setFile($blockPathInfos[1] . DS . $blockPathInfos[2] . static::FILE_EXT)
 			->render();
 
 		$content = ob_get_clean();
@@ -281,13 +304,5 @@ abstract class ViewAbstract
 	           . static::APP_HTTP_VIEW_DIR
 	           . DS
 	           . $this->_file;
-	}
-
-	/**
-	 * Set HTTP header (404, 401...)
-	 */
-	public function setHttpHeader($pHeader)
-	{
-		header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
 	}
 }

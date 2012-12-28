@@ -17,6 +17,11 @@ interface ViewInterface
     const TYPE_HTML = 'html';
 
     /**
+     *View type : JSON.
+     */
+    const TYPE_JSON = 'json';
+
+    /**
      * The suffix used by the application's View class names.
      */
     const APP_VIEW_SUFFIX = 'View';
@@ -63,6 +68,16 @@ interface ViewInterface
     const HEADER_500 = '500 Internal Server Error';
 
     /**
+     * HTML header.
+     */
+    const HEADER_HTML = 'Content-type: text/html; charset=UTF-8';
+
+    /**
+     * JSON header.
+     */
+    const HEADER_JSON = 'Content-type: application/json; charset=UTF-8';
+
+    /**
      * HTTP layouts directory.
      */
     const APP_HTTP_TEMPLATE_DIR = 'app/template';
@@ -72,6 +87,7 @@ interface ViewInterface
     public function getBuffer($pBuffer);
     public function render();
     public function getBlock($pBlock);
-    public function getFileExt();
     public function getType();
+    public static function setHttpHeader($pHeader);
+    public static function setHeader($pHeader);
 }

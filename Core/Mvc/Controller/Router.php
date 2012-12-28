@@ -94,13 +94,16 @@ class Router
 	{
 		$aclConfig = \Agl::app()->getConfig('@layout/modules/' . $this->_module . '/' . $this->_view . '/acl/all');
 
-		if (! $aclConfig) {
+		if ($aclConfig === NULL) {
 			$aclConfig = \Agl::app()->getConfig('@layout/modules/' . $this->_module . '/' . $this->_view . '/acl/' . $this->_action);
 		}
 
-		$acl = \Agl::getSingleton(\Agl::AGL_CORE_DIR . '/auth/acl');
-    	if ($aclConfig and ! $acl->isAllowed('guest', $aclConfig)) {
-    		$acl->requestLogin();
+    	if ($aclConfig !== NULL) {
+			$auth = \Agl::getAuth();
+			$acl  = \Agl::getSingleton(\Agl::AGL_CORE_DIR . '/auth/acl');
+			if (! $acl->isAllowed($auth->getRole(), $aclConfig)) {
+	    		$acl->requestLogin();
+	    	}
         }
 
         return true;

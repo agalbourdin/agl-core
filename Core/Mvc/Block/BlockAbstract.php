@@ -78,10 +78,12 @@ abstract class BlockAbstract
 	public static function checkAcl($pGroupId, $pBlockId)
 	{
 		$blockConfig = \Agl::app()->getConfig('@layout/blocks/' . $pGroupId . '/' . $pBlockId);
-		$acl         = \Agl::getSingleton(\Agl::AGL_CORE_DIR . '/auth/acl');
-
-		if (is_array($blockConfig) and isset($blockConfig['acl']) and ! $acl->isAllowed('guest', $blockConfig['acl'])) {
-			return false;
+		if (is_array($blockConfig) and isset($blockConfig['acl'])) {
+			$auth = \Agl::getAuth();
+			$acl  = \Agl::getSingleton(\Agl::AGL_CORE_DIR . '/auth/acl');
+			if (! $acl->isAllowed($auth->getRole(), $blockConfig['acl'])) {
+				return false;
+			}
 		}
 
         return true;
