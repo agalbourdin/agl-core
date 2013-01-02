@@ -71,7 +71,7 @@ abstract class ConnectionAbstract
      *
      * @return int
      */
-    public function count()
+    public function countQueries()
     {
         return $this->_queries;
     }

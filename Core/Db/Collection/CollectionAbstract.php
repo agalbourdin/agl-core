@@ -75,7 +75,7 @@ abstract class CollectionAbstract
             }
         }
 
-        throw new \Agl\Exception("Undefined method '$pMethod'");
+        throw new \Exception("Undefined method '$pMethod'");
     }
 
     /**

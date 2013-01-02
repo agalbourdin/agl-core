@@ -52,11 +52,11 @@ class Count
             if ($prepared->execute($this->_conditions->getPreparedValues())) {
                 $result = $prepared->fetchObject();
                 if (! $result) {
-                    throw new \Agl\Exception("The count query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "')");
+                    throw new \Exception("The count query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "')");
                 }
             } else {
                 $error = $prepared->errorInfo();
-                throw new \Agl\Exception("The count query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
+                throw new \Exception("The count query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
             }
 
             if (\Agl::app()->isDebugMode()) {
@@ -65,7 +65,7 @@ class Count
 
             return (int)$result->{'nb'};
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
     }
 }

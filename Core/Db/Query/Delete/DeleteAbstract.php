@@ -29,7 +29,7 @@ abstract class DeleteAbstract
         if ($pItem->getId()) {
             $this->_item = $pItem;
         } else {
-            throw new \Agl\Exception("Item cannot be deleted, an ID is required");
+            throw new \Exception("Item cannot be deleted, an ID is required");
         }
 
         $this->_setDbPrefix();

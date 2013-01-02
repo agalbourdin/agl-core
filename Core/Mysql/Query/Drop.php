@@ -28,14 +28,14 @@ class Drop
 
             if (! $prepared->execute()) {
                 $error = $prepared->errorInfo();
-                throw new \Agl\Exception("The drop query failed (table '" . $this->_dbPrefix . $this->_collection->getDbContainer() . "') with message '" . $error[2] . "'");
+                throw new \Exception("The drop query failed (table '" . $this->_dbPrefix . $this->_collection->getDbContainer() . "') with message '" . $error[2] . "'");
             }
 
             if (\Agl::app()->isDebugMode()) {
                 \Agl::app()->getDb()->incrementCounter();
             }
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
 
         return true;

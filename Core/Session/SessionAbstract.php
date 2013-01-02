@@ -44,7 +44,7 @@ abstract class SessionAbstract
             return $this->hasAttribute($var);
         }
 
-        throw new \Agl\Exception("Undefined method '$pMethod'");
+        throw new \Exception("Undefined method '$pMethod'");
     }
 
     /**

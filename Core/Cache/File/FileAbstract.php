@@ -47,12 +47,12 @@ abstract class FileAbstract
 	{
 		$dir = $this->getCachePath();
 		if (! \Agl\Core\Data\Directory::createDir($dir)) {
-			throw new \Agl\Exception("Unable to create the cache directory '$dir'");
+			throw new \Exception("Unable to create the cache directory '$dir'");
 		}
 
 		$file = $dir . $this->getCacheFile();
 		if (! \Agl\Core\Data\File::createEmptyFile($file)) {
-			throw new \Agl\Exception("Unable to create the cache file '$file'");
+			throw new \Exception("Unable to create the cache file '$file'");
 		}
 
 		return $this;

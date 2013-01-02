@@ -25,7 +25,7 @@ class Item
     public function removeAllJoins($pDbContainer)
     {
         if (! $this->getId()) {
-            throw new \Agl\Exception("The item must be existing in the database before being joined");
+            throw new \Exception("The item must be existing in the database before being joined");
         }
 
         $joins = $this->getJoins();
@@ -52,7 +52,7 @@ class Item
     public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL)
     {
         if (! $this->getId()) {
-            throw new \Agl\Exception("The item must be existing in the database before being joined");
+            throw new \Exception("The item must be existing in the database before being joined");
         }
 
         $collection = new \Agl\Core\Db\Collection\Collection($pDbContainer);

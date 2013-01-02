@@ -156,7 +156,7 @@ class Loader
     {
         $classArr = explode(DS, $pClass);
         if (count($classArr) != 2) {
-            throw new \Agl\Exception("Helper syntax is incorrect ('$pClass')");
+            throw new \Exception("Helper syntax is incorrect ('$pClass')");
         }
 
         $className = ucfirst($classArr[0]) . ucfirst($classArr[1]) . \Agl\Core\Mvc\Model\ModelInterface::APP_HELPER_SUFFIX;
@@ -176,10 +176,10 @@ class Loader
             if (is_readable($helperPath)) {
                 return self::getSingleton($className);
             } else {
-                throw new \Agl\Exception("Helper does not exists or isn't readable ('$pClass')");
+                throw new \Exception("Helper does not exists or isn't readable ('$pClass')");
             }
         } else {
-            throw new \Agl\Exception("The application must be initialized to instanciate a Helper ('$pClass')");
+            throw new \Exception("The application must be initialized to instanciate a Helper ('$pClass')");
         }
     }
 

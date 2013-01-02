@@ -70,7 +70,7 @@ class Insert
 
             if (! $prepared->execute($this->_fields)) {
                 $error = $prepared->errorInfo();
-                throw new \Agl\Exception("The insert query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
+                throw new \Exception("The insert query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
             }
 
             if (\Agl::app()->isDebugMode()) {
@@ -81,7 +81,7 @@ class Insert
 
             return $prepared->rowCount();
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
 
         return true;

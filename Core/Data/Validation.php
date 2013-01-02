@@ -39,7 +39,7 @@ class Validation
         foreach ($pParams as $type => $value) {
             $func = '_validate' . $type;
             if (! isset(self::$_types[$type])) {
-                throw new \Agl\Exception("TypeHint validation failed, unknown type '$type'");
+                throw new \Exception("TypeHint validation failed, unknown type '$type'");
             }
 
             $validation = self::$func($value);

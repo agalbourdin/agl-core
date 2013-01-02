@@ -37,7 +37,7 @@ class Arr
         }
 
         if (! is_array($this->_array)) {
-            throw new \Agl\Exception("Corrupted array cache '$pIdentifier'");
+            throw new \Exception("Corrupted array cache '$pIdentifier'");
         }
     }
 
@@ -49,7 +49,7 @@ class Arr
     public function save()
     {
         if (file_put_contents($this->getCacheFullPath(), var_export($this->_array, true), LOCK_EX) === false) {
-            throw new \Agl\Exception("Unable to write the cache");
+            throw new \Exception("Unable to write the cache");
         }
 
         return $this;

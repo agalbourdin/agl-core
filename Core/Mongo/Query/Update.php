@@ -26,9 +26,9 @@ class Update
     private function _checkCommitResult(array $result)
     {
         if (! $result['ok'] and $result['errmsg']) {
-            throw new \Agl\Exception("Update failed to MongoDB collection '" . $this->_prefix . $this->_item->getDbContainer() . "' with error message '" . $result['errmsg'] . "'");
+            throw new \Exception("Update failed to MongoDB collection '" . $this->_prefix . $this->_item->getDbContainer() . "' with error message '" . $result['errmsg'] . "'");
         } else if (! $result['ok']) {
-            throw new \Agl\Exception("Update failed to MongoDB collection '" . $this->_prefix . $this->_item->getDbContainer() . "' with no error message");
+            throw new \Exception("Update failed to MongoDB collection '" . $this->_prefix . $this->_item->getDbContainer() . "' with no error message");
         }
     }
 
@@ -59,9 +59,9 @@ class Update
                 }
             }
         } catch (\MongoCursorException $e) {
-            throw new \Agl\Exception("Update (safe mode) failed to MongoDB collection '" . $this->_prefix . $this->_item->getDbContainer() . "' with message '" . $e->getMessage() . "'");
+            throw new \Exception("Update (safe mode) failed to MongoDB collection '" . $this->_prefix . $this->_item->getDbContainer() . "' with message '" . $e->getMessage() . "'");
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
 
         return true;

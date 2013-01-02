@@ -37,7 +37,7 @@ abstract class ConditionsAbstract
         }
 
         if ($pType != static::TYPE_AND and $pType != static::TYPE_OR) {
-            throw new \Agl\Exception("Condition type unknown");
+            throw new \Exception("Condition type unknown");
         }
 
         $this->_type = $pType;

@@ -35,7 +35,7 @@ class Delete
 
             if (! $prepared->execute($preparedValues)) {
                 $error = $prepared->errorInfo();
-                throw new \Agl\Exception("The delete query failed (table '" . $this->_dbPrefix . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
+                throw new \Exception("The delete query failed (table '" . $this->_dbPrefix . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
             }
 
             $this->_item->removeJoinFromAllChilds();
@@ -46,7 +46,7 @@ class Delete
 
             return $prepared->rowCount();
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
 
         return true;

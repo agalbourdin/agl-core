@@ -12,10 +12,30 @@ namespace Agl\Core\Request;
 class Request
 {
 	/**
-	 * HTTP Status Codes.
+	 * HTTP Redirect Codes.
 	 */
 	const HTTP_CODE_REDIRECT_PERMANENT   = 301;
 	const HTTP_CODE_REDIRECT_TEMPORARILY = 302;
+
+	/**
+     * 404 HTTP header.
+     */
+    const HEADER_404 = '404 Not Found';
+
+    /**
+     * 500 HTTP header.
+     */
+    const HEADER_500 = '500 Internal Server Error';
+
+    /**
+     * HTML header.
+     */
+    const HEADER_HTML = 'Content-type: text/html; charset=UTF-8';
+
+    /**
+     * JSON header.
+     */
+    const HEADER_JSON = 'Content-type: application/json; charset=UTF-8';
 
 	/**
 	 * Default module.
@@ -70,6 +90,26 @@ class Request
 	private $_params = array();
 
 	/**
+	 * Set HTTP header (404, 401...).
+	 *
+	 * @param string $pHeader
+	 */
+	public static function setHttpHeader($pHeader)
+	{
+		header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
+	}
+
+	/**
+	 * Set misc. headers (HTML, JSON...).
+	 *
+	 * @param string $pHeader
+	 */
+	public static function setHeader($pHeader)
+	{
+		header($pHeader);
+	}
+
+	/**
 	 * Initialize the instance by registering the reqest parts.
 	 *
 	 * @param string $pRequestUri URI to parse
@@ -121,7 +161,7 @@ class Request
             return $this;
         }
 
-        throw new \Agl\Exception('Request URI is not available');
+        throw new \Exception('Request URI is not available');
 	}
 
 	/**
@@ -137,7 +177,7 @@ class Request
 			return $this;
         }
 
-        throw new \Agl\Exception('Bad request: the requested module is not valid (syntax)');
+        throw new \Exception('Bad request: the requested module is not valid (syntax)');
 	}
 
 	/**
@@ -153,7 +193,7 @@ class Request
 			return $this;
         }
 
-        throw new \Agl\Exception('Bad request: the requested view is not valid (syntax)');
+        throw new \Exception('Bad request: the requested view is not valid (syntax)');
 	}
 
 	/**

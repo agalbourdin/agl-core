@@ -25,7 +25,7 @@ class Id
         } else if (is_string($pId)) {
             $id = new \MongoId($pId);
         } else {
-            throw new \Agl\Exception('Trying to set an invalid ID (must be a string or an instance of MongoId)');
+            throw new \Exception('Trying to set an invalid ID (must be a string or an instance of MongoId)');
         }
 
         parent::__construct($id);
@@ -42,6 +42,6 @@ class Id
             return $this->_id->__toString();
         }
 
-        throw new \Agl\Exception('Trying to get an invalid ID (must be a string or an instance of MongoId)');
+        throw new \Exception('Trying to get an invalid ID (must be a string or an instance of MongoId)');
     }
 }

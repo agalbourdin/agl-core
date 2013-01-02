@@ -114,7 +114,7 @@ class Select
 
             if (! $this->_stm->execute($this->_conditions->getPreparedValues())) {
                 $error = $this->_stm->errorInfo();
-                throw new \Agl\Exception("The select query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
+                throw new \Exception("The select query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
             }
 
             if (\Agl::app()->isDebugMode()) {
@@ -123,7 +123,7 @@ class Select
 
             return $this;
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
     }
 

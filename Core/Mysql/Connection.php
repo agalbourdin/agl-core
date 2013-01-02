@@ -41,7 +41,7 @@ class Connection
                 $this->_connection = new \PDO("mysql:host=$pHost;dbname=$pDb");
             }
         } catch(\PDOException $e) {
-            throw new \Agl\Exception("Unable to establish a connection to MySQL: Host '$pHost', DB '$pDb', User '$pUser', Password '$pPass' with message '" . $e->getMessage() . "'");
+            throw new \Exception("Unable to establish a connection to MySQL: Host '$pHost', DB '$pDb', User '$pUser', Password '$pPass' with message '" . $e->getMessage() . "'");
         }
 
         $this->_connection->query("SET NAMES 'utf8';");

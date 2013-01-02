@@ -33,7 +33,7 @@ class Select
         try {
             $cursor = \Agl::app()->getDb()->getResourceDb()->{$this->_dbContainer}->find($this->_conditions->toArray(), $this->_fields);
             if (! $cursor instanceof \MongoCursor) {
-                throw new \Agl\Exception("Result must be an object of type MongoCursor");
+                throw new \Exception("Result must be an object of type MongoCursor");
             }
 
             if (! empty($this->_order)) {
@@ -54,7 +54,7 @@ class Select
 
             return $cursor;
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
     }
 
@@ -70,7 +70,7 @@ class Select
             if ($result === NULL) {
                 return array();
             } else if (! is_array($result)) {
-                throw new \Agl\Exception("Result must be an array");
+                throw new \Exception("Result must be an array");
             }
 
             if (! empty($this->_order)) {
@@ -95,7 +95,7 @@ class Select
 
             return $result;
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
     }
 }

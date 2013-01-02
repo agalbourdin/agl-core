@@ -89,6 +89,6 @@ class Date
     			break;
     	}
 
-    	throw new \Agl\Exception("The requested date format is not correct");
+    	throw new \Exception("The requested date format is not correct");
     }
 }

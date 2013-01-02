@@ -16,5 +16,5 @@ switch($view->getType()) {
         class Block extends \Agl\Core\Mvc\Block\Type\Html { }
         break;
     default:
-        throw new \Agl\Exception("View type '" . $view->getType() . "' is not valid");
+        throw new \Exception("View type '" . $view->getType() . "' is not valid");
 }

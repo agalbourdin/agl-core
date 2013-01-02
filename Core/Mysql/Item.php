@@ -78,7 +78,7 @@ class Item
     public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL)
     {
         if (! $this->getId()) {
-            throw new \Agl\Exception("The item must be existing in the database before childs can be retrieved.");
+            throw new \Exception("The item must be existing in the database before childs can be retrieved.");
         }
 
         $id = $this->getId()->getOrig();

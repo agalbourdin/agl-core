@@ -18,5 +18,5 @@ switch(\Agl::app()->getConfig('@app/session/storage')) {
         class Session extends \Agl\Core\Session\Storage\Db { }
         break;
     default:
-        throw new \Agl\Exception("Session storage type '" . \Agl::app()->getConfig('@app/session:storage') . "' is not allowed");
+        throw new \Exception("Session storage type '" . \Agl::app()->getConfig('@app/session:storage') . "' is not allowed");
 }

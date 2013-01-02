@@ -161,7 +161,7 @@ abstract class SelectAbstract
         } else if (is_int($pNb)) {
             $nb = $pNb;
         } else {
-            throw new \Agl\Exception("Validation failed for type 'array' or 'int'");
+            throw new \Exception("Validation failed for type 'array' or 'int'");
         }
 
         $this->_limit = $nb;

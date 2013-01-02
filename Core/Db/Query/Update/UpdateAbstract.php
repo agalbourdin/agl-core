@@ -36,7 +36,7 @@ abstract class UpdateAbstract
         if ($pItem->getId()) {
             $this->_item = $pItem;
         } else {
-            throw new \Agl\Exception("Item cannot be updated, an ID is required");
+            throw new \Exception("Item cannot be updated, an ID is required");
         }
 
         $this->_setDbPrefix();

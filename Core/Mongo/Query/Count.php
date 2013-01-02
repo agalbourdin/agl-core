@@ -23,7 +23,7 @@ class Count
         try {
             $result = \Agl::app()->getDb()->getResourceDb()->{$this->_dbContainer}->count($this->_conditions->toArray(), $this->_limit);
             if (! is_int($result)) {
-                throw new \Agl\Exception("The count result must be an integer");
+                throw new \Exception("The count result must be an integer");
             }
 
             if (\Agl::app()->isDebugMode()) {
@@ -32,7 +32,7 @@ class Count
 
             return $result;
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
     }
 }

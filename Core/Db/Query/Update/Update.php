@@ -18,5 +18,5 @@ switch(\Agl::app()->getConfig('@app/db/engine')) {
         class Update extends \Agl\Core\Mysql\Query\Update { }
         break;
     default:
-        throw new \Agl\Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
+        throw new \Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
 }

@@ -71,7 +71,7 @@ class Update
 
                 if (! $prepared->execute(array_values($toUpdate))) {
                     $error = $prepared->errorInfo();
-                    throw new \Agl\Exception("The update query failed (table '" . $this->_dbPrefix . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
+                    throw new \Exception("The update query failed (table '" . $this->_dbPrefix . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
                 }
 
                 if (\Agl::app()->isDebugMode()) {
@@ -81,7 +81,7 @@ class Update
                 return $prepared->rowCount();
             }
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
 
         return true;

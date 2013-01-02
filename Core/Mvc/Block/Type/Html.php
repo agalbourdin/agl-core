@@ -26,6 +26,6 @@ class Html
             return call_user_func_array(array($this->getView(), $pMethod), $pArgs);
         }
 
-        throw new \Agl\Exception("Method '$pMethod' doesn't exists");
+        throw new \Exception("Method '$pMethod' doesn't exists");
     }
 }

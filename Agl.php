@@ -122,7 +122,7 @@ final class Agl
     public static function validateParams(array $pParams)
     {
         if (! \Agl\Core\Data\Validation::check($pParams)) {
-            throw new \Agl\Exception("Validation failed for data '" . json_encode($pParams) . "'");
+            throw new \Exception("Validation failed for data '" . json_encode($pParams) . "'");
         }
 
         return true;
@@ -294,12 +294,18 @@ final class Agl
     /**
      * Route the request.
      *
-     * @param string $pRequestUri Request URI to route
+     * @param null|string $pRequestUri Request URI to route
      * @return Agl
      */
-    public static function route($pRequestUri)
+    public static function route($pRequestUri = NULL)
     {
-        $router = new \Agl\Core\Mvc\Controller\Router($pRequestUri);
+        if ($pRequestUri === NULL) {
+            $requestUri = $_SERVER['REQUEST_URI'];
+        } else {
+            $requestUri = $pRequestUri;
+        }
+
+        $router = new \Agl\Core\Mvc\Controller\Router($requestUri);
         $router->route();
     }
 
@@ -326,17 +332,20 @@ final class Agl
      */
     private function __construct($pCache, $pDebug)
     {
-        if (date_default_timezone_get() !== \Agl\Core\Data\Date::DEFAULT_TZ) {
+        /*if (date_default_timezone_get() !== \Agl\Core\Data\Date::DEFAULT_TZ) {
             date_default_timezone_set(\Agl\Core\Data\Date::DEFAULT_TZ);
-        }
+        }*/
 
         $this->_appPath = realpath('.') . DS;
         $this->_cache   = ($pCache) ? true : false;
         $this->_debug   = ($pDebug) ? true : false;
 
-        error_reporting(E_ALL);
+        error_reporting(-1);
+
         if ($pDebug) {
-            $debug = self::getSingleton(self::AGL_CORE_DIR . '/debug/debug');
+            ini_set('display_errors', 'On');
+        } else {
+            ini_set('display_errors', 'Off');
         }
     }
 
@@ -349,7 +358,7 @@ final class Agl
     public function __destruct()
     {
         if ($this->_debug) {
-            var_dump(self::getSingleton(self::AGL_CORE_DIR . '/debug/debug')->getDebugInfos());
+            var_dump(\Agl\Core\Debug\Debug::getDebugInfos());
         }
     }
 

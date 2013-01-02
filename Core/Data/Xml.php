@@ -89,7 +89,7 @@ class Xml
             return $this->_domDoc->load($pFile);
         }
 
-        throw new \Agl\Exception("'$pFile' is not readable");
+        throw new \Exception("'$pFile' is not readable");
     }
 
     /**
@@ -115,7 +115,7 @@ class Xml
             return $this->_domDoc->loadHTMLFile($pFile);
         }
 
-        throw new \Agl\Exception("'$pFile' is not readable");
+        throw new \Exception("'$pFile' is not readable");
     }
 
     /**
@@ -138,7 +138,7 @@ class Xml
     public function saveToXmlFile($pFile)
     {
         if (! is_writable($pFile)) {
-            throw new \Agl\Exception("The file '$pFile' is not writable");
+            throw new \Exception("The file '$pFile' is not writable");
         }
 
         return $this->_domDoc->save($pFile);
@@ -163,7 +163,7 @@ class Xml
     public function saveToHtmlFile($pFile)
     {
         if (! is_writable($pFile)) {
-            throw new \Agl\Exception("The file '$pFile' is not writable");
+            throw new \Exception("The file '$pFile' is not writable");
         }
 
         return $this->_domDoc->saveHTMLFile($pFile);
@@ -189,7 +189,7 @@ class Xml
     {
         $queryResult = $this->_getXPath()->query($pQuery, $pNode);
         if ($queryResult === false) {
-            throw new \Agl\Exception("Invalid XPath request");
+            throw new \Exception("Invalid XPath request");
         }
 
         return $queryResult;

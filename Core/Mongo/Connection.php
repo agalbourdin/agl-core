@@ -50,7 +50,7 @@ class Connection
                 $this->_connection = new \Mongo('mongodb://' . $pHost);
             }
         } catch(\MongoConnectionException $e) {
-            throw new \Agl\Exception("Unable to establish a connection to MongoDB: Host '$pHost', DB '$pDb', User '$pUser', Password '$pPass' with error '" . $e->getMessage() . "'");
+            throw new \Exception("Unable to establish a connection to MongoDB: Host '$pHost', DB '$pDb', User '$pUser', Password '$pPass' with error '" . $e->getMessage() . "'");
         }
 
         $this->_resourceDb = $this->_connection->selectDB($pDb);

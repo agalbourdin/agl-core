@@ -25,7 +25,7 @@ class Id
         } else if (is_int($pId)) {
             $id = (string)$pId;
         } else {
-            throw new \Agl\Exception('Trying to set an invalid ID (must be a string or an integer)');
+            throw new \Exception('Trying to set an invalid ID (must be a string or an integer)');
         }
 
         parent::__construct($id);

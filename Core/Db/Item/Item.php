@@ -18,5 +18,5 @@ switch(\Agl::app()->getConfig('@app/db/engine')) {
         class Item extends \Agl\Core\Mysql\Item { }
         break;
     default:
-        throw new \Agl\Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
+        throw new \Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
 }

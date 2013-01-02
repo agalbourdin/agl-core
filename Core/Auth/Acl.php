@@ -97,7 +97,7 @@ class Acl
 	{
 		$module = \Agl::app()->getConfig('@layout/errors/403');
 		if (\Agl::app()->isDebugMode() or ! $module) {
-			throw new \Agl\Exception("Invalid ACL to access the view");
+			throw new \Exception("Invalid ACL to access the view");
 		}
 
 		\Agl::getRequest()->redirect($module);

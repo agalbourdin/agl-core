@@ -18,5 +18,5 @@ switch(\Agl::app()->getConfig('@app/db/engine')) {
         class Select extends \Agl\Core\Mysql\Query\Select { }
         break;
     default:
-        throw new \Agl\Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
+        throw new \Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
 }

@@ -90,7 +90,7 @@ abstract class ItemAbstract
             }
         }
 
-        throw new \Agl\Exception("Undefined method '$pMethod'");
+        throw new \Exception("Undefined method '$pMethod'");
     }
 
     /**
@@ -126,7 +126,7 @@ abstract class ItemAbstract
 
         /*$validation = \Agl\Core\Data\Attribute\Validation::validate($pVar);
         if (! $validation) {
-            throw new \Agl\Exception("Validation failed for attribute '$attribute'");
+            throw new \Exception("Validation failed for attribute '$attribute'");
         }*/
 
         $this->_fields[$attribute] = $pValue;
@@ -502,7 +502,7 @@ abstract class ItemAbstract
     public function addParent(\Agl\Core\Db\Item\Item $pItem)
     {
         if (! $this->getId() or ! $pItem->getId()) {
-            throw new \Agl\Exception("The items must be existing in the database before being joined");
+            throw new \Exception("The items must be existing in the database before being joined");
         }
 
         if (! $this->_joinExists($pItem)) {
@@ -533,7 +533,7 @@ abstract class ItemAbstract
     public function removeParent(\Agl\Core\Db\Item\Item $pItem)
     {
         if (! $this->getId() or ! $pItem->getId()) {
-            throw new \Agl\Exception("The items must be existing in the database before being joined");
+            throw new \Exception("The items must be existing in the database before being joined");
         }
 
         if ($this->_joinExists($pItem)) {
@@ -565,7 +565,7 @@ abstract class ItemAbstract
         ));
 
         if (! $this->getId()) {
-            throw new \Agl\Exception("The item must be existing in the database before being joined");
+            throw new \Exception("The item must be existing in the database before being joined");
         }
 
         $collection = new \Agl\Core\Db\Collection\Collection($pDbContainer);

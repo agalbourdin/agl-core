@@ -34,7 +34,7 @@ interface ViewInterface
     /**
      *  The default Web Modules directory.
      */
-    const APP_HTTP_VIEW_DIR = 'webmodules';
+    const APP_HTTP_VIEW_DIR = 'views';
 
     /**
      *  The Web module config file name.
@@ -58,26 +58,6 @@ interface ViewInterface
     const CACHE_FILE_PREFIX = 'view_';
 
     /**
-     * 404 HTTP header.
-     */
-    const HEADER_404 = '404 Not Found';
-
-    /**
-     * 500 HTTP header.
-     */
-    const HEADER_500 = '500 Internal Server Error';
-
-    /**
-     * HTML header.
-     */
-    const HEADER_HTML = 'Content-type: text/html; charset=UTF-8';
-
-    /**
-     * JSON header.
-     */
-    const HEADER_JSON = 'Content-type: application/json; charset=UTF-8';
-
-    /**
      * HTTP layouts directory.
      */
     const APP_HTTP_TEMPLATE_DIR = 'app/template';
@@ -88,6 +68,4 @@ interface ViewInterface
     public function render();
     public function getBlock($pBlock);
     public function getType();
-    public static function setHttpHeader($pHeader);
-    public static function setHeader($pHeader);
 }

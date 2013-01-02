@@ -95,7 +95,7 @@ class Json
     public function __construct()
     {
         $envPrefixName = static::ENV_PREFIX_NAME;
-        if (isset($_SERVER[$envPrefixName])) {
+        if (isset($_SERVER[$envPrefixName]) and $_SERVER[$envPrefixName]) {
             $this->_envPrefix = $_SERVER[$envPrefixName] . static::ENV_PREFIX_SEPARATOR;
         }
 

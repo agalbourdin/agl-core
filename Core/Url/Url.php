@@ -160,7 +160,7 @@ class Url
                 return 'http://';
                 break;
             default:
-                throw new \Agl\Exception("Protocol '" . $_SERVER['SERVER_PROTOCOL'] . "' is not supported");
+                throw new \Exception("Protocol '" . $_SERVER['SERVER_PROTOCOL'] . "' is not supported");
         }
     }
 }

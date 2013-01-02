@@ -28,7 +28,7 @@ class Registry
     public static function set($pKey, $pValue)
     {
         if (array_key_exists($pKey, self::$_registry)) {
-            throw new \Agl\Exception("The registry key '$pKey' already exists");
+            throw new \Exception("The registry key '$pKey' already exists");
         }
 
         return self::$_registry[$pKey] = $pValue;
@@ -58,7 +58,7 @@ class Registry
     public static function delete($pKey)
     {
         if (! array_key_exists($pKey, self::$_registry)) {
-            throw new \Agl\Exception("The registry key '$pKey' doesn't exist");
+            throw new \Exception("The registry key '$pKey' doesn't exist");
         }
 
         if (is_object(self::$_registry[$pKey]) and method_exists(self::$_registry[$pKey], '__destruct')) {

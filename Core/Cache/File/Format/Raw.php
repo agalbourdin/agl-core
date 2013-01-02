@@ -42,7 +42,7 @@ class Raw
     public function save()
     {
         if (file_put_contents($this->getCacheFullPath(), $this->_content, LOCK_EX) === false) {
-            throw new \Agl\Exception("Unable to write the cache");
+            throw new \Exception("Unable to write the cache");
         }
 
         return $this;

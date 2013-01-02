@@ -18,5 +18,5 @@ switch(\Agl::app()->getConfig('@app/db/engine')) {
         class Drop extends \Agl\Core\Mysql\Query\Drop { }
         break;
     default:
-        throw new \Agl\Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
+        throw new \Exception("DB Engine '" . \Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
 }

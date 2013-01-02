@@ -40,26 +40,6 @@ abstract class ViewAbstract
 	protected $_type = NULL;
 
 	/**
-	 * Set HTTP header (404, 401...).
-	 *
-	 * @param string $pHeader
-	 */
-	public static function setHttpHeader($pHeader)
-	{
-		header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
-	}
-
-	/**
-	 * Set misc. headers (HTML, JSON...).
-	 *
-	 * @param string $pHeader
-	 */
-	public static function setHeader($pHeader)
-	{
-		header($pHeader);
-	}
-
-	/**
 	 * Prepare the rendering depending of the view type.
 	 *
 	 * @param $pBuffer string
@@ -122,11 +102,6 @@ abstract class ViewAbstract
 			'StrictString' => $pBuffer
         ));
 
-        $error = error_get_last();
-	    if ($error) {
-	        throw new \Agl\Exception($error['message']);
-	    }
-
         \Agl\Core\Observer\Observer::dispatch(\Agl\Core\Observer\Observer::EVENT_VIEW_RENDER_BUFFER_BEFORE, array(
 			'view'   => $this,
 			'buffer' => &$pBuffer
@@ -147,7 +122,7 @@ abstract class ViewAbstract
 		$this->_viewPath = $this->getViewPath();
 
 		if (! is_readable($this->_viewPath)) {
-			static::setHttpHeader(static::HEADER_404);
+			\Agl\Core\Request\Request::setHttpHeader(\Agl\Core\Request\Request::HEADER_404);
 			$template404 = \Agl::app()->getConfig('@layout/errors/404');
 			if ($template404) {
 				$this->setFile($template404);
@@ -155,7 +130,7 @@ abstract class ViewAbstract
 			}
 
 			if (! $template404 or ! is_readable($this->_viewPath)) {
-				throw new \Agl\Exception("View file '" . $this->_viewPath . "' doesn't exists");
+				throw new \Exception("View file '" . $this->_viewPath . "' doesn't exists");
 			}
 		}
 
@@ -175,7 +150,8 @@ abstract class ViewAbstract
 				        . DS
 	           			. \Agl::app()->getConfig('@app/global/theme')
 				        . DS
-				        . $template['file'];
+				        . $template['file']
+				        . static::FILE_EXT;
 			require($template);
 		} else {
 			echo $this->getView();
@@ -208,7 +184,7 @@ abstract class ViewAbstract
 		if (! preg_match('#^([a-z0-9]+)/([a-z0-9_-]+)$#', $pBlock, $blockPathInfos)
 			or ! isset($blockPathInfos[1])
 			or ! isset($blockPathInfos[2])) {
-			throw new \Agl\Exception("Block identifier '$pBlock' is not correct");
+			throw new \Exception("Block identifier '$pBlock' is not correct");
 		}
 
         $this->_blocks[] = array(

@@ -87,14 +87,14 @@ abstract class TreeAbstract
     {
         if ($this->_mainItem === NULL) {
             if (! $pItem->getId()) {
-                throw new \Agl\Exception("The main item must be saved to database before its insertion in a tree");
+                throw new \Exception("The main item must be saved to database before its insertion in a tree");
             }
 
             $this->_mainItem = $pItem;
             return $this;
         }
 
-        throw new \Agl\Exception("The tree's main item is already set");
+        throw new \Exception("The tree's main item is already set");
     }
 
     /**
@@ -307,7 +307,7 @@ abstract class TreeAbstract
     public function setParent(\Agl\Core\Db\Item\Item $pItem)
     {
         if (! $pItem->getId()) {
-            throw new \Agl\Exception("The item must be saved to database before its insertion in a tree");
+            throw new \Exception("The item must be saved to database before its insertion in a tree");
         }
 
         $this->_mainItem->setTreeParent($pItem->getId()->getOrig());
@@ -328,7 +328,7 @@ abstract class TreeAbstract
     public function addChild(\Agl\Core\Db\Item\Item $pItem)
     {
         if (! $pItem->getId()) {
-            throw new \Agl\Exception("The item must be saved to database before its insertion in a tree");
+            throw new \Exception("The item must be saved to database before its insertion in a tree");
         }
 
         $pItem->setTreeParent($this->_mainItem->getId()->getOrig());

@@ -21,9 +21,9 @@ class Insert
     private function _checkCommitResult(array $result)
     {
         if (! $result['ok'] and $result['errmsg']) {
-            throw new \Agl\Exception("Insert failed to MongoDB collection '$this->_dbContainer' with error message '" . $result['errmsg'] . "'");
+            throw new \Exception("Insert failed to MongoDB collection '$this->_dbContainer' with error message '" . $result['errmsg'] . "'");
         } else if (! $result['ok']) {
-            throw new \Agl\Exception("Insert failed to MongoDB collection '$this->_dbContainer' with no error message");
+            throw new \Exception("Insert failed to MongoDB collection '$this->_dbContainer' with no error message");
         }
     }
 
@@ -44,9 +44,9 @@ class Insert
                 \Agl::app()->getDb()->incrementCounter();
             }
         } catch (\MongoCursorException $e) {
-            throw new \Agl\Exception("Insert (safe mode) failed to MongoDB collection '$this->_dbContainer' with message '" . $e->getMessage() . "'");
+            throw new \Exception("Insert (safe mode) failed to MongoDB collection '$this->_dbContainer' with message '" . $e->getMessage() . "'");
         } catch (\Exception $e) {
-            throw new \Agl\Exception($e);
+            throw new \Exception($e);
         }
 
         return true;
