@@ -11,9 +11,6 @@ namespace Agl\Core\Db\Connection;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
-    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
-        class Connection extends \Agl\Core\Mongo\Connection { }
-        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Connection extends \Agl\Core\Mysql\Connection { }
         break;

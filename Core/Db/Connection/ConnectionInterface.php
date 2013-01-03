@@ -12,11 +12,6 @@ namespace Agl\Core\Db\Connection;
 interface ConnectionInterface
 {
     /**
-     * Supported database engine : MongoDB.
-     */
-    const MONGODB = 'mongodb';
-
-    /**
      * Supported database engine : MySQL.
      */
     const MYSQL = 'mysql';

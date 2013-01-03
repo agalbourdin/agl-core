@@ -14,7 +14,7 @@ class Drop
         implements \Agl\Core\Db\Query\Drop\DropInterface
 {
     /**
-     * Commit the deletion to MongoDB and check the query result.
+     * Commit the deletion to Mysql and check the query result.
      *
      * @return bool
      */

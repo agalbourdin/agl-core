@@ -77,7 +77,6 @@ abstract class ConditionsAbstract
      *
      * @return ConditionsAbstract
      * @todo $condition[2] if not exists
-     * @todo MongoDB compatibility
      */
     public function addGroup()
     {

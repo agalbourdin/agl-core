@@ -5,7 +5,7 @@ namespace Agl\Core\Mysql;
  * Specific ID management (based on the database engine).
  *
  * @category Agl_Core
- * @package Agl_Core_Mongo
+ * @package Agl_Core_Mysql
  * @version 0.1.0
  */
 

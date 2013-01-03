@@ -11,9 +11,6 @@ namespace Agl\Core\Db\Collection;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
-    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
-        class Collection extends \Agl\Core\Mongo\Collection { }
-        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Collection extends \Agl\Core\Mysql\Collection { }
         break;

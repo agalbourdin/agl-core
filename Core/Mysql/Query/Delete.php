@@ -14,7 +14,7 @@ class Delete
         implements \Agl\Core\Db\Query\Delete\DeleteInterface
 {
     /**
-     * Commit the deletion to MongoDB and check the query result.
+     * Commit the deletion to Mysql and check the query result.
      *
      * @return int Number of affected rows
      */

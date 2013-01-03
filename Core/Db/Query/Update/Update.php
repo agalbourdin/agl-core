@@ -11,9 +11,6 @@ namespace Agl\Core\Db\Query\Update;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
-    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
-        class Update extends \Agl\Core\Mongo\Query\Update { }
-        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Update extends \Agl\Core\Mysql\Query\Update { }
         break;

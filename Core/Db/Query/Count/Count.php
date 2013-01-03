@@ -11,9 +11,6 @@ namespace Agl\Core\Db\Query\Count;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
-    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
-        class Count extends \Agl\Core\Mongo\Query\Count { }
-        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Count extends \Agl\Core\Mysql\Query\Count { }
         break;
