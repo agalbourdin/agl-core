@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Query\Raw;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Raw extends \Agl\Core\Mongo\Query\Raw { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Raw extends \Agl\Core\Mysql\Query\Raw { }
         break;

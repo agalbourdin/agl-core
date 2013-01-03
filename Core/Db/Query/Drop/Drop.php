@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Query\Drop;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Drop extends \Agl\Core\Mongo\Query\Drop { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Drop extends \Agl\Core\Mysql\Query\Drop { }
         break;

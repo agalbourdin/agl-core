@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Query\Insert;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Insert extends \Agl\Core\Mongo\Query\Insert { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Insert extends \Agl\Core\Mysql\Query\Insert { }
         break;

@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Tree;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Tree extends \Agl\Core\Mongo\Tree { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Tree extends \Agl\Core\Mysql\Tree { }
         break;

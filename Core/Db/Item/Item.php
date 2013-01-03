@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Item;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Item extends \Agl\Core\Mongo\Item { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Item extends \Agl\Core\Mysql\Item { }
         break;

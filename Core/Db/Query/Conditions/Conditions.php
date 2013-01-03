@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Query\Conditions;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Conditions extends \Agl\Core\Mongo\Query\Conditions { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Conditions extends \Agl\Core\Mysql\Query\Conditions { }
         break;

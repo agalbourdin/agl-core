@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Query\Delete;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Delete extends \Agl\Core\Mongo\Query\Delete { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Delete extends \Agl\Core\Mysql\Query\Delete { }
         break;

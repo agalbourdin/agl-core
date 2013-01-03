@@ -11,6 +11,9 @@ namespace Agl\Core\Db\Id;
  */
 
 switch(\Agl::app()->getConfig('@app/db/engine')) {
+    case \Agl\Core\Db\Connection\ConnectionInterface::MONGODB:
+        class Id extends \Agl\Core\Mongo\Id { }
+        break;
     case \Agl\Core\Db\Connection\ConnectionInterface::MYSQL:
         class Id extends \Agl\Core\Mysql\Id { }
         break;
