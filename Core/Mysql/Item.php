@@ -23,23 +23,6 @@ class Item
      */
     public function save($pConditions = NULL)
     {
-        /*$joinsField = $this->getField(\Agl\Core\Db\Item\ItemInterface::JOINS_FIELD);
-        $origJoinsField = $this->getOrigField(\Agl\Core\Db\Item\ItemInterface::JOINS_FIELD);
-        if ($joinsField !== NULL or $origJoinsField !== NULL) {
-            $joins = $this->getJoins();
-            $joinsArr = array();
-            foreach ($joins as $dbContainer => $joinedIds) {
-                $joinsArr[] = $dbContainer . '>' . implode(',', $joinedIds);
-            }
-            $this->setJoins(implode('|', $joinsArr));
-        }
-
-        $ancestorsField = $this->getField(\Agl\Core\Db\Tree\TreeInterface::ANCESTORSFIELD);
-        $origAncestorsField = $this->getOrigField(\Agl\Core\Db\Tree\TreeInterface::ANCESTORSFIELD);
-        if ($ancestorsField !== NULL or $origAncestorsField !== NULL) {
-            $ancestors = $this->getTreeAncestors();
-            $this->setTreeAncestors(implode('|', $ancestors));
-        }*/
         foreach ($this->_fields as &$value) {
             if (is_array($value)) {
                 $value = implode(',', $value);
@@ -95,25 +78,5 @@ class Item
         $collection->load($conditions, $pLimit, $pOrder);
 
         return $collection;
-    }
-
-    /**
-     * Return the tree ancestors as an array.
-     *
-     * @return array
-     */
-    public function getTreeAncestors()
-    {
-        $ancestorsField = $this->getField(\Agl\Core\Db\Tree\TreeInterface::ANCESTORSFIELD);
-
-        if (! $ancestorsField) {
-            return array();
-        } else if (is_array($ancestorsField)) {
-            return $ancestorsField;
-        }
-
-        $ancestors = explode('|', $ancestorsField);
-
-        return $ancestors;
     }
 }

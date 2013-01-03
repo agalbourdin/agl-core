@@ -16,12 +16,12 @@ class Directory
      *
      * @param string $pDir
      */
-    public static function delTree($pDir)
+    public static function deleteRecursive($pDir)
     {
         $files = glob($pDir . '*', GLOB_MARK);
         foreach ($files as $file) {
             if (substr($file, -1) == '/') {
-                self::delTree($file);
+                self::deleteRecursive($file);
             } else {
                 unlink($file);
             }

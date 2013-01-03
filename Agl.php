@@ -124,20 +124,6 @@ final class Agl
     }
 
     /**
-     * Create and return a new Tree.
-     *
-     * @param string $pCollection The type of the collection to use to create
-     * the tree
-     * @return Tree
-     */
-    public static function getTree(\Agl\Core\Db\Item\Item $pItem)
-    {
-        $tree = new \Agl\Core\Db\Tree\Tree($pItem->getDbContainer());
-        $tree->setMainItem($pItem);
-        return $tree;
-    }
-
-    /**
      * Create and return a new Collection.
      *
      * @param string $pCollection The type of the collection to create
