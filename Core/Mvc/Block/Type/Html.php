@@ -14,7 +14,7 @@ class Html
 		implements \Agl\Core\Mvc\Block\BlockInterface
 {
 	/**
-     * Magic method - redirect the calls to the main view.
+     * Redirect the calls to the parent view instance.
      *
      * @param string $pMethod Called method
      * @param array $pArgs Arguments
@@ -22,10 +22,6 @@ class Html
      */
     public function __call($pMethod, array $pArgs)
     {
-        if (method_exists($this->getView(), $pMethod)) {
-            return call_user_func_array(array($this->getView(), $pMethod), $pArgs);
-        }
-
-        throw new \Exception("Method '$pMethod' doesn't exists");
+        return call_user_func_array(array($this->getView(), $pMethod), $pArgs);
     }
 }

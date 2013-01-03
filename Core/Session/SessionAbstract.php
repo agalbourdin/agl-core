@@ -35,8 +35,8 @@ abstract class SessionAbstract
             $var = str_replace('set', '', $pMethod);
             $this->$var = $pArgs[0];
             return $this;
-        } else if (preg_match('/^unset/', $pMethod)) {
-            $var = str_replace('unset', '', $pMethod);
+        } else if (preg_match('/^remove/', $pMethod)) {
+            $var = str_replace('remove', '', $pMethod);
             unset($this->$var);
             return true;
         } else if (preg_match('/^has/', $pMethod)) {

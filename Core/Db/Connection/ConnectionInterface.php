@@ -22,10 +22,9 @@ interface ConnectionInterface
     const MYSQL = 'mysql';
 
     public function __construct($pHost, $pDb, $pUser = NULL, $pPass = NULL);
-    //public function __destruct();
     public static function orderAsc();
     public static function orderDesc();
     public function getConnection();
     public function incrementCounter();
-    public function count();
+    public function countQueries();
 }

@@ -50,12 +50,12 @@ class Registry
     }
 
     /**
-     * Delete an entry from the registry.
+     * Remove an entry from the registry.
      *
      * @param string $pKey
      * @return bool
      */
-    public static function delete($pKey)
+    public static function remove($pKey)
     {
         if (! array_key_exists($pKey, self::$_registry)) {
             throw new \Exception("The registry key '$pKey' doesn't exist");

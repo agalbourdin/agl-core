@@ -21,11 +21,6 @@ require(__DIR__ . DS . 'Exception.php');
 final class Agl
 {
     /**
-     * Agl version.
-     */
-    const AGL_VERSION = '0.1.0';
-
-    /**
      * Available protocols and dirs.
      */
     const AGL_CORE_DIR              = 'Core';
