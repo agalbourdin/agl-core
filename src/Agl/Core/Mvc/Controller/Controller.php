@@ -39,7 +39,7 @@ class Controller
 	/**
 	 * The application directory to search a Controller class.
 	 */
-	const APP_PHP_CONTROLLER_DIR = 'Controller';
+	const APP_PHP_CONTROLLER_DIR = 'controller';
 
 	/**
 	 * Render the view page.
@@ -111,9 +111,9 @@ class Controller
                     . DS
                     . ViewInterface::APP_PHP_VIEW_DIR
                     . DS
-                    . ucfirst($module)
+                    . $module
                     . DS
-                    . ucfirst($view)
+                    . $view
                     . Agl::PHP_EXT;
 
         if (file_exists($viewPath)) {

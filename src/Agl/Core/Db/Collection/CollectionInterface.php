@@ -19,7 +19,7 @@ interface CollectionInterface
     /**
      * The application directory to search a Collection class.
      */
-    const APP_PHP_DIR = 'Collection';
+    const APP_PHP_DIR = 'collection';
 
     public function __construct($pDbContainer);
     public function __call($pMethod, array $pArgs);

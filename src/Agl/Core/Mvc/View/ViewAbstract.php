@@ -266,9 +266,9 @@ abstract class ViewAbstract
                     . DS
                     . BlockInterface::APP_PHP_BLOCK_DIR
                     . DS
-                    . ucfirst($blockPathInfos[1])
+                    . strtolower($blockPathInfos[1])
                     . DS
-                    . ucfirst($blockPathInfos[2])
+                    . strtolower($blockPathInfos[2])
                     . Agl::PHP_EXT;
 
         if (file_exists($blockPath)) {

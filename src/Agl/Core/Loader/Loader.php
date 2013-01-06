@@ -21,14 +21,14 @@ use \Agl,
 
 class Loader
 {
-	/**
+    /**
      * The list of all the More modules loaded into AGL.
      *
      * @var array
      */
     private static $_loadedModules = array();
 
-	/**
+    /**
      * Create a new instance of the requested class.
      *
      * @param string $pClass Class path
@@ -105,7 +105,7 @@ class Loader
     public static function getModel($pModel, array $pFields = array())
     {
         $className = ucfirst($pModel) . ModelInterface::APP_MODEL_SUFFIX;
-        $fileName  = ucfirst($pModel);
+        $fileName  = strtolower($pModel);
 
         if (Agl::isInitialized()) {
             $modelPath = Agl::app()->getPath()
@@ -135,7 +135,7 @@ class Loader
     public static function getCollection($pCollection)
     {
         $className = ucfirst($pCollection) . CollectionInterface::APP_SUFFIX;
-        $fileName  = ucfirst($pCollection);
+        $fileName  = strtolower($pCollection);
 
         if (Agl::isInitialized()) {
             $collectionPath = Agl::app()->getPath()
@@ -170,7 +170,6 @@ class Loader
         }
 
         $className = ucfirst($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
-        $fileName = ucfirst($classArr[1]);
 
         if (Agl::isInitialized()) {
             $helperPath = Agl::app()->getPath()
@@ -178,9 +177,9 @@ class Loader
                          . DS
                          . ModelInterface::APP_PHP_HELPER_DIR
                          . DS
-                         . ucfirst($classArr[0])
+                         . strtolower($classArr[0])
                          . DS
-                         . ucfirst($classArr[1])
+                         . strtolower($classArr[1])
                          . Agl::PHP_EXT;
 
             if (is_readable($helperPath)) {
@@ -193,7 +192,7 @@ class Loader
         }
     }
 
-	/**
+    /**
      * Return the array of the More modules loaded into AGL.
      *
      * @return array

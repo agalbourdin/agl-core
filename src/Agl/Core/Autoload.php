@@ -100,7 +100,6 @@ class Autoload
     private static function _loadFromApp($pClassName)
     {
         $classNameArr = explode('_', StringData::fromCamelCase($pClassName));
-        $classNameArr = array_map('ucfirst', $classNameArr);
         $pool         = array_pop($classNameArr);
 
         return Agl::app()->getPath()

@@ -29,7 +29,7 @@ interface ViewInterface
     /**
 	 * The application directory to search a View class.
 	 */
-	const APP_PHP_VIEW_DIR = 'View';
+	const APP_PHP_VIEW_DIR = 'view';
 
     /**
      *  The default Web Modules directory.

@@ -19,7 +19,7 @@ interface BlockInterface
     /**
      * The application's block directory.
      */
-    const APP_PHP_BLOCK_DIR = 'Block';
+    const APP_PHP_BLOCK_DIR = 'block';
 
     /**
      * The application's HTTP block directory.

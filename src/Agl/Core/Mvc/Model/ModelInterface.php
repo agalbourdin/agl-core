@@ -19,7 +19,7 @@ interface ModelInterface
     /**
      * The application directory to search a Model class.
      */
-    const APP_PHP_MODEL_DIR = 'Model';
+    const APP_PHP_MODEL_DIR = 'model';
 
     /**
      * The suffix used by the application's helper class names.
@@ -29,5 +29,5 @@ interface ModelInterface
     /**
      * The application directory to search a Helper class.
      */
-    const APP_PHP_HELPER_DIR = 'Helper';
+    const APP_PHP_HELPER_DIR = 'helper';
 }

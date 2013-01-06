@@ -70,9 +70,9 @@ class Router
                           . DS
                           . Controller::APP_PHP_CONTROLLER_DIR
                           . DS
-                          . ucfirst($this->_module)
+                          . $this->_module
                           . DS
-                          . ucfirst($this->_view)
+                          . $this->_view
                           . Agl::PHP_EXT;
 
         if (file_exists($controllerPath)) {
