@@ -14,6 +14,11 @@ use \Agl;
 class Debug
 {
     /**
+     * File to log messages.
+     */
+    const LOG_FILE = 'debug.log';
+
+    /**
      * Check if xDebug is enabled.
      *
      * @return bool

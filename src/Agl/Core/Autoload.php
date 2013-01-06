@@ -7,8 +7,8 @@ use \Agl\Core\Data\String as StringData,
 /**
  * Load class on demand.
  *
- * @category Agl
- * @package Agl
+ * @category Agl_Core
+ * @package Agl_Core
  * @version 0.1.0
  */
 

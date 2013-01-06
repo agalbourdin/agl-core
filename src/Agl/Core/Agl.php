@@ -22,8 +22,8 @@ require(__DIR__ . DS . 'Exception.php');
 /**
  * Mother application class.
  *
- * @category Agl
- * @package Agl
+ * @category Agl_Core
+ * @package Agl_Core
  * @version 0.1.0
  */
 

@@ -7,8 +7,8 @@ use \Agl\Core\Debug\Debug,
 /**
  * Add a global application exception handler.
  *
- * @category Agl
- * @package Agl
+ * @category Agl_Core
+ * @package Agl_Core
  * @version 0.1.0
  */
 
