@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mysql\Query;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Db\Query\Select\SelectAbstract,
     \Agl\Core\Db\Query\Select\SelectInterface,
     \Exception,

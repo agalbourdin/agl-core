@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Session\Storage;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Db\Collection\Collection,
     \Agl\Core\Db\Query\Conditions\Conditions,
     \Agl\Core\Db\Item\Item,

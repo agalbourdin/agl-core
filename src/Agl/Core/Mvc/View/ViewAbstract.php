@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mvc\View;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Cache\Apc\Apc,
 	\Agl\Core\Mvc\Block\Block,
 	\Agl\Core\Mvc\Block\BlockAbstract,

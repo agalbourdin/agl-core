@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mvc\Controller;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Data\String as StringData,
 	\Agl\Core\Mvc\Controller\Controller,
 	\Agl\Core\Observer\Observer,

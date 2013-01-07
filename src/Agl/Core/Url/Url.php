@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Url;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Mvc\View\ViewInterface,
     \Exception;
 

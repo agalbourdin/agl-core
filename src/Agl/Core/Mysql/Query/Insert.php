@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mysql\Query;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Insert\InsertAbstract,
     \Agl\Core\Db\Query\Insert\InsertInterface,

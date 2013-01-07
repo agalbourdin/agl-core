@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Cache\File\Format;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Cache\File\FileAbstract,
     \Agl\Core\Cache\File\FileInterface,
     \Exception;

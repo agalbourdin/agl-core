@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Collection;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Data\String as StringData,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Conditions\Conditions,

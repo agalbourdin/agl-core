@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Auth;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Exception;
 
 /**

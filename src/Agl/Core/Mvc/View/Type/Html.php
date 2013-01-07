@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mvc\View\Type;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Data\String as StringData,
 	\Agl\Core\Mvc\View\ViewAbstract,
 	\Agl\Core\Mvc\View\ViewInterface;

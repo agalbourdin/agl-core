@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Connection;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Db\Connection\ConnectionInterface,
 	\Agl\Core\Mysql\Connection as MysqlConnection,
 	\Exception;

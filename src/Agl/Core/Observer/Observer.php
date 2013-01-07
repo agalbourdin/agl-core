@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Observer;
 
-use \Agl;
+use \Agl\Core\Agl;
 
 /**
  * Dispatch events to the corresponding instance.

@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Loader;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Autoload,
     \Agl\Core\Db\Collection\Collection,
     \Agl\Core\Db\Collection\CollectionInterface,

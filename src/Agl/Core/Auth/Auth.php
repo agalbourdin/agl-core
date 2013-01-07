@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Auth;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Db\Item\ItemInterface,
 	\Agl\Core\Db\Query\Conditions\Conditions;
 

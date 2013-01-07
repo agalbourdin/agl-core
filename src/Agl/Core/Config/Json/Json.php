@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Config\Json;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Cache\Apc\Apc,
     \Agl\Core\Cache\File\FileInterface,
     \Agl\Core\Cache\File\Format\Arr as CacheArr,

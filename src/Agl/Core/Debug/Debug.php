@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Debug;
 
-use \Agl;
+use \Agl\Core\Agl;
 
 /**
  * A set of debug tools, with xDebug support.

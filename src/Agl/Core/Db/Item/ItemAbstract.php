@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Item;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Data\Date as DateData,
     \Agl\Core\Data\String as StringData,
     \Agl\Core\Db\Id\Id,

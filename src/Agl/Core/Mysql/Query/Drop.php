@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mysql\Query;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Db\Query\Drop\DropAbstract,
     \Agl\Core\Db\Query\Drop\DropInterface,
     \Exception;

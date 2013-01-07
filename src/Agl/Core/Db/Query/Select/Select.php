@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Query\Select;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Db\Connection\ConnectionInterface,
 	\Agl\Core\Mysql\Query\Select as MysqlSelect,
 	\Exception;

@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Cache\Apc;
 
-use \Agl;
+use \Agl\Core\Agl;
 
 /**
  * Generic methods to store data in the APC cache.

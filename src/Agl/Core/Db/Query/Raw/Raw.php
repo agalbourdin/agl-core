@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Query\Raw;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Db\Connection\ConnectionInterface,
 	\Agl\Core\Mysql\Query\Raw as MysqlRaw,
 	\Exception;

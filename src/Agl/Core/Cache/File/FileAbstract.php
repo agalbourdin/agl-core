@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Cache\File;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Data\Directory as DirecoryData,
 	\Agl\Core\Data\File as FileData,
 	\Exception;

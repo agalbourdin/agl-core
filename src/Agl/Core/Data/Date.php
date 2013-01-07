@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Data;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\DateTime,
 	\DateTimeZone,
 	\Exception;

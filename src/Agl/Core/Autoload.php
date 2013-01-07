@@ -56,6 +56,7 @@ class Autoload
      */
     private function _load($pClassName)
     {
+        var_dump($pClassName);
         if (array_key_exists($pClassName, self::$_aliases)) {
             return class_alias(self::$_aliases[$pClassName], $pClassName);
         }

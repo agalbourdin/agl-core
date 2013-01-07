@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Query;
 
-use \Agl;
+use \Agl\Core\Agl;
 
 /**
  * Abstract class - All queries

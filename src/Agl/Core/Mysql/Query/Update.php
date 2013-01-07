@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mysql\Query;
 
-use \Agl,
+use \Agl\Core\Agl,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Update\UpdateAbstract,
     \Agl\Core\Db\Query\Update\UpdateInterface,

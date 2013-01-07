@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Session;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Session\Storage\File as FileSession,
 	\Agl\Core\Session\Storage\Db as DbSession,
 	\Exception;

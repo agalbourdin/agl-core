@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Mvc\Controller;
 
-use \Agl,
+use \Agl\Core\Agl,
 	\Agl\Core\Cache\Apc\Apc,
 	\Agl\Core\Cache\File\FileInterface,
 	\Agl\Core\Cache\File\Format\Raw as RawCache,
