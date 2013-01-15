@@ -1,6 +1,6 @@
 {
     "name": "agl/core",
-    "description": "AGL Framework / Core package",
+    "description": "AGL Framework / Core package.",
     "keywords": [ "agl", "framework", "core", "mvc" ],
     "homepage": "http://www.agl.io/",
     "license": "MIT",

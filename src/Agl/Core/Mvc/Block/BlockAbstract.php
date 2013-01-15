@@ -106,7 +106,7 @@ abstract class BlockAbstract
 		$blockConfig = Agl::app()->getConfig('@layout/blocks/' . $pGroupId . '/' . $pBlockId);
 		if (is_array($blockConfig) and isset($blockConfig['acl'])) {
 			$auth = Agl::getAuth();
-			$acl  = Agl::getSingleton(Agl::AGL_CORE_DIR . '/auth/acl');
+			$acl  = Agl::getSingleton(Agl::AGL_CORE_POOL . '/auth/acl');
 			if (! $acl->isAllowed($auth->getRole(), $blockConfig['acl'])) {
 				return false;
 			}

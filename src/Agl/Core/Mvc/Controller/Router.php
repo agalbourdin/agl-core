@@ -110,7 +110,7 @@ class Router
 
     	if ($aclConfig !== NULL) {
 			$auth = Agl::getAuth();
-			$acl  = Agl::getSingleton(Agl::AGL_CORE_DIR . '/auth/acl');
+			$acl  = Agl::getSingleton(Agl::AGL_CORE_POOL . '/auth/acl');
 			if (! $acl->isAllowed($auth->getRole(), $aclConfig)) {
 	    		$acl->requestLogin();
 	    	}

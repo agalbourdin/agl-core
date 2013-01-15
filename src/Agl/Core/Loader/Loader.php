@@ -37,14 +37,14 @@ class Loader
      */
     public static function getInstance($pClass, array $pArgs = array())
     {
-        if (stripos($pClass, Agl::AGL_CORE_DIR) === 0  or stripos($pClass, Agl::AGL_MORE_DIR) === 0) {
+        if (strpos($pClass, Agl::AGL_CORE_POOL) === 0 or strpos($pClass, Agl::AGL_MORE_POOL) === 0) {
             $moduleArr = explode(DS, $pClass);
             $moduleArr = array_map('ucfirst', $moduleArr);
             if (count($moduleArr) == 2) {
                 $moduleArr[] = $moduleArr[1];
             }
 
-            if (preg_match('#^' . Agl::AGL_MORE_DIR . '/#', $pClass)) {
+            if (strpos($pClass, Agl::AGL_MORE_POOL) === 0) {
                 self::$_loadedModules[strtolower(implode('/', $moduleArr))] = true;
             }
 
@@ -53,15 +53,19 @@ class Loader
             if (empty($pArgs)) {
                 return new $path();
             } else {
-                $reflect  = new ReflectionClass($path);
+                $reflect = new ReflectionClass($path);
                 return $reflect->newInstanceArgs($pArgs);
             }
-        } else if (is_string($pClass)) {
-            $reflect  = new ReflectionClass($pClass);
-            return $reflect->newInstanceArgs($pArgs);
+        } else if (strpos($pClass, ModelInterface::APP_PHP_HELPER_DIR) === 0) {
+            return self::getHelper(str_replace(ModelInterface::APP_PHP_HELPER_DIR . DS, '', $pClass));
+        } else if (strpos($pClass, ModelInterface::APP_PHP_MODEL_DIR) === 0) {
+            return self::getModel(str_replace(ModelInterface::APP_PHP_MODEL_DIR . DS, '', $pClass));
+        } else if (strpos($pClass, CollectionInterface::APP_PHP_DIR) === 0) {
+            return self::getCollection(str_replace(CollectionInterface::APP_PHP_DIR . DS, '', $pClass));
         }
 
-        return NULL;
+        $reflect = new ReflectionClass($pClass);
+        return $reflect->newInstanceArgs($pArgs);
     }
 
     /**
@@ -73,7 +77,7 @@ class Loader
      */
     public static function getSingleton($pClass, array $pArgs = array())
     {
-        if (stripos($pClass, Agl::AGL_CORE_DIR) === 0 or stripos($pClass, Agl::AGL_MORE_DIR) === 0) {
+        if (strpos($pClass, Agl::AGL_CORE_POOL) === 0 or strpos($pClass, Agl::AGL_MORE_POOL) === 0) {
             $moduleArr = explode(DS, $pClass);
             if (count($moduleArr) == 2) {
                 $moduleArr[] = $moduleArr[1];
@@ -162,7 +166,7 @@ class Loader
      * @param string $pClass
      * @return mixed
      */
-    public static function helper($pClass)
+    public static function getHelper($pClass)
     {
         $classArr = explode(DS, $pClass);
         if (count($classArr) != 2) {

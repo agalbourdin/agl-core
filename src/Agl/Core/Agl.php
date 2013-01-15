@@ -11,13 +11,20 @@ use \Agl\Core\Config\Json\Json as JsonConfig,
     \Exception;
 
 /**
- * Include the required application class and initialize the Autoload.
- * Import Errors and Exceptions handlers.
+ * Import and initialize the Autoload class.
  */
 require(__DIR__ . DS . 'Autoload.php');
 new Autoload();
 
+/**
+ * Import Errors and Exceptions handlers.
+ */
 require(__DIR__ . DS . 'Exception.php');
+
+/**
+ * Import Debug class to always log errors.
+ */
+require(__DIR__ . DS . 'Debug/Debug.php');
 
 /**
  * Mother application class.
@@ -197,7 +204,7 @@ final class Agl
      */
     public static function getHelper($pClass)
     {
-        return Loader::helper($pClass);
+        return Loader::getHelper($pClass);
     }
 
     /**
@@ -208,7 +215,7 @@ final class Agl
      */
     public static function getRequest($pRequestUri = NULL)
     {
-        return self::getSingleton(self::AGL_CORE_DIR . '/request/request', array($pRequestUri));
+        return self::getSingleton(self::AGL_CORE_POOL . '/request/request', array($pRequestUri));
     }
 
     /**
@@ -218,7 +225,7 @@ final class Agl
      */
     public static function getSession()
     {
-        return self::getSingleton(self::AGL_CORE_DIR . '/session/session');
+        return self::getSingleton(self::AGL_CORE_POOL . '/session/session');
     }
 
     /**
@@ -228,7 +235,7 @@ final class Agl
      */
     public static function getAuth()
     {
-        return self::getSingleton(self::AGL_CORE_DIR . '/auth/auth');
+        return self::getSingleton(self::AGL_CORE_POOL . '/auth/auth');
     }
 
     /**
@@ -335,7 +342,7 @@ final class Agl
     public function __destruct()
     {
         if ($this->_debug) {
-            var_dump(Debug::getInfos());
+            var_dump(\Agl\Core\Debug\Debug::getInfos());
         }
     }
 

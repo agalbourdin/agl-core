@@ -130,7 +130,7 @@ class Json
      */
     private function _getInstance($pPath)
     {
-        $path = str_replace('@layout', '@module[' . Agl::AGL_CORE_DIR . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
+        $path = str_replace('@layout', '@module[' . Agl::AGL_CORE_POOL . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
 
         $file = Agl::app()->getPath()
                 . Agl::APP_ETC_DIR
@@ -138,7 +138,7 @@ class Json
                 . self::CONFIG_MODULES_DIR
                 . DS;
 
-        if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_DIR . '|' . Agl::AGL_MORE_DIR . ')/([a-z0-9]+)\]#i', $path, $matches)) {
+        if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_POOL . '|' . Agl::AGL_MORE_DIR . ')/([a-z0-9]+)\]#i', $path, $matches)) {
             $file .= strtolower($matches[1])
                     . DS
                     . $this->_envPrefix
