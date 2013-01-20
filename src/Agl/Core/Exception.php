@@ -45,7 +45,7 @@ class Exception
         if (Agl::isInitialized()) {
             $file = Agl::app()->getConfig('@layout/errors/static/file');
             if ($file) {
-                $path = Agl::app()->getPath() . $file;
+                $path = APP_PATH . $file;
                 if (is_readable($path)) {
                     require($path);
                     exit;

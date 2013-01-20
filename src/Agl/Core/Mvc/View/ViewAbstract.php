@@ -146,7 +146,7 @@ abstract class ViewAbstract
 	public function getBuffer($pBuffer)
 	{
 		Agl::validateParams(array(
-			'StrictString' => $pBuffer
+			'String' => $pBuffer
         ));
 
         Observer::dispatch(Observer::EVENT_VIEW_RENDER_BUFFER_BEFORE, array(
@@ -189,7 +189,7 @@ abstract class ViewAbstract
 		$this->_type = $template['type'];
 
 		if (isset($template['file'])) {
-			$template = Agl::app()->getPath()
+			$template = APP_PATH
 				        . static::APP_HTTP_TEMPLATE_DIR
 				        . DS
 	           			. Agl::app()->getConfig('@app/global/theme')
@@ -245,7 +245,7 @@ abstract class ViewAbstract
 		$cacheEnabled = BlockAbstract::isCacheEnabled($blockConfig);
 
 		if ($cacheEnabled) {
-			$apcEnabled = Apc::isApcEnabled();
+			$apcEnabled = Apc::isEnabled();
 			$cache      = BlockAbstract::getCacheInstance($blockPathInfos, $blockConfig);
 
 			if ($apcEnabled) {
@@ -261,7 +261,7 @@ abstract class ViewAbstract
 	        }
 		}
 
-		$blockPath = Agl::app()->getPath()
+		$blockPath = APP_PATH
 					. Agl::APP_PHP_DIR
                     . DS
                     . BlockInterface::APP_PHP_BLOCK_DIR
@@ -316,7 +316,7 @@ abstract class ViewAbstract
 	 */
 	public function getPath()
 	{
-		return Agl::app()->getPath()
+		return APP_PATH
 	           . static::APP_HTTP_TEMPLATE_DIR
 	           . DS
                . Agl::app()->getConfig('@app/global/theme')

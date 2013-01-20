@@ -86,7 +86,7 @@ class Arr
     public function setValue($pKey, $pValue)
     {
         Agl::validateParams(array(
-            'StrictString' => $pKey
+            'String' => $pKey
         ));
 
         $this->_array[$pKey] = $pValue;

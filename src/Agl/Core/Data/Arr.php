@@ -1,8 +1,6 @@
 <?php
 namespace Agl\Core\Data;
 
-use \Agl\Core\Agl;
-
 /**
  * Generic methods to manipulate arrays.
  *
@@ -14,26 +12,18 @@ use \Agl\Core\Agl;
 class Arr
 {
     /**
-     * Search a value in a multidimensional array and returns its key if finded.
+     * Search a value in a multidimensional array.
      *
      * @param $pValue string The searched value
      * @param $pArray array The array
      * @return mixed
-     * @todo Recursive search / return array of keys
      */
     public static function arraySearch($pValue, array $pArray)
     {
-        Agl::validateParams(array(
-            'StrictString' => $pValue
-        ));
-
-        if (empty($pValue) or empty($pArray)) {
-            return false;
-        }
-
-        foreach ($pArray as $key => $subArr) {
-            if (array_search($pValue, $subArr)) {
-                return $key;
+        foreach($pArray as $key => $value) {
+            $currentKey = $key;
+            if ($pValue === $value or (is_array($value) and self::arraySearch($pValue, $value) !== false)) {
+                return $currentKey;
             }
         }
 

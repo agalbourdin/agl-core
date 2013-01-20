@@ -22,7 +22,7 @@ class Validation
     public static function check(array $pParams)
     {
         foreach ($pParams as $type => $value) {
-            $func = '_validate' . $type;
+            $func = 'is' . $type;
             if (is_array($value)) {
                 foreach ($value as $subValue) {
                     if (self::$func($subValue) === false) {
@@ -43,7 +43,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateBool($pValue)
+    public static function isBool($pValue)
     {
         return is_bool($pValue);
     }
@@ -54,7 +54,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateInt($pValue)
+    public static function isInt($pValue)
     {
         return is_int($pValue);
     }
@@ -65,7 +65,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateDouble($pValue)
+    public static function isDouble($pValue)
     {
         return is_float($pValue);
     }
@@ -76,18 +76,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateString($pValue)
-    {
-        return (is_string($pValue) or is_int($pValue) or is_float($pValue));
-    }
-
-    /**
-     * Validate a string.
-     *
-     * @param mixed $pValue
-     * @return bool
-     */
-    private static function _validateStrictString($pValue)
+    public static function isString($pValue)
     {
         return is_string($pValue);
     }
@@ -98,7 +87,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateNull($pValue)
+    public static function isNull($pValue)
     {
         return ($pValue === NULL);
     }
@@ -109,7 +98,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateDigit($pValue)
+    public static function isDigit($pValue)
     {
         return ctype_digit($pValue);
     }
@@ -120,7 +109,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateNumeric($pValue)
+    public static function isNumeric($pValue)
     {
         return is_numeric($pValue);
     }
@@ -131,7 +120,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateScalar($pValue)
+    public static function isScalar($pValue)
     {
         return is_scalar($pValue);
     }
@@ -142,7 +131,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateRewritedString($pValue)
+    public static function isRewritedString($pValue)
     {
         return (preg_match('/^[a-z0-9_-]+$/', $pValue) === 1) ? true : false;
     }
@@ -153,7 +142,7 @@ class Validation
      * @param mixed $pValue
      * @return bool
      */
-    private static function _validateAlNum($pValue)
+    public static function isAlNum($pValue)
     {
         return (preg_match('/^[a-z0-9]+$/', $pValue) === 1) ? true : false;
     }
@@ -164,7 +153,7 @@ class Validation
      * @param string $pValue
      * @return bool
      */
-    private static function _validateEmail($pValue)
+    public static function isEmail($pValue)
     {
         return (filter_var($pValue, FILTER_VALIDATE_EMAIL)) ? true : false;
     }

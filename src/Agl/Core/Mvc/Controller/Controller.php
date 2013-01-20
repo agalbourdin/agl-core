@@ -51,7 +51,7 @@ class Controller
 		$cacheInstance = $this->getCacheInstance();
 
 		if ($cacheInstance) {
-			$apcEnabled = Apc::isApcEnabled();
+			$apcEnabled = Apc::isEnabled();
 
 			if ($apcEnabled) {
 				$content = Apc::get($cacheInstance[0]);
@@ -106,7 +106,7 @@ class Controller
 		$module  = $request->getModule();
 		$view    = $request->getView();
 
-		$viewPath = Agl::app()->getPath()
+		$viewPath = APP_PATH
                     . Agl::APP_PHP_DIR
                     . DS
                     . ViewInterface::APP_PHP_VIEW_DIR
@@ -180,7 +180,7 @@ class Controller
 				}
 			}
 
-			if (Apc::isApcEnabled()) {
+			if (Apc::isEnabled()) {
 				return array($configKey, $ttl);
 			} else {
 				return new RawCache($configKey, $ttl);

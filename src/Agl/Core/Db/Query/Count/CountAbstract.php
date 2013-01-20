@@ -99,7 +99,7 @@ abstract class CountAbstract
     public function setField($pField, $pDistinct = false)
     {
         Agl::validateParams(array(
-            'StrictString' => $pField,
+            'String' => $pField,
             'Bool'         => $pDistinct
         ));
 

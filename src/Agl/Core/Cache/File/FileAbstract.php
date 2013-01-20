@@ -96,10 +96,11 @@ abstract class FileAbstract
      */
     public function getCachePath()
     {
-        return Agl::app()->getPath()
+        return APP_PATH
                . Agl::APP_VAR_DIR
                . DS
                . static::AGL_VAR_CACHE_DIR
+               . DS
                . FileData::getSubPath(md5($this->getCacheFile()));
     }
 

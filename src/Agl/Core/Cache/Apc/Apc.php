@@ -1,8 +1,6 @@
 <?php
 namespace Agl\Core\Cache\Apc;
 
-use \Agl\Core\Agl;
-
 /**
  * Generic methods to store data in the APC cache.
  *
@@ -21,6 +19,16 @@ class Apc
 	private static $_apcEnabled = NULL;
 
 	/**
+	 * Generate a prefix for cache files, based on the application's path.
+	 *
+	 * @return string
+	 */
+	private static function _getAppIdentifierPrefix()
+	{
+		return md5(APP_PATH) . '_';
+	}
+
+	/**
 	 * Get a unique cache identifier based on the application path.
 	 *
 	 * @param string $pIdentifier Cache identifier
@@ -28,7 +36,7 @@ class Apc
 	 */
 	private static function _getAppCacheIdentifier($pIdentifier)
 	{
-        return md5(Agl::app()->getPath()) . '_' . $pIdentifier;
+        return self::_getAppIdentifierPrefix() . $pIdentifier;
 	}
 
 	/**
@@ -36,7 +44,7 @@ class Apc
 	 *
 	 * @return bool
 	 */
-	public static function isApcEnabled()
+	public static function isEnabled()
 	{
 		if (! isset(self::$_apcEnabled)) {
 			self::$_apcEnabled = (ini_get('apc.enabled')) ? true : false;
@@ -72,12 +80,36 @@ class Apc
 	}
 
 	/**
-	 * Clean the memory cache.
+	 * Delete a value from the memory cache.
 	 *
-	 * @return bool
+	 * @param string $pIdentifier Cache identifier
+	 * @return mixed
 	 */
-	public static function clean()
+	public static function delete($pIdentifier)
 	{
-		return apc_clear_cache();
+		$identifier = self::_getAppCacheIdentifier($pIdentifier);
+		return apc_delete($identifier);
+	}
+
+	/**
+	 * Delete all the Application's cache variables.
+	 * Return the number on deleted entries.
+	 *
+	 * @return int
+	 */
+	public static function deleteAll()
+	{
+		$i    = 0;
+		$info = apc_cache_info('user');
+		if ($info and isset($info['cache_list'])) {
+			foreach ($info['cache_list'] as $cacheFile) {
+				if (strpos($cacheFile['info'], self::_getAppIdentifierPrefix()) === 0
+					and apc_delete($cacheFile['info'])) {
+					$i++;
+				}
+			}
+		}
+
+		return $i;
 	}
 }

@@ -58,7 +58,7 @@ class Debug
         $xDebugEnabled = self::isXdebugEnabled();
         $debugInfos    = array();
 
-        $debugInfos['app']['path']  = Agl::app()->getPath();
+        $debugInfos['app']['path']  = APP_PATH;
         $debugInfos['app']['cache'] = Agl::app()->isCacheEnabled();
 
         if ($xDebugEnabled) {

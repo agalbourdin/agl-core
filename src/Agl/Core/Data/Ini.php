@@ -17,13 +17,6 @@ class Ini
     const SEPARATOR = '.';
 
     /**
-     * The INI file (absolute path).
-     *
-     * @var null|string
-     */
-    private $_file = NULL;
-
-    /**
      * The parsed content of the INI file.
      *
      * @var array
@@ -31,23 +24,12 @@ class Ini
     private $_content = array();
 
     /**
-     * Set the INI file path when the class is instanciated.
-     *
-     * @var string $pFile Absolute path to the INI file
-     */
-    public function __construct($pFile)
-    {
-        $this->_file = $pFile;
-    }
-
-    /**
      * Parse the keys of the loaded content to create multidimensional arrays,
      * based on the SEPARATOR constant (recursive).
      *
      * @param array $content The array to parse
-     * @return Ini
      */
-    private function _parseKeys(array &$content)
+    private static function _parseKeys(array &$content)
     {
         foreach($content as $key => $value) {
             if (strpos($key, self::SEPARATOR) !== false) {
@@ -62,7 +44,7 @@ class Ini
                 }
 
                 if (is_array($value)) {
-                    $this->_parseKeys($value);
+                    self::_parseKeys($value);
                 }
 
                 $arr = $value;
@@ -70,12 +52,10 @@ class Ini
                 unset($content[$key]);
             } else if (is_array($value)) {
                 $arr = &$content[$key];
-                $this->_parseKeys($value);
+                self::_parseKeys($value);
                 $arr = $value;
             }
         }
-
-        return $this;
     }
 
     /**
@@ -85,9 +65,9 @@ class Ini
      * @var bool $pParseKeys Parse the keys to create multidimensional arrays
      * @return Ini
      */
-    public function loadFile($pParseKeys = false)
+    public function loadFile($pFile, $pParseKeys = false)
     {
-        $this->_content = parse_ini_file($this->_file, true);
+        $this->_content = parse_ini_file($pFile, true);
 
         if ($pParseKeys) {
             $this->_parseKeys($this->_content);

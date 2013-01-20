@@ -15,6 +15,7 @@ class Directory
      * Recursive deletion of a directory.
      *
      * @param string $pDir
+     * @return bool
      */
     public static function deleteRecursive($pDir)
     {
@@ -30,6 +31,8 @@ class Directory
         if (is_dir($pDir)) {
             rmdir($pDir);
         }
+
+        return true;
     }
 
     /**
@@ -41,12 +44,15 @@ class Directory
     public static function listDirs($pDir)
     {
         $content = glob($pDir . '*', GLOB_ONLYDIR);
-
-        if (is_array($content)) {
-            return $content;
+        if ($content === false) {
+            return array();
         }
 
-        return array();
+        $content = array_map(function($el) use ($pDir) {
+            return str_replace($pDir, '', $el);
+        }, $content);
+
+        return $content;
     }
 
     /**

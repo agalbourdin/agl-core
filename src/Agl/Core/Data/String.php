@@ -86,13 +86,19 @@ class String
     	}
 
     	if ($pStrength >= 2) {
-            $chars .= '@#$%';
+            $strengthChars = '@#$%';
+            $chars        .= $strengthChars;
     	}
 
     	$str = '';
     	for ($i = 0; $i < $pLength; $i++) {
             $str .= $chars[(rand() % strlen($chars))];
     	}
+
+        if ($pStrength >= 2 and ! preg_match('/@|#|\$|%/', $str)) {
+            $str = substr($str, 0, -1);
+            $str = preg_replace("/^(.{" . (rand() % $pLength) ."})/", "$1" . $strengthChars[rand() % strlen($strengthChars)], $str);
+        }
 
     	return $str;
     }

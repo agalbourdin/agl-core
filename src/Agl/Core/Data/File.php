@@ -1,8 +1,6 @@
 <?php
 namespace Agl\Core\Data;
 
-use \Agl\Core\Agl;
-
 /**
  * Generic methods to manipulate files.
  *
@@ -15,10 +13,6 @@ class File
 {
 	public static function getSubPath($pFileName, $pDepth = 3)
     {
-    	Agl::validateParams(array(
-			'Int' => $pDepth
-        ));
-
         if (empty($pFileName)) {
             return DS;
         }
@@ -29,7 +23,7 @@ class File
             $levels[] = substr($pFileName, $i, 1);
         }
 
-        return DS . implode(DS, $levels) . DS;
+        return implode(DS, $levels) . DS;
     }
 
     /**
@@ -44,6 +38,21 @@ class File
             if (! fopen($pPath, 'w') or ! chmod($pPath, 0777)) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete a file.
+     *
+     * @param string $pPath Absolute path to the file to delete
+     * @return bool
+     */
+    public static function deleteFile($pPath)
+    {
+        if (! is_writable($pPath) or ! unlink($pPath)) {
+            return false;
         }
 
         return true;

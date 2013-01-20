@@ -100,7 +100,7 @@ class Db
     public function _write($pId, $pData)
     {
         Agl::validateParams(array(
-            'StrictString' => $pData
+            'String' => $pData
         ));
 
         $access = time();

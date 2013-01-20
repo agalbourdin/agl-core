@@ -61,13 +61,6 @@ final class Agl
     private static $_instance = NULL;
 
     /**
-     * Current application absolute path.
-     *
-     * @var string
-     */
-    private $_appPath = NULL;
-
-    /**
      * Should AGL cache the configuration parameters?
      */
     private $_cache = false;
@@ -320,9 +313,8 @@ final class Agl
             date_default_timezone_set(\Agl\Core\Data\Date::DEFAULT_TZ);
         }*/
 
-        $this->_appPath = realpath('.') . DS;
-        $this->_cache   = ($pCache) ? true : false;
-        $this->_debug   = ($pDebug) ? true : false;
+        $this->_cache = ($pCache) ? true : false;
+        $this->_debug = ($pDebug) ? true : false;
 
         error_reporting(-1);
 
@@ -344,16 +336,6 @@ final class Agl
         if ($this->_debug) {
             var_dump(\Agl\Core\Debug\Debug::getInfos());
         }
-    }
-
-    /**
-     * Return the current application path.
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->_appPath;
     }
 
     /**

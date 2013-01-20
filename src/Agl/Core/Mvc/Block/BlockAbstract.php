@@ -72,7 +72,7 @@ abstract class BlockAbstract
 			}
 		}
 
-		$apcEnabled = Apc::isApcEnabled();
+		$apcEnabled = Apc::isEnabled();
 		if ($apcEnabled) {
 			return array($configKey, $ttl);
 		} else {
@@ -146,7 +146,7 @@ abstract class BlockAbstract
 	 */
 	public function render()
 	{
-		$path = Agl::app()->getPath()
+		$path = APP_PATH
 		        . ViewInterface::APP_HTTP_TEMPLATE_DIR
 		        . DS
                 . Agl::app()->getConfig('@app/global/theme')

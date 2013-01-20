@@ -112,7 +112,7 @@ class Loader
         $fileName  = strtolower($pModel);
 
         if (Agl::isInitialized()) {
-            $modelPath = Agl::app()->getPath()
+            $modelPath = APP_PATH
                          . Agl::APP_PHP_DIR
                          . DS
                          . ModelInterface::APP_PHP_MODEL_DIR
@@ -142,7 +142,7 @@ class Loader
         $fileName  = strtolower($pCollection);
 
         if (Agl::isInitialized()) {
-            $collectionPath = Agl::app()->getPath()
+            $collectionPath = APP_PATH
                             . Agl::APP_PHP_DIR
                             . DS
                             . CollectionInterface::APP_PHP_DIR
@@ -176,7 +176,7 @@ class Loader
         $className = ucfirst($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
 
         if (Agl::isInitialized()) {
-            $helperPath = Agl::app()->getPath()
+            $helperPath = APP_PATH
                          . Agl::APP_PHP_DIR
                          . DS
                          . ModelInterface::APP_PHP_HELPER_DIR

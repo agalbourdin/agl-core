@@ -62,7 +62,7 @@ class Autoload
 
         if (strpos($pClassName, self::AGL_POOL) === 0) {
             $path     = self::_loadFromAgl($pClassName);
-            $realPath = BP . $path . Agl::PHP_EXT;
+            $realPath = AGL_PATH . $path . Agl::PHP_EXT;
         } else {
             $realPath = self::_loadFromApp($pClassName);
         }
@@ -102,7 +102,7 @@ class Autoload
         $classNameArr = explode('_', StringData::fromCamelCase($pClassName));
         $pool         = array_pop($classNameArr);
 
-        return Agl::app()->getPath()
+        return APP_PATH
                . Agl::APP_PHP_DIR
                . DS
                . $pool

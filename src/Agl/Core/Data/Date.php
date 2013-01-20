@@ -53,10 +53,14 @@ class Date
 	 * @param $pDate
 	 * @return string
 	 */
-    public static function toTz($pDate)
+    public static function toTz($pDate, $pTimezone = NULL)
     {
+    	if ($pTimezone === NULL) {
+    		$pTimezone = Agl::app()->getConfig('@app/global/timezone');
+    	}
+
     	$time_object = new DateTime($pDate, new DateTimeZone(self::DEFAULT_TZ));
-	    $time_object->setTimezone(new DateTimeZone(Agl::app()->getConfig('@app/global/timezone')));
+	    $time_object->setTimezone(new DateTimeZone($pTimezone));
 	    return $time_object->format(self::DATE_FORMAT);
     }
 
@@ -66,9 +70,13 @@ class Date
 	 * @param $pDate
 	 * @return string
 	 */
-    public static function toDefault($pDate)
+    public static function toDefault($pDate, $pTimezone = NULL)
     {
-    	$time_object = new DateTime($pDate, new DateTimeZone(Agl::app()->getConfig('@app/global/timezone')));
+    	if ($pTimezone === NULL) {
+    		$pTimezone = Agl::app()->getConfig('@app/global/timezone');
+    	}
+
+    	$time_object = new DateTime($pDate, new DateTimeZone($pTimezone));
 	    $time_object->setTimezone(new DateTimeZone(self::DEFAULT_TZ));
 	    return $time_object->format(self::DATE_FORMAT);
     }

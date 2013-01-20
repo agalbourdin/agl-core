@@ -109,7 +109,7 @@ class Json
         $this->_cacheEnabled = Agl::app()->isCacheEnabled();
 
         if ($this->_cacheEnabled) {
-            $this->_apcEnabled   = Apc::isApcEnabled();
+            $this->_apcEnabled   = Apc::isEnabled();
             if ($this->_apcEnabled) {
                 $cache = Apc::get(self::CONFIG_CACHE_ID);
                 if (is_array($cache)) {
@@ -132,7 +132,7 @@ class Json
     {
         $path = str_replace('@layout', '@module[' . Agl::AGL_CORE_POOL . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
 
-        $file = Agl::app()->getPath()
+        $file = APP_PATH
                 . Agl::APP_ETC_DIR
                 . DS
                 . self::CONFIG_MODULES_DIR

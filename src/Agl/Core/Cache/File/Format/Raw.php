@@ -75,7 +75,7 @@ class Raw
     public function setContent($pContent)
     {
         Agl::validateParams(array(
-            'StrictString' => $pContent
+            'String' => $pContent
         ));
 
         $this->_content = $pContent;

@@ -38,36 +38,42 @@ class Acl
 
 	/**
 	 * Initialize the Acl instance.
+	 *
+	 * @param mixed $aclConfig Roles and Resources configuration
 	 */
-	public function __construct()
+	public function __construct($aclConfig = NULL)
 	{
-		$this->_loadRoles();
+		if ($aclConfig === NULL) {
+			$aclConfig = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/acl]');
+		}
+
+		if (is_array($aclConfig)) {
+			$this->_loadRoles($aclConfig);
+		}
 	}
 
 	/**
 	 * Load the roles from the ACL configuration file.
 	 *
+	 * @param array $aclConfig Roles and Resources configuration
 	 * @return array
 	 */
-	private function _loadRoles()
+	private function _loadRoles(array $aclConfig)
 	{
-		$aclConfig = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/acl]');
-		if (is_array($aclConfig)) {
-			foreach ($aclConfig as $role => $acl) {
-				if (isset($acl[self::CONFIG_FIELD_RESOURCE])
-					and is_array($acl[self::CONFIG_FIELD_RESOURCE])) {
-					$this->_roles[$role] = $acl[self::CONFIG_FIELD_RESOURCE];
-				} else {
-					$this->_roles[$role] = array();
-				}
+		foreach ($aclConfig as $role => $acl) {
+			if (isset($acl[self::CONFIG_FIELD_RESOURCE])
+				and is_array($acl[self::CONFIG_FIELD_RESOURCE])) {
+				$this->_roles[$role] = $acl[self::CONFIG_FIELD_RESOURCE];
+			} else {
+				$this->_roles[$role] = array();
+			}
 
-				if (isset($acl[self::CONFIG_FIELD_INHERIT])
-					and is_array($acl[self::CONFIG_FIELD_INHERIT])) {
-					foreach ($acl[self::CONFIG_FIELD_INHERIT] as $inherit) {
-						if (isset($aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE])
-							and is_array($aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE])) {
-							$this->_roles[$role] = array_merge($this->_roles[$role], $aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE]);
-						}
+			if (isset($acl[self::CONFIG_FIELD_INHERIT])
+				and is_array($acl[self::CONFIG_FIELD_INHERIT])) {
+				foreach ($acl[self::CONFIG_FIELD_INHERIT] as $inherit) {
+					if (isset($aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE])
+						and is_array($aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE])) {
+						$this->_roles[$role] = array_merge($this->_roles[$role], $aclConfig[$inherit][self::CONFIG_FIELD_RESOURCE]);
 					}
 				}
 			}
@@ -82,9 +88,9 @@ class Acl
 	 * @param string $pRole Role identifier
 	 * @param array $pResource Required resources
 	 */
-	public function isAllowed($pRole, array $pResource)
+	public function isAllowed($pRole, array $pResources)
 	{
-    	foreach ($pResource as $resource) {
+    	foreach ($pResources as $resource) {
     		if (! isset($this->_roles[$pRole]) or ! in_array($resource, $this->_roles[$pRole])) {
     			return false;
     		}

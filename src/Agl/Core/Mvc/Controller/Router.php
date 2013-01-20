@@ -65,7 +65,7 @@ class Router
 		$this->_view   = $request->getView();
 		$this->_action = $request->getAction();
 
-		$controllerPath = Agl::app()->getPath()
+		$controllerPath = APP_PATH
                           . Agl::APP_PHP_DIR
                           . DS
                           . Controller::APP_PHP_CONTROLLER_DIR
