@@ -28,7 +28,7 @@ abstract class FileAbstract
 	 *
 	 * @var null|string
 	 */
-	protected $_cachePath = NULL;
+	protected $_path = NULL;
 
 	/**
 	 * Create the Cache instance, set the identifier and create the cache file
@@ -97,14 +97,14 @@ abstract class FileAbstract
     protected function _setPath($pPath)
     {
     	if (! $pPath) {
-    		$this->_cachePath = APP_PATH
+    		$this->_path = APP_PATH
 				              . Agl::APP_VAR_DIR
 				              . DS
 				              . static::AGL_VAR_CACHE_DIR
 				              . DS
 				              . FileData::getSubPath(md5($this->getFile()));
     	} else {
-    		$this->_cachePath = $pPath;
+    		$this->_path = $pPath;
     	}
 
     	return $this;
@@ -127,7 +127,7 @@ abstract class FileAbstract
      */
     public function getPath()
     {
-        return $this->_cachePath;
+        return $this->_path;
     }
 
     /**

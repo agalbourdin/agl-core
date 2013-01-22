@@ -1,7 +1,8 @@
 <?php
 namespace Agl\Core\Observer;
 
-use \Agl\Core\Agl;
+use \Agl\Core\Agl,
+    \Agl\Core\Loader\Loader;
 
 /**
  * Dispatch events to the corresponding instance.
@@ -13,11 +14,6 @@ use \Agl\Core\Agl;
 
 class Observer
 {
-    /**
-     * The filename of the events configuration file.
-     */
-    const CONFIG_FILE = 'events';
-
     /**
      * List of allowed events.
      */
@@ -37,19 +33,24 @@ class Observer
      *
      * @param type $pName Name of the event to dispatch
      * @param type array $pArgs Arguments to pass to the event
-     * @return bool
+     * @return int
      */
-    public static function dispatch($pName, array $pArgs)
+    public static function dispatch($pName, array $pArgs, array $pEvents = array())
     {
-        $eventConfig = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/events]/' . $pName, true);
-        foreach ($eventConfig as $event) {
+        if (empty($pEvents)) {
+            $pEvents = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/events]/' . $pName, true);
+        }
+
+        $i = 0;
+        foreach ($pEvents as $event) {
             if (is_array($event)) {
                 foreach ($event as $class => $methods) {
                     if (is_array($methods)) {
-                        $instance = Agl::getSingleton($class);
+                        $class = Loader::getClassName($class);
                         foreach ($methods as $method) {
-                            if ($instance and method_exists($instance, $method)) {
-                                $instance::$method($pArgs);
+                            if (method_exists($class, $method)) {
+                                $class::$method($pArgs);
+                                $i++;
                             }
                         }
                     }
@@ -57,6 +58,6 @@ class Observer
             }
         }
 
-        return false;
+        return $i;
     }
 }

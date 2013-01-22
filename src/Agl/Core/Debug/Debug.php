@@ -1,7 +1,8 @@
 <?php
 namespace Agl\Core\Debug;
 
-use \Agl\Core\Agl;
+use \Agl\Core\Agl,
+    \Exception;
 
 /**
  * A set of debug tools, with xDebug support.
@@ -32,7 +33,7 @@ class Debug
      * Log a message in the syslog.
      *
      * @param string $pMessage
-     * @return bool
+     * @return string
      */
     public static function log($pMessage)
     {
@@ -42,8 +43,12 @@ class Debug
             $message = $pMessage;
         }
 
-        $logId = uniqid();
-        syslog(LOG_DEBUG, '[agl_' . $logId . '] ' . $message);
+        $logId  = uniqid();
+        $logged = syslog(LOG_DEBUG, '[agl_' . $logId . '] ' . $message);
+
+        if (! $logged) {
+            throw new Exception("syslog() error");
+        }
 
         return $logId;
     }
