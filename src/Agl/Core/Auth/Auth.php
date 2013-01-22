@@ -21,6 +21,13 @@ class Auth
 	 */
 	const USER_DB_CONTAINER  = 'user';
 
+	/**
+	 * Session object.
+	 *
+	 * @var null|Session
+	 */
+	private $this->_session = NULL;
+
  	/**
  	 * Logged in user.
  	 *
@@ -34,10 +41,10 @@ class Auth
 	public function __construct()
 	{
 		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
-		$session     = Agl::getSession();
+		$this->_session     = Agl::getSession();
 
-		if ($session->hasUserId()) {
-			$this->_user->loadById($session->getUserId());
+		if ($this->_session->hasUserId()) {
+			$this->_user->loadById($this->_session->getUserId());
 		}
 	}
 
@@ -69,8 +76,7 @@ class Auth
 
 		$this->_user->load($conditions);
 		if ($this->isLogged()) {
-			$session = Agl::getSession();
-			$session->setUserId($this->_user->getId());
+			$this->_session->setUserId($this->_user->getId());
 			return true;
 		}
 
@@ -85,8 +91,7 @@ class Auth
 	public function logout()
 	{
 		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
-		$session     = Agl::getSession();
-		$session->unsetUserId();
+		$this->_session->unsetUserId();
 		return $this;
 	}
 
@@ -110,6 +115,11 @@ class Auth
 		return $this->_user;
 	}
 
+	/**
+	 * Return the role of the current user.
+	 *
+	 * @return string
+	 */
 	public function getRole()
 	{
 		if ($this->_user->getRole()) {

@@ -60,7 +60,7 @@ class Controller
 	                return $this;
 	            }
 			} else {
-	            $content = $cacheInstance->getContent();
+	            $content = $cacheInstance->get();
 	            if ($content) {
 	                echo $content;
 	                return $this;

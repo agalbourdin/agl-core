@@ -24,23 +24,33 @@ abstract class FileAbstract
 	protected $_identifier = NULL;
 
 	/**
+	 * Absolute path to the cache directory.
+	 *
+	 * @var null|string
+	 */
+	protected $_cachePath = NULL;
+
+	/**
 	 * Create the Cache instance, set the identifier and create the cache file
 	 * and directories.
 	 *
 	 * @param string $pIdentifier
 	 * @param int $pTtl Cache Time to Live in seconds, 0 = never expires
+	 * @param string $pPath Absolute path to the cache directory
 	 */
-	public function __construct($pIdentifier, $pTtl = 0)
+	public function __construct($pIdentifier, $pTtl = 0, $pPath = '')
 	{
 		Agl::validateParams(array(
 			'RewritedString' => $pIdentifier,
+			'String'         => $pPath,
 			'Int'            => $pTtl
         ));
 
 		$this->_identifier = $pIdentifier;
 
-		$this->_checkTtl($pTtl);
-		$this->_createFile();
+		$this->_setPath($pPath)
+		     ->_checkTtl($pTtl)
+		     ->_createFile();
 	}
 
 	/**
@@ -50,12 +60,12 @@ abstract class FileAbstract
 	 */
 	protected function _createFile()
 	{
-		$dir = $this->getCachePath();
+		$dir = $this->getPath();
 		if (! DirecoryData::createDir($dir)) {
 			throw new Exception("Unable to create the cache directory '$dir'");
 		}
 
-		$file = $dir . $this->getCacheFile();
+		$file = $dir . $this->getFile();
 		if (! FileData::createEmptyFile($file)) {
 			throw new Exception("Unable to create the cache file '$file'");
 		}
@@ -71,13 +81,34 @@ abstract class FileAbstract
 	 */
 	protected function _checkTtl($pTtl)
 	{
-		$file = $this->getCacheFullPath();
+		$file = $this->getFullPath();
 		if ($pTtl and is_writable($file) and (time() - filemtime($file)) > $pTtl) {
 			file_put_contents($file, '');
 		}
 
 		return $this;
 	}
+
+	/**
+     * Set the cache directory.
+     *
+     * @param string $pPath Absolute path to the cache directory
+     */
+    protected function _setPath($pPath)
+    {
+    	if (! $pPath) {
+    		$this->_cachePath = APP_PATH
+				              . Agl::APP_VAR_DIR
+				              . DS
+				              . static::AGL_VAR_CACHE_DIR
+				              . DS
+				              . FileData::getSubPath(md5($this->getFile()));
+    	} else {
+    		$this->_cachePath = $pPath;
+    	}
+
+    	return $this;
+    }
 
 	/**
 	 * Rerturn the Cache identifier.
@@ -94,14 +125,9 @@ abstract class FileAbstract
      *
      * @return string
      */
-    public function getCachePath()
+    public function getPath()
     {
-        return APP_PATH
-               . Agl::APP_VAR_DIR
-               . DS
-               . static::AGL_VAR_CACHE_DIR
-               . DS
-               . FileData::getSubPath(md5($this->getCacheFile()));
+        return $this->_cachePath;
     }
 
     /**
@@ -109,7 +135,7 @@ abstract class FileAbstract
      *
      * @return string
      */
-	public function getCacheFile()
+	public function getFile()
     {
         return $this->_identifier
                . static::AGL_VAR_CACHE_EXT;
@@ -120,8 +146,8 @@ abstract class FileAbstract
      *
      * @return string
      */
-    public function getCacheFullPath()
+    public function getFullPath()
     {
-    	return $this->getCachePath() . $this->getCacheFile();
+    	return $this->getPath() . $this->getFile();
     }
 }

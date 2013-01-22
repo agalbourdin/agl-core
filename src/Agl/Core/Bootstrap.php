@@ -1,4 +1,6 @@
 <?php
+namespace {
+
 /**
  * Checking the PHP version.
  */
@@ -28,3 +30,25 @@ require(__DIR__ . DS . 'Agl.php');
  * Run AGL.
  */
 \Agl\Core\Agl::run(AGL_CACHE_ENABLED, AGL_DEBUG_MODE);
+
+}
+
+namespace Agl\Core {
+
+/**
+ * Import and initialize the Autoload class.
+ */
+require(__DIR__ . DS . 'Autoload.php');
+new Autoload();
+
+/**
+ * Import Errors and Exceptions handlers.
+ */
+require(__DIR__ . DS . 'Exception.php');
+
+/**
+ * Import Debug class to always log errors.
+ */
+require(__DIR__ . DS . 'Debug/Debug.php');
+
+}

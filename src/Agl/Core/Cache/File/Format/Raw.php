@@ -31,12 +31,13 @@ class Raw
      *
      * @param string $pIdentifier
      * @param int $pTtl Cache Time to Live in seconds, 0 = never expires
+     * @param string $pPath Absolute path to the cache directory
      */
-    public function __construct($pIdentifier, $pTtl = 0)
+    public function __construct($pIdentifier, $pTtl = 0, $pPath = '')
     {
-        parent::__construct($pIdentifier, $pTtl);
+        parent::__construct($pIdentifier, $pTtl, $pPath);
 
-        $this->_content = file_get_contents($this->getCacheFullPath());
+        $this->_content = file_get_contents($this->getFullPath());
     }
 
     /**
@@ -46,7 +47,7 @@ class Raw
      */
     public function save()
     {
-        if (file_put_contents($this->getCacheFullPath(), $this->_content, LOCK_EX) === false) {
+        if (file_put_contents($this->getFullPath(), $this->_content, LOCK_EX) === false) {
             throw new Exception("Unable to write the cache");
         }
 
@@ -59,7 +60,7 @@ class Raw
      * @param string $pKey
      * @return mixed
      */
-    public function getContent()
+    public function get()
     {
         return $this->_content;
     }
@@ -72,7 +73,7 @@ class Raw
      *
      * @return Arr
      */
-    public function setContent($pContent)
+    public function set($pContent)
     {
         Agl::validateParams(array(
             'String' => $pContent

@@ -31,10 +31,10 @@ interface FileInterface
      */
     const CACHE_FILE_SEPARATOR = '_';
 
-    public function __construct($pIdentifier, $pTtl = 0);
+    public function __construct($pIdentifier, $pTtl = 0, $pPath = '');
     public function getIdentifier();
-    public function getCachePath();
-    public function getCacheFile();
-    public function getCacheFullPath();
+    public function getPath();
+    public function getFile();
+    public function getFullPath();
     public function save();
 }

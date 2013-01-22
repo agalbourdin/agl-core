@@ -11,22 +11,6 @@ use \Agl\Core\Config\Json\Json as JsonConfig,
     \Exception;
 
 /**
- * Import and initialize the Autoload class.
- */
-require(__DIR__ . DS . 'Autoload.php');
-new Autoload();
-
-/**
- * Import Errors and Exceptions handlers.
- */
-require(__DIR__ . DS . 'Exception.php');
-
-/**
- * Import Debug class to always log errors.
- */
-require(__DIR__ . DS . 'Debug/Debug.php');
-
-/**
  * Mother application class.
  *
  * @category Agl_Core

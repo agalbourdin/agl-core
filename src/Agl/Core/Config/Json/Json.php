@@ -217,7 +217,7 @@ class Json
                     return $this->_cache[$pPath];
                 }
             } else {
-                $value = self::$_cacheInstance->getValue($pPath);
+                $value = self::$_cacheInstance->get($pPath);
                 if ($value !== FileInterface::AGL_CACHE_TAG_NOT_FOUND) {
                     return $value;
                 }
@@ -231,7 +231,7 @@ class Json
                 Apc::set(self::CONFIG_CACHE_ID, $this->_cache);
             } else {
                 self::$_cacheInstance
-                    ->setValue($pPath, $value)
+                    ->set($pPath, $value)
                     ->save();
             }
         }

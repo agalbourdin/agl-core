@@ -254,7 +254,7 @@ abstract class ViewAbstract
 	                return $content;
 	            }
 			} else {
-	            $content = $cache->getContent();
+	            $content = $cache->get();
 	            if ($content) {
 	                return $content;
 	            }

@@ -19,6 +19,13 @@ class Apc
 	private static $_apcEnabled = NULL;
 
 	/**
+	 * Save the PHP apc.enabled_cli configuration value.
+	 *
+	 * @var bool
+	 */
+	private static $_apcCliEnabled = NULL;
+
+	/**
 	 * Generate a prefix for cache files, based on the application's path.
 	 *
 	 * @return string
@@ -51,6 +58,20 @@ class Apc
 		}
 
 		return self::$_apcEnabled;
+	}
+
+	/**
+	 * Check if APC Cli is enabled on the server.
+	 *
+	 * @return bool
+	 */
+	public static function isCliEnabled()
+	{
+		if (! isset(self::$_apcCliEnabled)) {
+			self::$_apcCliEnabled = (ini_get('apc.enable_cli')) ? true : false;
+		}
+
+		return self::$_apcCliEnabled;
 	}
 
 	/**
