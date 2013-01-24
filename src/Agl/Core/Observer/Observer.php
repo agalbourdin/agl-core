@@ -29,21 +29,49 @@ class Observer
     const EVENT_ITEM_DELETE_AFTER         = 'agl_item_delete_after';
 
     /**
+     * Registered events.
+     *
+     * @var null|array
+     */
+    private static $_events = NULL;
+
+    /**
+     * Register events. Get events from the configuration by default.
+     *
+     * @param $pEvents null|array
+     * @return array
+     */
+    public static function setEvents($pEvents = NULL)
+    {
+        if ($pEvents === NULL) {
+            $pEvents = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/events]/');
+        }
+
+        if (is_array($pEvents)) {
+            self::$_events = $pEvents;
+        } else {
+            self::$_events = array();
+        }
+
+        return self::$_events;
+    }
+
+    /**
      * Dispatch the event $pName with the arguments $pArgs.
      *
      * @param type $pName Name of the event to dispatch
      * @param type array $pArgs Arguments to pass to the event
      * @return int
      */
-    public static function dispatch($pName, array $pArgs, array $pEvents = array())
+    public static function dispatch($pName, array $pArgs = array())
     {
-        if (empty($pEvents)) {
-            $pEvents = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/events]/' . $pName, true);
+        if (self::$_events === NULL) {
+            self::setEvents();
         }
 
         $i = 0;
-        foreach ($pEvents as $event) {
-            if (is_array($event)) {
+        foreach (self::$_events as $name => $event) {
+            if ($name === $pName and is_array($event)) {
                 foreach ($event as $class => $methods) {
                     if (is_array($methods)) {
                         $class = Loader::getClassName($class);

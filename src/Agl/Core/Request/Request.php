@@ -159,8 +159,8 @@ class Request
 
             $this->_requestVars = explode('/', $this->_request);
             if (count($this->_requestVars) == 1) {
-            	$this->_request .= '/' . Controller::DEFAULT_ACTION;
-            	$this->_requestVars[] = Controller::DEFAULT_ACTION;
+				$this->_request       .= '/' . Controller::DEFAULT_ACTION;
+				$this->_requestVars[] = Controller::DEFAULT_ACTION;
             }
 
             return $this;
