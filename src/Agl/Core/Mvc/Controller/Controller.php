@@ -85,7 +85,7 @@ class Controller
         		Apc::set($cacheInstance[0], $content, $cacheInstance[1]);
         	} else {
         		$cacheInstance
-	                ->setContent($content)
+	                ->set($content)
 	                ->save();
         	}
 
