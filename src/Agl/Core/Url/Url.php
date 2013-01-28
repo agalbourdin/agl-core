@@ -15,6 +15,19 @@ use \Agl\Core\Agl,
 
 class Url
 {
+    private static $_request = NULL;
+
+    public static function setRequest($pRequest = NULL)
+    {
+        if ($pRequest === NULL) {
+            self::$_request = Agl::getRequest();
+        } else {
+            self::$_request = $pRequest;
+        }
+
+        return self::$_request;
+    }
+
     /**
      * Return a formated URL with module, view, action and parameters.
      *
@@ -26,9 +39,12 @@ class Url
     public static function get($pUrl, array $pParams = array(), $pRelative = true)
     {
         if (strpos($pUrl, '*/') !== false) {
-            $request = Agl::getRequest();
-            $pUrl    = str_replace('*/*/', $request->getModule() . DS . $request->getView(), $pUrl);
-            $pUrl    = str_replace('*/', $request->getModule(), $pUrl);
+            if (self::$_request === NULL) {
+                self::setRequest();
+            }
+
+            $pUrl = str_replace('*/*/', self::$_request->getModule() . DS . self::$_request->getView(), $pUrl);
+            $pUrl = str_replace('*/', self::$_request->getModule() . DS, $pUrl);
         }
 
         if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale') and $pUrl) {
@@ -77,10 +93,13 @@ class Url
      */
     public static function getCurrent(array $pNewParams = array())
     {
-        $request = Agl::getRequest();
-        $module = $request->getModule();
-        $view   = $request->getView();
-        $params = $request->getParams();
+        if (self::$_request === NULL) {
+            self::setRequest();
+        }
+
+        $module = self::$_request->getModule();
+        $view   = self::$_request->getView();
+        $params = self::$_request->getParams();
 
         $params = array_merge($params, $pNewParams);
 

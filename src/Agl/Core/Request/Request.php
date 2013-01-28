@@ -125,15 +125,12 @@ class Request
 			return $this;
 		}
 
-		$observerIsLoaded  = class_exists('\Agl\Core\Observer\Observer');
 		$this->_requestUri = $pRequestUri;
 
-		if ($observerIsLoaded) {
-			Observer::dispatch(Observer::EVENT_SET_REQUEST_BEFORE, array(
-				'request'     => $this,
-				'request_uri' => &$this->_requestUri
-			));
-		}
+		Observer::dispatch(Observer::EVENT_SET_REQUEST_BEFORE, array(
+			'request'     => $this,
+			'request_uri' => &$this->_requestUri
+		));
 
 		$this
 			->_setRequest()
@@ -141,12 +138,10 @@ class Request
 			->_setView()
 			->_setParams();
 
-		if ($observerIsLoaded) {
-			Observer::dispatch(Observer::EVENT_SET_REQUEST_AFTER, array(
-				'request'     => $this,
-				'request_uri' => $this->_requestUri
-			));
-		}
+		Observer::dispatch(Observer::EVENT_SET_REQUEST_AFTER, array(
+			'request'     => $this,
+			'request_uri' => $this->_requestUri
+		));
 	}
 
 	/**
