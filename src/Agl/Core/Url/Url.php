@@ -91,7 +91,7 @@ class Url
      * @param array $pParams Parameters to add to the request (additional)
      * @return string
      */
-    public static function getCurrent(array $pNewParams = array())
+    public static function getCurrent(array $pNewParams = array(), $pRelative = true)
     {
         if (self::$_request === NULL) {
             self::setRequest();
@@ -103,7 +103,7 @@ class Url
 
         $params = array_merge($params, $pNewParams);
 
-        return self::get($module . DS . $view, $params);
+        return self::get($module . DS . $view, $params, $pRelative);
     }
 
     /**
@@ -124,13 +124,17 @@ class Url
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function getSkin($pUrl, $pRelative = true)
+    public static function getSkin($pUrl, $pRelative = true, $pDir = NULL)
     {
+        if ($pDir === NULL) {
+            $pDir = Agl::app()->getConfig('@app/global/theme');
+        }
+
         $url = Agl::APP_PUBLIC_DIR
                . DS
                . ViewInterface::APP_HTTP_SKIN_DIR
                . DS
-               . Agl::app()->getConfig('@app/global/theme')
+               . $pDir
                . DS
                . $pUrl;
 
