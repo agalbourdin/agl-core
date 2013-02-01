@@ -1,9 +1,9 @@
 <?php
 /**
- * Checking the PHP version.
+ * Checking PHP version.
  */
-if (version_compare(phpversion(), '5.3.0', '<')) {
-    echo 'Invalid PHP Version (' . phpversion() . ' < 5.3.0)';
+if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+    echo 'Invalid PHP Version (' . PHP_VERSION . ' < 5.3.0)';
     exit;
 }
 

@@ -36,14 +36,14 @@ abstract class SessionAbstract
         if (preg_match('/^get/', $pMethod)) {
             $var = str_replace('get', '', $pMethod);
             return $this->$var;
-        } else if (preg_match('/^set/', $pMethod) and isset($pArgs[0])) {
+        } else if (preg_match('/^set/', $pMethod) and array_key_exists(0, $pArgs)) {
             $var = str_replace('set', '', $pMethod);
             $this->$var = $pArgs[0];
             return $this;
         } else if (preg_match('/^remove/', $pMethod)) {
             $var = str_replace('remove', '', $pMethod);
             unset($this->$var);
-            return true;
+            return $this;
         } else if (preg_match('/^has/', $pMethod)) {
             $var = str_replace('has', '', $pMethod);
             return $this->hasAttribute($var);
@@ -74,13 +74,11 @@ abstract class SessionAbstract
      *
      * @param string $pVar The attribute to create / update
      * @param string $pValue The attribute value to set
-     * @return mixed The attribute value
      */
     public function __set($pVar, $pValue)
     {
-        $attribute = StringData::fromCamelCase($pVar);
+        $attribute            = StringData::fromCamelCase($pVar);
         $_SESSION[$attribute] = $pValue;
-        return $_SESSION[$attribute];
     }
 
     /**
@@ -88,17 +86,13 @@ abstract class SessionAbstract
      *
      * @param string $pVar The attribute to create / update
      * @param string $pValue The attribute value to set
-     * @return mixed The attribute value
      */
     public function __unset($pVar)
     {
         $attribute = StringData::fromCamelCase($pVar);
         if (array_key_exists($attribute, $_SESSION)) {
             unset($_SESSION[$attribute]);
-            return true;
         }
-
-        return false;
     }
 
     /**
