@@ -274,7 +274,7 @@ final class Agl
     public static function route($pRequestUri = NULL)
     {
         if ($pRequestUri === NULL) {
-            $requestUri = $_SERVER['REQUEST_URI'];
+            $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
         } else {
             $requestUri = $pRequestUri;
         }

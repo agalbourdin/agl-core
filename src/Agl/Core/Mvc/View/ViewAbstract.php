@@ -3,6 +3,7 @@ namespace Agl\Core\Mvc\View;
 
 use \Agl\Core\Agl,
 	\Agl\Core\Cache\Apc\Apc,
+	\Agl\Core\Debug\Debug,
 	\Agl\Core\Mvc\Block\Block,
 	\Agl\Core\Mvc\Block\BlockAbstract,
 	\Agl\Core\Mvc\Block\BlockInterface,
@@ -196,7 +197,18 @@ abstract class ViewAbstract
 				        . DS
 				        . $template['file']
 				        . static::FILE_EXT;
+
+			$debugMode = \Agl::app()->isDebugMode();
+			if ($debugMode) {
+				echo Debug::DISPLAY_PATH_START;
+				echo sprintf(Debug::DISPLAY_PATH, $template);
+			}
+
 			require($template);
+
+			if ($debugMode) {
+				echo Debug::DISPLAY_PATH_END;
+			}
 		} else {
 			echo $this->getView();
 		}
@@ -212,8 +224,21 @@ abstract class ViewAbstract
 	 */
 	public function getView()
 	{
+		$debugMode = \Agl::app()->isDebugMode();
+
 		ob_start();
+
+		if ($debugMode) {
+			echo Debug::DISPLAY_PATH_START;
+			echo sprintf(Debug::DISPLAY_PATH, $this->_path);
+		}
+
 		require($this->_path);
+
+		if ($debugMode) {
+			echo Debug::DISPLAY_PATH_END;
+		}
+
 		return ob_get_clean();
 	}
 

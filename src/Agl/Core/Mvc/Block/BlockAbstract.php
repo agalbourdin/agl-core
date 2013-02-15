@@ -6,8 +6,10 @@ use \Agl\Core\Agl,
 	\Agl\Core\Cache\File\FileInterface,
 	\Agl\Core\Cache\File\Format\Raw as RawCache,
 	\Agl\Core\Config\ConfigInterface,
+	\Agl\Core\Debug\Debug,
 	\Agl\Core\Mvc\View\ViewInterface,
-	\Agl\Core\Registry\Registry;
+	\Agl\Core\Registry\Registry,
+	\Agl\Core\Request\Request;
 
 /**
  * Absract class - Block
@@ -67,7 +69,7 @@ abstract class BlockAbstract
 
 		if ($type == ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
 			$configKey .= $configKeySeparator . \Agl\Core\Data\String::rewrite($request->getReq());
-			if ($request->isAjax()) {
+			if (Request::isAjax()) {
 				$configKey .= $configKeySeparator . ConfigInterface::CONFIG_CACHE_KEY_AJAX;
 			}
 		}
@@ -155,6 +157,16 @@ abstract class BlockAbstract
 		        . DS
 		        . $this->_file;
 
+		$debugMode = \Agl::app()->isDebugMode();
+		if ($debugMode) {
+			echo Debug::DISPLAY_PATH_START;
+			echo sprintf(Debug::DISPLAY_PATH, $path);
+		}
+
 		require($path);
+
+		if ($debugMode) {
+			echo Debug::DISPLAY_PATH_END;
+		}
 	}
 }

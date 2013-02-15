@@ -2,6 +2,7 @@
 namespace Agl\Core\Auth;
 
 use \Agl\Core\Agl,
+	\Agl\Core\Request\Request,
 	\Exception;
 
 /**
@@ -109,7 +110,7 @@ class Acl
 			throw new Exception("Invalid ACL to access the view");
 		}
 
-		Agl::getRequest()->redirect($module);
+		Request::redirect($module);
 		exit;
 	}
 }

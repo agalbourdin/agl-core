@@ -9,7 +9,8 @@ use \Agl\Core\Agl,
 	\Agl\Core\Data\String as StringData,
 	\Agl\Core\Mvc\View\View,
 	\Agl\Core\Mvc\View\ViewInterface,
-	\Agl\Core\Registry\Registry;
+	\Agl\Core\Registry\Registry,
+	\Agl\Core\Request\Request;
 
 /**
  * Base Controller class.
@@ -175,7 +176,7 @@ class Controller
 
 			if ($type == ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
 				$configKey .= $configKeySeparator . StringData::rewrite($request->getReq());
-				if ($request->isAjax()) {
+				if (Request::isAjax()) {
 					$configKey .= $configKeySeparator . ConfigInterface::CONFIG_CACHE_KEY_AJAX;
 				}
 			}

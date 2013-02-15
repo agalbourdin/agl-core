@@ -343,7 +343,7 @@ class Request
 	 * @param array $pParams
 	 * @param int $pType Type of redirection
 	 */
-	public function redirect($pPath = '', array $pParams = array(), $pType = self::HTTP_CODE_REDIRECT_TEMPORARILY)
+	public static function redirect($pPath = '', array $pParams = array(), $pType = self::HTTP_CODE_REDIRECT_TEMPORARILY)
 	{
 		header('Location: ' . Url::get($pPath, $pParams), true, $pType);
 		exit;
@@ -354,7 +354,7 @@ class Request
 	 *
 	 * @return bool
 	 */
-	public function isAjax()
+	public static function isAjax()
 	{
 		return (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 				and strcasecmp($_SERVER['HTTP_X_REQUESTED_WITH'], 'xmlhttprequest') === 0) ? true : false;
