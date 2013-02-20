@@ -34,6 +34,7 @@ class Autoload
         'Debug'      => '\Agl\Core\Debug\Debug',
         'Model'      => '\Agl\Core\Mvc\Model\Model',
         'Registry'   => '\Agl\Core\Registry\Registry',
+        'String'     => '\Agl\Core\Data\String',
         'Url'        => '\Agl\Core\Url\Url',
         'Validation' => '\Agl\Core\Data\Validation',
         'View'       => '\Agl\Core\Mvc\View\View'

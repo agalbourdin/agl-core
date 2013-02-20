@@ -102,4 +102,23 @@ class String
 
     	return $str;
     }
+
+    /**
+     * Truncate a string and add an optional suffix.
+     *
+     * @param string $pStr String to truncate
+     * @param int $pLimit Length of the string to return
+     * @param string $pEnd Suffix
+     */
+    public static function truncate($pStr, $pLimit, $pEnd = '...')
+    {
+        $str    = strip_tags($pStr);
+        $length = strlen($str);
+        if ($length <= $pLimit) {
+            return $str;
+        }
+
+        return trim(substr($str, 0, $pLimit)) . $pEnd;
+    }
+
 }
