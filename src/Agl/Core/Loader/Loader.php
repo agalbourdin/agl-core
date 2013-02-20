@@ -29,28 +29,6 @@ class Loader
     private static $_loadedModules = array();
 
     /**
-     * Is requested with a short format, for example core/debug/debug, return
-     * a full class name.
-     *
-     * @param $pClass
-     * @return string
-     */
-    public static function getClassName($pClass)
-    {
-        if (strpos($pClass, Agl::AGL_CORE_POOL) === 0 or strpos($pClass, Agl::AGL_MORE_POOL) === 0) {
-            $moduleArr = explode(DS, $pClass);
-            $moduleArr = array_map('ucfirst', $moduleArr);
-            if (count($moduleArr) == 2) {
-                $moduleArr[] = $moduleArr[1];
-            }
-
-            return '\\' . Autoload::AGL_POOL . '\\' . implode('\\', $moduleArr);
-        }
-
-        return $pClass;
-    }
-
-    /**
      * Create a new instance of the requested class.
      *
      * @param string $pClass Class path

@@ -345,7 +345,12 @@ class Request
 	 */
 	public static function redirect($pPath = '', array $pParams = array(), $pType = self::HTTP_CODE_REDIRECT_TEMPORARILY)
 	{
-		header('Location: ' . Url::get($pPath, $pParams), true, $pType);
+		if (strpos($pPath, 'http') === false) {
+			header('Location: ' . Url::get($pPath, $pParams), true, $pType);
+		} else {
+			header('Location: ' . $pPath, true, $pType);
+		}
+
 		exit;
 	}
 

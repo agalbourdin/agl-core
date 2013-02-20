@@ -157,15 +157,17 @@ abstract class BlockAbstract
 		        . DS
 		        . $this->_file;
 
-		$debugMode = \Agl::app()->isDebugMode();
-		if ($debugMode) {
+		$debugMode           = \Agl::app()->isDebugMode();
+		$canDisplayHtmlDebug = Debug::canDisplayHtmlDebug();
+
+		if ($debugMode and $canDisplayHtmlDebug) {
 			echo Debug::DISPLAY_PATH_START;
 			echo sprintf(Debug::DISPLAY_PATH, $path);
 		}
 
 		require($path);
 
-		if ($debugMode) {
+		if ($debugMode and $canDisplayHtmlDebug) {
 			echo Debug::DISPLAY_PATH_END;
 		}
 	}

@@ -82,14 +82,14 @@ abstract class ItemAbstract
     public function __call($pMethod, array $pArgs)
     {
         if (strpos($pMethod, 'get') === 0) {
-            $var = str_replace('get', '', $pMethod);
+            $var = substr($pMethod, 3);
             return $this->$var;
         } else if (strpos($pMethod, 'set') === 0 and isset($pArgs[0])) {
-            $var = str_replace('set', '', $pMethod);
+            $var        = substr($pMethod, 3);
             $this->$var = $pArgs[0];
             return $this;
         } else if (strpos($pMethod, 'unset') === 0) {
-            $var = str_replace('unset', '', $pMethod);
+            $var = substr($pMethod, 5);
             unset($this->$var);
             return true;
         } else if (preg_match('/^loadBy([a-zA-Z0-9]+)$/', $pMethod, $matches)) {

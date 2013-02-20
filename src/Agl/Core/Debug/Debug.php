@@ -2,6 +2,9 @@
 namespace Agl\Core\Debug;
 
 use \Agl\Core\Agl,
+    \Agl\Core\Mvc\View\View,
+    \Agl\Core\Mvc\View\ViewInterface,
+    \Agl\Core\Registry\Registry,
     \Exception;
 
 /**
@@ -25,6 +28,22 @@ class Debug
     const DISPLAY_PATH_START = '<div style="border: 1px dotted Darkred; padding: 5px;">';
     const DISPLAY_PATH_END   = '</div>';
     const DISPLAY_PATH       = '<span style="background-color: IndianRed; padding: 0 5px;">%s</span>';
+
+    private static $_isHtmlView = NULL;
+
+    public static function canDisplayHtmlDebug()
+    {
+        if (self::$_isHtmlView === NULL) {
+            $view = Registry::get('view');
+            if ($view instanceof View and $view->getType() == ViewInterface::TYPE_HTML) {
+                self::$_isHtmlView = true;
+            } else {
+                self::$_isHtmlView = false;
+            }
+        }
+
+        return self::$_isHtmlView;
+    }
 
     /**
      * Check if xDebug is enabled.

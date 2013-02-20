@@ -3,7 +3,8 @@ namespace Agl\Core\Auth;
 
 use \Agl\Core\Agl,
 	\Agl\Core\Db\Item\ItemInterface,
-	\Agl\Core\Db\Query\Conditions\Conditions;
+	\Agl\Core\Db\Query\Conditions\Conditions,
+	\Agl\Core\Mvc\Model\Model;
 
 /**
  * Authentication management.
@@ -26,7 +27,7 @@ class Auth
 	 *
 	 * @var null|Session
 	 */
-	private $this->_session = NULL;
+	private $_session = NULL;
 
  	/**
  	 * Logged in user.
@@ -40,13 +41,32 @@ class Auth
 	 */
 	public function __construct()
 	{
-		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
-		$this->_session     = Agl::getSession();
+		$this->_user    = Agl::getModel(self::USER_DB_CONTAINER);
+		$this->_session = Agl::getSession();
 
 		if ($this->_session->hasUserId()) {
 			$this->_user->loadById($this->_session->getUserId());
 		}
 	}
+
+	/**
+	 * Log in the user with a given User model.
+	 *
+	 * @param Model
+	 * @return bool
+	 */
+	public function loginByUser(Model $pUser)
+	{
+		$this->logout();
+		$this->_user = $pUser;
+
+		if ($this->isLogged()) {
+			$this->_session->setUserId($this->_user->getId());
+			return true;
+		}
+
+		return false;
+    }
 
 	/**
 	 * Log in the user by its ID and register it to the session.
@@ -91,7 +111,7 @@ class Auth
 	public function logout()
 	{
 		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
-		$this->_session->unsetUserId();
+		$this->_session->removeUserId();
 		return $this;
 	}
 
