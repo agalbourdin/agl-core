@@ -9,7 +9,7 @@ namespace Agl\Core\Data;
  * @version 0.1.0
  */
 
-class Directory
+class Dir
 {
     /**
      * Recursive deletion of a directory.
@@ -61,7 +61,7 @@ class Directory
      * @param string $pDir Absolute path to the directory to create
      * @return bool
      */
-    public static function createDir($pDir)
+    public static function create($pDir)
     {
         if (! is_dir($pDir) and ! mkdir($pDir, 0777, true)) {
             return false;

@@ -11,6 +11,14 @@ namespace Agl\Core\Data;
 
 class File
 {
+    /**
+     * Create a path to store files in multiple subdirectories, based on first
+     * letters of filename.
+     *
+     * @param string $pFIleName
+     * @param int $pDepth Number of subdirectories
+     * @return string
+     */
 	public static function getSubPath($pFileName, $pDepth = 3)
     {
         if (empty($pFileName)) {
@@ -32,7 +40,7 @@ class File
      * @param string $pPath Absolute path to the file to create
      * @return bool
      */
-    public static function createEmptyFile($pPath)
+    public static function createEmpty($pPath)
     {
         if (! file_exists($pPath)) {
             if (! fopen($pPath, 'w') or ! chmod($pPath, 0777)) {
@@ -49,7 +57,7 @@ class File
      * @param string $pPath Absolute path to the file to delete
      * @return bool
      */
-    public static function deleteFile($pPath)
+    public static function delete($pPath)
     {
         if (! is_writable($pPath) or ! unlink($pPath)) {
             return false;

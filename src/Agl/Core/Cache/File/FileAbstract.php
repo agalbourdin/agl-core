@@ -2,7 +2,7 @@
 namespace Agl\Core\Cache\File;
 
 use \Agl\Core\Agl,
-	\Agl\Core\Data\Directory as DirecoryData,
+	\Agl\Core\Data\Dir as DirecoryData,
 	\Agl\Core\Data\File as FileData,
 	\Exception;
 
@@ -61,12 +61,12 @@ abstract class FileAbstract
 	protected function _createFile()
 	{
 		$dir = $this->getPath();
-		if (! DirecoryData::createDir($dir)) {
+		if (! DirecoryData::create($dir)) {
 			throw new Exception("Unable to create the cache directory '$dir'");
 		}
 
 		$file = $dir . $this->getFile();
-		if (! FileData::createEmptyFile($file)) {
+		if (! FileData::createEmpty($file)) {
 			throw new Exception("Unable to create the cache file '$file'");
 		}
 

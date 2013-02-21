@@ -217,6 +217,10 @@ class Request
 			}
 		}
 
+		foreach ($_GET as $key => $value) {
+			$this->_params[$key] = $this->_sanitize($value);
+		}
+
 		foreach ($_POST as $key => $value) {
 			$_POST[$key] = $this->_sanitize($value);
 		}

@@ -27,11 +27,15 @@ class Autoload
      */
     private static $_aliases = array(
         'Agl'        => '\Agl\Core\Agl',
+        'Arr'        => '\Agl\Core\Data\Arr',
         'Block'      => '\Agl\Core\Mvc\Block\Block',
         'Collection' => '\Agl\Core\Db\Collection\Collection',
         'Conditions' => '\Agl\Core\Db\Query\Conditions\Conditions',
         'Controller' => '\Agl\Core\Mvc\Controller\Controller',
+        'Date'       => '\Agl\Core\Data\Date',
         'Debug'      => '\Agl\Core\Debug\Debug',
+        'Dir'        => '\Agl\Core\Data\Dir',
+        'File'       => '\Agl\Core\Data\File',
         'Model'      => '\Agl\Core\Mvc\Model\Model',
         'Registry'   => '\Agl\Core\Registry\Registry',
         'String'     => '\Agl\Core\Data\String',
