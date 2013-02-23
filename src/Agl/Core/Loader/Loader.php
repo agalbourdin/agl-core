@@ -9,7 +9,8 @@ use \Agl\Core\Agl,
     \Agl\Core\Mvc\Model\ModelInterface,
     \Agl\Core\Registry\Registry,
     \Exception,
-    \ReflectionClass;
+    \ReflectionClass,
+    \ReflectionException;
 
 /**
  * Load instances or singletons when requested.
@@ -64,8 +65,12 @@ class Loader
             return self::getCollection(str_replace(CollectionInterface::APP_PHP_DIR . DS, '', $pClass));
         }
 
-        $reflect = new ReflectionClass($pClass);
-        return $reflect->newInstanceArgs($pArgs);
+        try {
+            $reflect = new ReflectionClass($pClass);
+            return $reflect->newInstanceArgs($pArgs);
+        } catch (ReflectionException $e) {
+            return NULL;
+        }
     }
 
     /**

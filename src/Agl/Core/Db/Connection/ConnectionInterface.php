@@ -16,8 +16,6 @@ interface ConnectionInterface
      */
     const MYSQL = 'mysql';
 
-    public static function orderAsc();
-    public static function orderDesc();
     public function connect($pHost, $pDb, $pUser = NULL, $pPass = NULL);
     public function getConnection();
     public function incrementCounter();

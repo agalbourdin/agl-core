@@ -75,6 +75,10 @@ class Observer
                 foreach ($event as $class => $methods) {
                     if (is_array($methods)) {
                         $class = Loader::getSingleton($class);
+                        if ($class === NULL) {
+                            continue;
+                        }
+
                         foreach ($methods as $method) {
                             if (method_exists($class, $method)) {
                                 $class::$method($pArgs);

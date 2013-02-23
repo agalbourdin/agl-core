@@ -1,8 +1,7 @@
 <?php
 namespace Agl\Core\Db\Connection;
 
-use \Agl\Core\Agl,
-    \Agl\Core\Db\Query\Select\Select;
+use \Agl\Core\Agl;
 
 /**
  * Abstract class - Connection
@@ -29,23 +28,26 @@ abstract class ConnectionAbstract
     protected $_connection = NULL;
 
     /**
-     * Return the order ASC constant, depending of the DB engine.
+     * Database name (saved when connected).
      *
-     * @return mixed
+     * @var string
      */
-    public static function orderAsc()
-    {
-        return Select::ORDER_ASC;
-    }
+    protected $_dbName = '';
 
     /**
-     * Return the order DESC constant, depending of the DB engine.
+     * Connect to database and register the connection.
      *
-     * @return mixed
+     * @param string $pHost
+     * @param string $pName
+     * @param null|string $pUser
+     * @param null|string $pPassword
+     * @return ConnectionAbstract
      */
-    public static function orderDesc()
+    public function setConnection($pHost, $pName, $pUser = NULL, $pPassword = NULL)
     {
-        return Select::ORDER_DESC;
+        $this->_connection = $this->connect($pHost, $pName, $pUser, $pPassword);
+        $this->_dbName = $pName;
+        return $this;
     }
 
     /**
@@ -56,7 +58,7 @@ abstract class ConnectionAbstract
     public function getConnection()
     {
         if (is_null($this->_connection)) {
-            $this->connect(
+            $this->setConnection(
                 Agl::app()->getConfig('@app/db/host'),
                 Agl::app()->getConfig('@app/db/name'),
                 Agl::app()->getConfig('@app/db/user'),

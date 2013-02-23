@@ -28,7 +28,7 @@ class Connection
      */
     /*public function __destruct()
     {
-        $this->_connection = NULL;
+        $connection = NULL;
     }*/
 
     /**
@@ -38,20 +38,23 @@ class Connection
      * @param string $pDb Database name
      * @param string $pUser Database user
      * @param string $pPass Database password
+     * @return PDO
      */
     public function connect($pHost, $pDb, $pUser = NULL, $pPass = NULL)
     {
         try {
             if ($pUser !== NULL and $pPass !== NULL and is_string($pUser) and is_string($pPass)) {
-                $this->_connection = new PDO("mysql:host=$pHost;dbname=$pDb", $pUser, $pPass);
+                $connection = new PDO("mysql:host=$pHost;dbname=$pDb", $pUser, $pPass);
             } else {
-                $this->_connection = new PDO("mysql:host=$pHost;dbname=$pDb");
+                $connection = new PDO("mysql:host=$pHost;dbname=$pDb");
             }
         } catch(PDOException $e) {
             throw new Exception("Unable to establish a connection to MySQL: Host '$pHost', DB '$pDb', User '$pUser', Password '$pPass' with message '" . $e->getMessage() . "'");
         }
 
-        $this->_connection->query("SET NAMES 'utf8';");
+        $connection->query("SET NAMES 'utf8';");
+
+        return $connection;
     }
 
     /**
@@ -63,7 +66,7 @@ class Connection
     {
         $tables = array();
 
-        $prepared = Agl::app()->getDb()->getConnection()->prepare('SHOW TABLES FROM `' . Agl::app()->getConfig('@app/db/name') . '`');
+        $prepared = $this->getConnection()->prepare('SHOW TABLES FROM `' . $this->_dbName . '`');
         if ($prepared->execute()) {
             while ($row = $prepared->fetchObject()) {
                 $tables[] = current($row);
