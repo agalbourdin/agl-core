@@ -133,7 +133,7 @@ class Validation
      */
     public static function isRewritedString($pValue)
     {
-        return (preg_match('/^[a-z0-9_-]+$/', $pValue) === 1) ? true : false;
+        return (is_string($pValue) and preg_match('/^[a-z0-9_-]+$/', $pValue) === 1) ? true : false;
     }
 
     /**
@@ -144,7 +144,7 @@ class Validation
      */
     public static function isAlNum($pValue)
     {
-        return (preg_match('/^[a-z0-9]+$/', $pValue) === 1) ? true : false;
+        return (is_string($pValue) and preg_match('/^[a-z0-9]+$/', $pValue) === 1) ? true : false;
     }
 
     /**

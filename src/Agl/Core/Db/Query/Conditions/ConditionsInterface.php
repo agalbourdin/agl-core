@@ -23,4 +23,5 @@ interface ConditionsInterface
     public function toArray();
     public function getType();
     public function getSubType();
+    public function count();
 }

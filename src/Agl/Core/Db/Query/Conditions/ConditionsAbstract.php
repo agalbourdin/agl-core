@@ -40,7 +40,7 @@ abstract class ConditionsAbstract
             $pType = static::TYPE_AND;
         }
 
-        if ($pType != static::TYPE_AND and $pType != static::TYPE_OR) {
+        if ($pType !== static::TYPE_AND and $pType !== static::TYPE_OR) {
             throw new Exception("Condition type unknown");
         }
 
