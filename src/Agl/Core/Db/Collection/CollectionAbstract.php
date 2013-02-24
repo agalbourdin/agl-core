@@ -106,7 +106,7 @@ abstract class CollectionAbstract
         $conditions = new Conditions();
         $conditions->add(
             $pAttribute,
-            Conditions::EQUAL,
+            Conditions::EQ,
             $pValue
         );
 

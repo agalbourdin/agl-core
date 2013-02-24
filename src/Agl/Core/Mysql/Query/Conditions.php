@@ -20,18 +20,18 @@ class Conditions
     /**
      * Accepted conditions types
      */
-    const EQUAL    = '%s = %s';
-    const NOTEQUAL = '%s != %s';
-    const LT       = '%s < %s';
-    const LTEQ     = '%s <= %s';
-    const GT       = '%s > %s';
-    const GTEQ     = '%s >= %s';
-    const IN       = '%s IN (%s)';
-    const NOTIN    = '%s NOT IN (%s)';
-    const REGEX    = '%s REGEXP "%s"';
-    const NULL     = '%s IS NULL';
-    const NOTNULL  = '%s IS NOT NULL';
-    const INSET    = 'FIND_IN_SET(%s, %s)';
+    const EQ      = '%s = %s';
+    const NOTEQ   = '%s != %s';
+    const LT      = '%s < %s';
+    const LTEQ    = '%s <= %s';
+    const GT      = '%s > %s';
+    const GTEQ    = '%s >= %s';
+    const IN      = '%s IN (%s)';
+    const NOTIN   = '%s NOT IN (%s)';
+    const REGEX   = '%s REGEXP "%s"';
+    const NULL    = '%s IS NULL';
+    const NOTNULL = '%s IS NOT NULL';
+    const INSET   = 'FIND_IN_SET(%s, %s)';
 
     /**
      * Prepare the conditions for PDO.
@@ -45,6 +45,7 @@ class Conditions
     {
         switch ($pType) {
             case self::IN:
+            case self::NOTIN:
                 if (is_array($pValue)) {
                     $markers = '?' . str_repeat(', ?', count($pValue) - 1);
                     return sprintf($pType, $pField, $markers);
@@ -55,7 +56,7 @@ class Conditions
                 break;
             default:
                 if ($pValue !== NULL) {
-                    return sprintf($pType, $pField, $pValue);
+                    return sprintf($pType, '`' . $pField . '`', '?');
                 } else {
                     return sprintf($pType, $pField);
                 }
@@ -73,7 +74,7 @@ class Conditions
     {
         if (is_array($pValue)) {
             foreach($pValue as $subValue) {
-                $pPrepared[] = $subValue;
+                $pPrepared[] = (string)$subValue;
             }
         } else if ($pValue !== NULL) {
             $pPrepared[] = $pValue;

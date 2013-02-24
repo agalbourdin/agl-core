@@ -91,7 +91,7 @@ class Auth
 
 		$conditions = new Conditions();
 		foreach ($pFields as $field => $value) {
-			$conditions->add($field, Conditions::EQUAL, $value);
+			$conditions->add($field, Conditions::EQ, $value);
 		}
 
 		$this->_user->load($conditions);

@@ -216,7 +216,7 @@ abstract class ItemAbstract
         $conditions = new Conditions();
         $conditions->add(
             $pAttribute,
-            Conditions::EQUAL,
+            Conditions::EQ,
             $pValue
         );
 

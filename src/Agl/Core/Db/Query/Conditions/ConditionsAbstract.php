@@ -58,13 +58,30 @@ abstract class ConditionsAbstract
     public function add($pField, $pType, $pValue = NULL)
     {
         if ($pField == ItemInterface::IDFIELD) {
-            if (! $pValue instanceof Id) {
-                $id = new Id($pValue);
+            if (! is_array($pValue) and ! $pValue instanceof Id) {
+                $id     = new Id($pValue);
                 $pValue = $id->getOrig();
+            } else if (is_array($pValue)) {
+                if (empty($pValue)) {
+                    throw new Exception("Trying to set an invalid condition value (`$pField`)");
+                }
+
+                foreach ($pValue as &$value) {
+                    if (! $value instanceof Id) {
+                        $id    = new Id($value);
+                        $value = $id->getOrig();
+                    }
+                }
             }
         }
 
-        if (static::EQUAL == $pType) {
+        if ($pType !== static::IN and $pType !== static::NOTIN) {
+            $pValue = (string)$pValue;
+        } else if (($pType === static::IN or $pType === static::NOTIN) and ! is_array($pValue)) {
+            throw new Exception("Trying to set an invalid condition value (`$pField`)");
+        }
+
+        if (static::EQ == $pType) {
             $this->_conditions[$pField] = $pValue;
         } else {
             $this->_conditions[$pField] = array(
