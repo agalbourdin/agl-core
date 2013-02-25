@@ -224,7 +224,7 @@ abstract class CollectionAbstract
      *
      * @return mixed
      */
-    public function getCurrent()
+    public function current()
     {
         return $this->_fetch();
     }
@@ -234,7 +234,7 @@ abstract class CollectionAbstract
      *
      * @return mixed
      */
-    public function getNext()
+    public function next()
     {
         $this->_pointer++;
         $item = $this->_fetch();
@@ -250,7 +250,7 @@ abstract class CollectionAbstract
      *
      * @return mixed
      */
-    public function getPrevious()
+    public function prev()
     {
         if ($this->_pointer <= 0) {
             $this->resetPointer();
@@ -297,7 +297,7 @@ abstract class CollectionAbstract
     public function save()
     {
         $this->resetPointer();
-        while ($item = $this->getNext()) {
+        while ($item = $this->next()) {
             $item->save();
         }
 
@@ -312,7 +312,7 @@ abstract class CollectionAbstract
     public function deleteItems()
     {
         $this->resetPointer();
-        while ($item = $this->getNext()) {
+        while ($item = $this->next()) {
             if ($item->getId()) {
                 $item->delete();
             }

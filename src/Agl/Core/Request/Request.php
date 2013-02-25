@@ -238,6 +238,7 @@ class Request
 	{
 		$value = trim($pValue);
 		$value = htmlspecialchars($value);
+		$value = (string)$value;
 		return $value;
 	}
 
@@ -269,7 +270,7 @@ class Request
 	public function getAction()
 	{
 		$action = $this->getParam(self::ACTION_PARAM);
-		if (! $action or ! preg_match('/^[a-z0-9_-]+$/', $action)) {
+		if (! preg_match('/^[a-z0-9_-]+$/', $action)) {
 			return Controller::DEFAULT_ACTION;
 		}
 
@@ -309,7 +310,7 @@ class Request
 	/**
 	 * Return the $pParam parameter, if exists.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function getParam($pParam)
 	{
@@ -317,14 +318,14 @@ class Request
 			return $this->_params[$pParam];
 		}
 
-		return NULL;
+		return '';
 	}
 
 	/**
 	 * Return the POST or a POST entry if $pParam is specified.
 	 *
 	 * @param string $pParam
-	 * @return mixed
+	 * @return string
 	 */
 	public function getPost($pParam = '')
 	{
@@ -334,7 +335,7 @@ class Request
         	return $_POST[$pParam];
         }
 
-        return NULL;
+        return '';
 	}
 
 	/**

@@ -56,7 +56,7 @@ abstract class UpdateAbstract
     {
         $toUpdate = array();
 
-        $fields = $this->_item->getFields();
+        $fields     = $this->_item->getFields();
         $origFields = $this->_item->getOrigFields();
         foreach ($fields as $field => $value) {
             if (! array_key_exists($field, $origFields) or $value != $origFields[$field]) {
@@ -76,7 +76,7 @@ abstract class UpdateAbstract
     {
         $toDelete = array();
 
-        $fields = $this->_item->getFields();
+        $fields     = $this->_item->getFields();
         $origFields = $this->_item->getOrigFields();
         foreach ($origFields as $field => $value) {
             if (! array_key_exists($field, $fields)) {

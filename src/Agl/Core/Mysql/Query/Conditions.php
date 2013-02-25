@@ -32,6 +32,7 @@ class Conditions
     const NULL    = '%s IS NULL';
     const NOTNULL = '%s IS NOT NULL';
     const INSET   = 'FIND_IN_SET(%s, %s)';
+    const LIKE    = '%s LIKE %s';
 
     /**
      * Prepare the conditions for PDO.

@@ -60,8 +60,8 @@ class Update
                     WHERE
                         `" . $this->_item->getDbContainer() . ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD . "` = ?";
 
-                if (! array_key_exists(ItemInterface::IDFIELD, $toUpdate)) {
-                    $toUpdate[ItemInterface::IDFIELD] = $this->_item->getId()->getOrig();
+                if (! array_key_exists($this->_item->getIdField(), $toUpdate)) {
+                    $toUpdate[$this->_item->getIdField()] = $this->_item->getId()->getOrig();
                 }
 
                 if ($this->_conditions !== NULL) {

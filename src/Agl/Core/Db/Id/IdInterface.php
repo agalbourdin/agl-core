@@ -13,5 +13,5 @@ interface IdInterface
 {
     public function __construct($pId);
     public function getOrig();
-    //public function __toString();
+    public function __toString();
 }

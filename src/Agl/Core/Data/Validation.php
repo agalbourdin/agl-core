@@ -82,6 +82,17 @@ class Validation
     }
 
     /**
+     * Check if a value is not empty.
+     *
+     * @param mixed $pValue
+     * @return bool
+     */
+    public static function isNotEmpty($pValue)
+    {
+        return (! empty($pValue));
+    }
+
+    /**
      * Validate a NULL value.
      *
      * @param mixed $pValue

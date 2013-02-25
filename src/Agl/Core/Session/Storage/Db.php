@@ -164,7 +164,7 @@ class Db
 
         $collection->load($conditions);
 
-        while ($item = $collection->getNext()) {
+        while ($item = $collection->next()) {
             $item->delete();
         }
 

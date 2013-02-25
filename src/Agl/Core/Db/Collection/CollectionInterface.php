@@ -25,9 +25,9 @@ interface CollectionInterface
     public function __call($pMethod, array $pArgs);
     public function load($pConditions = NULL, $pLimit = NULL, $pOrder = NULL);
     public function getDbContainer();
-    public function getCurrent();
-    public function getNext();
-    public function getPrevious();
+    public function current();
+    public function next();
+    public function prev();
     public function count($pConditions = NULL, $pLimit = NULL);
     public function save();
     public function deleteItems();

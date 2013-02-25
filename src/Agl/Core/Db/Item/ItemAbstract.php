@@ -616,7 +616,7 @@ abstract class ItemAbstract
             }
 
             $childs = $this->getChilds($collection);
-            while ($item = $childs->getNext()) {
+            while ($item = $childs->next()) {
                 $item
                     ->removeParent($this)
                     ->save();
