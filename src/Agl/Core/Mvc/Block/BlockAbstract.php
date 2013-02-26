@@ -64,7 +64,7 @@ abstract class BlockAbstract
 		$configKey          = static::CACHE_FILE_PREFIX . $blockPathInfos[1] . $configKeySeparator . $blockPathInfos[2];
 
 		if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale')) {
-			$configKey .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale/locale')->getLanguage();
+			$configKey .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getLanguage();
 		}
 
 		if ($type == ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {

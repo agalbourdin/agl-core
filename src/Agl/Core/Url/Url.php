@@ -48,14 +48,14 @@ class Url
         }
 
         if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale') and $pUrl) {
-            return Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale/locale')->getUrl($pUrl, $pParams, $pRelative);
+            return Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getUrl($pUrl, $pParams, $pRelative);
         }
 
         if (! $pUrl) {
             if ($pRelative) {
                 return ROOT;
             }
-            return self::getHost();
+            return self::getHost(ROOT);
         }
 
         if (strpos($pUrl, Agl::APP_PUBLIC_DIR) === false) {
@@ -69,20 +69,20 @@ class Url
                 if ($pRelative) {
                     return ROOT . $url;
                 }
-                return self::getHost($url);
+                return self::getHost(ROOT . $url);
             }
 
             $url = $pUrl . DS;
             if ($pRelative) {
                 return ROOT . $url;
             }
-            return self::getHost($url);
+            return self::getHost(ROOT . $url);
         }
 
         if ($pRelative) {
             return ROOT . $pUrl;
         }
-        return self::getHost($pUrl);
+        return self::getHost(ROOT . $pUrl);
     }
 
     /**
@@ -142,7 +142,7 @@ class Url
             return ROOT . $url;
         }
 
-        return self::getHost($url);
+        return self::getHost(ROOT . $url);
     }
 
     /**
@@ -162,7 +162,7 @@ class Url
             return ROOT . $url;
         }
 
-        return self::getHost($url);
+        return self::getHost(ROOT . $url);
     }
 
     /**
@@ -170,9 +170,13 @@ class Url
      *
      * @return string
      */
-    public static function getHost($pPath = '')
+    public static function getHost($pPath = '', $pHost = '')
     {
-        return self::getProtocol() . $_SERVER['HTTP_HOST'] . ROOT . $pPath;
+        if (! $pHost) {
+            $pHost = $_SERVER['HTTP_HOST'];
+        }
+
+        return self::getProtocol() . $pHost . $pPath;
     }
 
     /**

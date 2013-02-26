@@ -171,7 +171,7 @@ class Controller
 			$configKey = ViewInterface::CACHE_FILE_PREFIX . $module . $configKeySeparator . $view . $configKeySeparator . $action;
 
 			if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale')) {
-	            $configKey .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale/locale')->getLanguage();
+	            $configKey .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getLanguage();
 	        }
 
 			if ($type == ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
