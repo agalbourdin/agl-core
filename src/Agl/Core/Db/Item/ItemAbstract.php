@@ -234,30 +234,6 @@ abstract class ItemAbstract
     }
 
     /**
-     * Insert a new item in the database.
-     * @return Item
-     */
-    protected function _insert()
-    {
-        Observer::dispatch(Observer::EVENT_ITEM_INSERT_BEFORE, array(
-            'item' => $this
-        ));
-
-        $this->{static::DATEADDFIELD} = DateData::now();
-        $insert = new Insert($this->_dbContainer);
-        $insert->addFields($this->_fields);
-        $insert->commit();
-        $this->setId($insert->getId());
-        $this->_origFields = $this->_fields;
-
-        Observer::dispatch(Observer::EVENT_ITEM_INSERT_AFTER, array(
-            'item' => $this
-        ));
-
-        return $this;
-    }
-
-    /**
      * Load item by ID.
      *
      * @param mixed $pId The item ID
@@ -437,13 +413,13 @@ abstract class ItemAbstract
      */
     public function save($pConditions = NULL)
     {
+        if (! $this->getOrigField(static::IDFIELD)) {
+            throw new Exception("Cannot save an item without ID");
+        }
+
         Observer::dispatch(Observer::EVENT_ITEM_SAVE_BEFORE, array(
             'item' => $this
         ));
-
-        if (! $this->getOrigField(static::IDFIELD)) {
-            return $this->_insert();
-        }
 
         $this->{static::DATEUPDATEFIELD} = DateData::now();
         $update = new Update($this);
@@ -457,6 +433,30 @@ abstract class ItemAbstract
         $this->_origFields = $this->_fields;
 
         Observer::dispatch(Observer::EVENT_ITEM_SAVE_AFTER, array(
+            'item' => $this
+        ));
+
+        return $this;
+    }
+
+    /**
+     * Insert a new item in the database.
+     * @return Item
+     */
+    public function insert()
+    {
+        Observer::dispatch(Observer::EVENT_ITEM_INSERT_BEFORE, array(
+            'item' => $this
+        ));
+
+        $this->{static::DATEADDFIELD} = DateData::now();
+        $insert = new Insert($this->_dbContainer);
+        $insert->addFields($this->_fields);
+        $insert->commit();
+        $this->setId($insert->getId());
+        $this->_origFields = $this->_fields;
+
+        Observer::dispatch(Observer::EVENT_ITEM_INSERT_AFTER, array(
             'item' => $this
         ));
 

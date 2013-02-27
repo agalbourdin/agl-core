@@ -116,9 +116,10 @@ class Db
 
         if (! $this->_items[$pId]->getId()) {
             $this->_items[$pId]->setId($pId);
+            $this->_items[$pId]->insert();
+        } else {
+            $this->_items[$pId]->save();
         }
-
-        $this->_items[$pId]->save();
 
         return true;
     }
