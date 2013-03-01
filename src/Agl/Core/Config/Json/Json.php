@@ -139,11 +139,11 @@ class Json
                 . DS;
 
         if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_POOL . '|' . Agl::AGL_MORE_DIR . ')/([a-z0-9]+)\]#i', $path, $matches)) {
-            $file .= strtolower($matches[1])
-                    . DS
-                    . $this->_envPrefix
-                    . $matches[2]
-                    . self::CONFIG_EXT;
+                $file .= strtolower($matches[1])
+                        . DS
+                        . $this->_envPrefix
+                        . $matches[2]
+                        . self::CONFIG_EXT;
         } else {
             $file .= $this->_envPrefix
                     . self::MAIN_CONFIG_FILE
