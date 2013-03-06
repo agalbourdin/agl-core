@@ -44,7 +44,7 @@ class Observer
     public static function setEvents($pEvents = NULL)
     {
         if ($pEvents === NULL) {
-            $pEvents = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/events]/');
+            $pEvents = Agl::app()->getConfig('@app/events');
         }
 
         if (is_array($pEvents)) {

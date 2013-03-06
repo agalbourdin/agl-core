@@ -56,6 +56,27 @@ class Dir
     }
 
     /**
+     * Return a list of files matching a regex pattern in a directory
+     * (recursive).
+     *
+     * @param string $pDir The directory to scan
+     * @param string $pRegex Regex for filename
+     * @return array Files with absolute path
+     */
+    public static function listFilesRecursive($pDir, $pRegex = '(.*)')
+    {
+        $content   = array();
+        $Directory = new \RecursiveDirectoryIterator($pDir);
+        $Iterator  = new \RecursiveIteratorIterator($Directory);
+        $Regex     = new \RegexIterator($Iterator, '/^(.*)' . $pRegex . '$/i', \RecursiveRegexIterator::GET_MATCH);
+        foreach ($Regex as $file) {
+            $content[] = $file[0];
+        }
+
+        return $content;
+    }
+
+    /**
      * Create a directory (recursively).
      *
      * @param string $pDir Absolute path to the directory to create

@@ -179,26 +179,7 @@ class Loader
         }
 
         $className = ucfirst($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
-
-        if (Agl::isInitialized()) {
-            $helperPath = APP_PATH
-                         . Agl::APP_PHP_DIR
-                         . DS
-                         . ModelInterface::APP_PHP_HELPER_DIR
-                         . DS
-                         . strtolower($classArr[0])
-                         . DS
-                         . strtolower($classArr[1])
-                         . Agl::PHP_EXT;
-
-            if (is_readable($helperPath)) {
-                return self::getSingleton($className);
-            } else {
-                throw new Exception("Helper does not exists or isn't readable ('$pClass')");
-            }
-        } else {
-            throw new Exception("The application must be initialized to instanciate a Helper ('$pClass')");
-        }
+        return self::getSingleton($className);
     }
 
     /**

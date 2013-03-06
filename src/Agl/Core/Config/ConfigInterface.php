@@ -35,6 +35,11 @@ interface ConfigInterface
      */
     const CONFIG_CACHE_KEY_AJAX = 'ajax';
 
+    /**
+     * Events path (rewrited as events are splitted into multiple files).
+     */
+    const CONFIG_EVENTS_PATH = '@app/events';
+
     public function __construct();
     public static function getCacheSingleton();
     public function getConfig($pPath);

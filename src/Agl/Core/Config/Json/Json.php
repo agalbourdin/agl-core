@@ -6,6 +6,8 @@ use \Agl\Core\Agl,
     \Agl\Core\Cache\File\FileInterface,
     \Agl\Core\Cache\File\Format\Arr as CacheArr,
     \Agl\Core\Config\ConfigInterface,
+    \Agl\Core\Data\Dir as DirData,
+    \Agl\Core\Data\Json as JsonData,
     \Agl\Core\Mvc\View\ViewInterface;
 
 /**
@@ -20,9 +22,14 @@ class Json
     implements ConfigInterface
 {
     /**
-     * Global configuration file
+     * Global configuration file.
      */
-    const MAIN_CONFIG_FILE = 'config';
+    const MAIN_CONFIG_FILE = 'main';
+
+    /**
+     * Events file name.
+     */
+    const MAIN_EVENTS_FILE = 'events';
 
     /**
      * The XML extension used by the configuration files.
@@ -122,6 +129,20 @@ class Json
     }
 
     /**
+     * Return absolute path to the config directory.
+     *
+     * @return string
+     */
+    private static function _getConfigPath()
+    {
+        return APP_PATH
+             . Agl::APP_ETC_DIR
+             . DS
+             . self::CONFIG_MODULES_DIR
+             . DS;
+    }
+
+    /**
      * Get informations about the JSON instance to call to resolve the
      * requested path.
      *
@@ -132,30 +153,51 @@ class Json
     {
         $path = str_replace('@layout', '@module[' . Agl::AGL_CORE_POOL . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
 
-        $file = APP_PATH
-                . Agl::APP_ETC_DIR
-                . DS
-                . self::CONFIG_MODULES_DIR
-                . DS;
+        $file = self::_getConfigPath();
 
         if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_POOL . '|' . Agl::AGL_MORE_DIR . ')/([a-z0-9]+)\]#i', $path, $matches)) {
-                $file .= strtolower($matches[1])
-                        . DS
-                        . $this->_envPrefix
-                        . $matches[2]
-                        . self::CONFIG_EXT;
+                if ($matches[1] === Agl::AGL_CORE_POOL) {
+                    $file .= $matches[2]
+                           . self::CONFIG_EXT;
+                } else {
+                    $file .= strtolower($matches[1])
+                           . DS
+                           . $matches[2]
+                           . DS
+                           . self::MAIN_CONFIG_FILE
+                           . self::CONFIG_EXT;
+                }
         } else {
             $file .= $this->_envPrefix
-                    . self::MAIN_CONFIG_FILE
-                    . self::CONFIG_EXT;
+                   . self::MAIN_CONFIG_FILE
+                   . self::CONFIG_EXT;
         }
 
         if (! isset($this->_instance[$file])) {
-            $this->_instance[$file] = new \Agl\Core\Data\Json();
+            $this->_instance[$file] = new JsonData();
             $this->_instance[$file]->loadFile($file, true);
         }
 
         return $this->_instance[$file];
+    }
+
+    /**
+     * Search all events.json files and get config value.
+     *
+     * @return array
+     */
+    private function _getEventsConfig()
+    {
+        $files = DirData::listFilesRecursive(self::_getConfigPath(), self:: MAIN_EVENTS_FILE . self::CONFIG_EXT);
+
+        $content = array(self:: MAIN_EVENTS_FILE => array());
+        foreach ($files as $file) {
+            $json = new JsonData();
+            $json->loadFile($file, true);
+            $content['events'] = array_merge($json->getContent(), $content['events']);
+        }
+
+        return $content;
     }
 
     /**
@@ -170,10 +212,15 @@ class Json
     private function _getConfigValues($pPath, $pForceGlobalArray)
     {
         if (! array_key_exists($pPath, $this->_cache)) {
-            $json    = $this->_getInstance($pPath);
-            $path    = str_replace('@app/', '', $pPath);
-            $path    = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)(/)?#', '', $path);
-            $content = $json->getContent();
+            if ($pPath === static::CONFIG_EVENTS_PATH) {
+                $content = $this->_getEventsConfig();
+            } else {
+                $json    = $this->_getInstance($pPath);
+                $content = $json->getContent();
+            }
+
+            $path = str_replace('@app/', '', $pPath);
+            $path = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)(/)?#', '', $path);
 
             if ($path) {
                 $pathArr = explode('/', $path);
