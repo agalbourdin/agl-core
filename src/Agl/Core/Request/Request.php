@@ -125,7 +125,7 @@ class Request
 			return $this;
 		}
 
-		$this->_requestUri = $pRequestUri;
+		$this->_requestUri = str_replace(ROOT, DS, $pRequestUri);
 
 		Observer::dispatch(Observer::EVENT_SET_REQUEST_BEFORE, array(
 			'request'     => $this,
@@ -152,7 +152,7 @@ class Request
 	private function _setRequest()
 	{
 		if ($this->_requestUri !== NULL) {
-            $this->_request = preg_replace('#(^' . ROOT . ')|(/$)#', '', $this->_requestUri);
+            $this->_request = preg_replace('#(^/)|(^' . ROOT . ')|(/$)#', '', $this->_requestUri);
             if (! $this->_request) {
             	$this->_request = self::DEFAULT_MODULE . '/' . Controller::DEFAULT_ACTION;
             }
