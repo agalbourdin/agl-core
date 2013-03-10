@@ -51,12 +51,12 @@ class Composer
                 $destinationFile = $destination . $config->file;
 
                 if (is_readable($destinationFile)) {
-                    return true;
+                    continue;
                 }
 
-                if ((is_dir($destination) and ! is_writable(is_dir($destination)))
+                if ((is_dir($destination) and ! is_writable($destination))
                     or (! is_dir($destination) and ! mkdir($destination, 0777, true))
-                    or ! copy($installFile, $destinationFile)) {
+                    or ! copy($path . $file, $destinationFile)) {
                     throw new Exception("Configuration files copy failed. Check that '$destination' has write permissions.");
                 }
             }
