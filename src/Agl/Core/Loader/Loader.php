@@ -179,6 +179,7 @@ class Loader
         }
 
         $className = ucfirst($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
+        return $className;
         return self::getSingleton($className);
     }
 

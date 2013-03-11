@@ -22,6 +22,14 @@ class Validation
     public static function check(array $pParams)
     {
         foreach ($pParams as $type => $value) {
+            if (preg_match('#^/(.*)/$#', $type)) {
+                if (! self::isRegex($type, $value)) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+
             $func = 'is' . $type;
             if (is_array($value)) {
                 foreach ($value as $subValue) {
@@ -167,5 +175,29 @@ class Validation
     public static function isEmail($pValue)
     {
         return (filter_var($pValue, FILTER_VALIDATE_EMAIL)) ? true : false;
+    }
+
+    /**
+     * Regex validation.
+     *
+     * @param $pExpr PCRE expression
+     * @param array|string $pValue
+     * @return bool
+     */
+    public static function isRegex($pExpr, $pValue)
+    {
+        if (is_array($pValue)) {
+            foreach ($pValue as $value) {
+                if (! preg_match($pExpr, $value)) {
+                    return false;
+                }
+            }
+        } else {
+            if (! preg_match($pExpr, $pValue)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
