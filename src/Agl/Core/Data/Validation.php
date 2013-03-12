@@ -22,7 +22,7 @@ class Validation
     public static function check(array $pParams)
     {
         foreach ($pParams as $type => $value) {
-            if (preg_match('#^/(.*)/$#', $type)) {
+            if (strpos($type, '/') === 0 or strpos($type, '#') === 0) {
                 if (! self::isRegex($type, $value)) {
                     return false;
                 } else {
