@@ -101,7 +101,9 @@ class Request
 	 */
 	public static function setHttpHeader($pHeader)
 	{
-		header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
+		if (! headers_sent()) {
+			header($_SERVER['SERVER_PROTOCOL'] . ' ' . $pHeader);
+		}
 	}
 
 	/**

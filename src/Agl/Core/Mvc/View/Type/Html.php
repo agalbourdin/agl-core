@@ -330,7 +330,11 @@ class Html
 		$view    = $request->getView();
 		$action  = $request->getAction();
 
-		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/template/css'));
+		$templateConfig = self::getTemplateConfig();
+		if ($templateConfig and isset($templateConfig['css'])) {
+			$this->_loadCssFromArray($templateConfig['css']);
+		}
+
 		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/actions/' . $action . '/css'));
 		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/css'));
 		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/css'));
@@ -357,7 +361,11 @@ class Html
 		$view    = $request->getView();
 		$action  = $request->getAction();
 
-		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/template/js'));
+		$templateConfig = self::getTemplateConfig();
+		if ($templateConfig and isset($templateConfig['js'])) {
+			$this->_loadJsFromArray($templateConfig['js']);
+		}
+
 		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/actions/' . $action . '/js'));
 		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/js'));
 		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/js'));

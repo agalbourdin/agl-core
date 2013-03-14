@@ -110,7 +110,7 @@ class Json
     {
         $envPrefixName = static::ENV_PREFIX_NAME;
         if (isset($_SERVER[$envPrefixName]) and $_SERVER[$envPrefixName]) {
-            $this->_envPrefix = static::ENV_PREFIX_SEPARATOR . $_SERVER[$envPrefixName];
+            $this->_envPrefix = $_SERVER[$envPrefixName] . static::ENV_PREFIX_SEPARATOR;
         }
 
         $this->_cacheEnabled = Agl::app()->isCacheEnabled();
@@ -171,7 +171,6 @@ class Json
                 }
         } else {
             $file .= self::MAIN_CONFIG_FILE
-                   . $this->_envPrefix
                    . self::CONFIG_EXT;
         }
 
@@ -235,7 +234,7 @@ class Json
                     } else if ($i < $nbKeys) {
                         $content = $content[$key];
                     } else if ($i == $nbKeys) {
-                        $this->_cache[$pPath] = $content[$key];
+                        $this->_cache[$pPath] = (isset($content[$this->_envPrefix . $key])) ? $content[$this->_envPrefix . $key] : $content[$key];
                     }
                 }
             } else {

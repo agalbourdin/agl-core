@@ -47,7 +47,7 @@ class Url
             $pUrl = str_replace('*/', self::$_request->getModule() . DS, $pUrl);
         }
 
-        if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale') and $pUrl) {
+        if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale')) {
             return Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getUrl($pUrl, $pParams, $pRelative);
         }
 
