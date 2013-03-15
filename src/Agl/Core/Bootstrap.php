@@ -15,12 +15,9 @@ define('APP_PATH', realpath('.') . DS);
 define('ROOT', str_replace('index.php', '', $_SERVER['PHP_SELF']));
 
 define('REQUEST_URI', preg_replace(
-	array(
-		'#^http(s)?://' . $_SERVER['HTTP_HOST'] . '#',
-		'#\?' . preg_quote($_SERVER['QUERY_STRING'], '#') . '#'
-	),
+	'#^http(s)?://' . $_SERVER['HTTP_HOST'] . '#',
 	'',
-	$_SERVER['REQUEST_URI']));
+	str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI'])));
 
 /**
  * Default umask
