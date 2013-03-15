@@ -13,10 +13,11 @@ if (version_compare(PHP_VERSION, '5.3.0', '<')) {
 define('DS', DIRECTORY_SEPARATOR);
 define('APP_PATH', realpath('.') . DS);
 define('ROOT', str_replace('index.php', '', $_SERVER['PHP_SELF']));
+
 define('REQUEST_URI', preg_replace(
 	array(
 		'#^http(s)?://' . $_SERVER['HTTP_HOST'] . '#',
-		'#\?' . $_SERVER['QUERY_STRING'] . '#'
+		'#\?' . preg_quote($_SERVER['QUERY_STRING'], '#') . '#'
 	),
 	'',
 	$_SERVER['REQUEST_URI']));
