@@ -86,7 +86,7 @@ class Router
         $this->_actionMethod = StringData::toCamelCase($this->_action) . Controller::ACTION_METHOD_SUFFIX;
 
 		if (! method_exists($this->_controller, $this->_actionMethod)) {
-			throw new Exception("Invalid action '$this->_actionMethod' requested to controller");
+			$this->_actionMethod = Controller::DEFAULT_ACTION . Controller::ACTION_METHOD_SUFFIX;
 		}
 	}
 
