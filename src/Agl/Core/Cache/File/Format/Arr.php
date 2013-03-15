@@ -4,6 +4,7 @@ namespace Agl\Core\Cache\File\Format;
 use \Agl\Core\Agl,
     \Agl\Core\Cache\File\FileAbstract,
     \Agl\Core\Cache\File\FileInterface,
+    \Agl\Core\Data\File as FileData,
     \Exception;
 
 /**
@@ -54,7 +55,7 @@ class Arr
      */
     public function save()
     {
-        if (file_put_contents($this->getFullPath(), json_encode($this->_array), LOCK_EX) === false) {
+        if (FileData::write($this->getFullPath(), json_encode($this->_array)) === false) {
             throw new Exception("Unable to write the cache");
         }
 

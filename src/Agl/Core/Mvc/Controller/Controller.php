@@ -109,7 +109,6 @@ class Controller
 
 		$viewPath = APP_PATH
                     . Agl::APP_PHP_DIR
-                    . DS
                     . ViewInterface::APP_PHP_VIEW_DIR
                     . DS
                     . $module

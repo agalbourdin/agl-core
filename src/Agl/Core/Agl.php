@@ -30,9 +30,9 @@ final class Agl
     const AGL_CORE_POOL  = 'core';
     const AGL_MORE_POOL  = 'more';
 
-    const APP_PHP_DIR    = 'app/php';
-    const APP_ETC_DIR    = 'app/etc';
-    const APP_VAR_DIR    = 'app/var';
+    const APP_PHP_DIR    = 'app/php/';
+    const APP_ETC_DIR    = 'app/etc/';
+    const APP_VAR_DIR    = 'app/var/';
     const APP_PUBLIC_DIR = 'public';
 
     const PHP_EXT        = '.php';

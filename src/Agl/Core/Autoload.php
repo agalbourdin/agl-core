@@ -110,7 +110,6 @@ class Autoload
 
         return APP_PATH
                . Agl::APP_PHP_DIR
-               . DS
                . $pool
                . DS
                . implode(DS, $classNameArr)

@@ -40,7 +40,7 @@ class File
      * @param string $pPath Absolute path to the file to create
      * @return bool
      */
-    public static function createEmpty($pPath)
+    public static function create($pPath)
     {
         if (! file_exists($pPath)) {
             if (! fopen($pPath, 'w') or ! chmod($pPath, 0777)) {
@@ -64,5 +64,27 @@ class File
         }
 
         return true;
+    }
+
+    /**
+     * Write content to a file.
+     *
+     * @param string $pFile
+     * @param string $pContent
+     * @param bool $pAppend Append data to file (erase content before write by
+     * default)
+     * @return mixed
+     */
+    public static function write($pFile, $pContent, $pAppend = false)
+    {
+        if (! is_writable($pFile)) {
+            self::create($pFile);
+        }
+
+        if ($pAppend) {
+            return (file_put_contents($pFile, $pContent, FILE_APPEND | LOCK_EX));
+        }
+
+        return (file_put_contents($pFile, $pContent, LOCK_EX));
     }
 }

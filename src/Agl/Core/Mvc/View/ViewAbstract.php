@@ -290,7 +290,6 @@ abstract class ViewAbstract
 
 		$blockPath = APP_PATH
 					. Agl::APP_PHP_DIR
-                    . DS
                     . BlockInterface::APP_PHP_BLOCK_DIR
                     . DS
                     . strtolower($blockPathInfos[1])

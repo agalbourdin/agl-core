@@ -119,7 +119,6 @@ class Loader
         if (Agl::isInitialized()) {
             $modelPath = APP_PATH
                          . Agl::APP_PHP_DIR
-                         . DS
                          . ModelInterface::APP_PHP_MODEL_DIR
                          . DS
                          . $fileName
@@ -149,7 +148,6 @@ class Loader
         if (Agl::isInitialized()) {
             $collectionPath = APP_PATH
                             . Agl::APP_PHP_DIR
-                            . DS
                             . CollectionInterface::APP_PHP_DIR
                             . DS
                             . $fileName

@@ -66,7 +66,7 @@ abstract class FileAbstract
 		}
 
 		$file = $dir . $this->getFile();
-		if (! FileData::createEmpty($file)) {
+		if (! FileData::create($file)) {
 			throw new Exception("Unable to create the cache file '$file'");
 		}
 
@@ -83,7 +83,7 @@ abstract class FileAbstract
 	{
 		$file = $this->getFullPath();
 		if ($pTtl and is_writable($file) and (time() - filemtime($file)) > $pTtl) {
-			file_put_contents($file, '');
+			FileData::write($file, '');
 		}
 
 		return $this;
@@ -99,7 +99,6 @@ abstract class FileAbstract
     	if (! $pPath) {
     		$this->_path = APP_PATH
 				              . Agl::APP_VAR_DIR
-				              . DS
 				              . static::AGL_VAR_CACHE_DIR
 				              . DS
 				              . FileData::getSubPath(md5($this->getFile()));

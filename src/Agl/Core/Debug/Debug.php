@@ -2,6 +2,7 @@
 namespace Agl\Core\Debug;
 
 use \Agl\Core\Agl,
+    \Agl\Core\Data\File as FileData,
     \Agl\Core\Mvc\View\View,
     \Agl\Core\Mvc\View\ViewInterface,
     \Agl\Core\Registry\Registry,
@@ -29,8 +30,18 @@ class Debug
     const DISPLAY_PATH_END   = '</div>';
     const DISPLAY_PATH       = '<span style="background-color: IndianRed; padding: 0 5px;">%s</span>';
 
+    /**
+     * Is the current view of HTML type?
+     *
+     * @var null|bool
+     */
     private static $_isHtmlView = NULL;
 
+    /**
+     * Check if the view is of HTML type.
+     *
+     * @return bool
+     */
     public static function canDisplayHtmlDebug()
     {
         if (self::$_isHtmlView === NULL) {
@@ -70,7 +81,7 @@ class Debug
         }
 
         $logId  = uniqid();
-        $logged = syslog(LOG_DEBUG, '[agl_' . $logId . '] ' . $message);
+        $logged = FileData::write(APP_PATH . Agl::APP_VAR_DIR . 'debug.log', '[agl_' . $logId . '] ' . $message, true);
 
         if (! $logged) {
             throw new Exception("syslog() error");

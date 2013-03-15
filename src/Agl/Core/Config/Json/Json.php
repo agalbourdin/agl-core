@@ -137,7 +137,6 @@ class Json
     {
         return APP_PATH
              . Agl::APP_ETC_DIR
-             . DS
              . self::CONFIG_MODULES_DIR
              . DS;
     }

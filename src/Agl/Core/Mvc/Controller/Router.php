@@ -67,7 +67,6 @@ class Router
 
 		$controllerPath = APP_PATH
                           . Agl::APP_PHP_DIR
-                          . DS
                           . Controller::APP_PHP_CONTROLLER_DIR
                           . DS
                           . $this->_module
