@@ -59,9 +59,16 @@ final class Agl
     /**
      * Running in debug mode.
      *
-     * @var Debug
+     * @var bool
      */
     private $_debug = false;
+
+    /**
+     * Log errors.
+     *
+     * @var bool
+     */
+    private $_log = false;
 
     /**
      * Save the config instance.
@@ -291,13 +298,14 @@ final class Agl
      * @param bool $pCache
      * @param bool $pDebug
      */
-    private function __construct($pCache, $pDebug)
+    private function __construct($pCache, $pLog, $pDebug)
     {
         /*if (date_default_timezone_get() !== \Agl\Core\Data\Date::DEFAULT_TZ) {
             date_default_timezone_set(\Agl\Core\Data\Date::DEFAULT_TZ);
         }*/
 
         $this->_cache = ($pCache) ? true : false;
+        $this->_log   = ($pLog) ? true : false;
         $this->_debug = ($pDebug) ? true : false;
 
         error_reporting(-1);
@@ -333,13 +341,23 @@ final class Agl
     }
 
     /**
-     * Return the current App ID.
+     * Is Cache enabled?
      *
      * @return bool
      */
     public function isCacheEnabled()
     {
         return $this->_cache;
+    }
+
+    /**
+     * Is Log enabled?
+     *
+     * @return bool
+     */
+    public function isLogEnabled()
+    {
+        return $this->_log;
     }
 
     /**

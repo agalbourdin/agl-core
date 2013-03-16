@@ -21,7 +21,8 @@ class Debug
     /**
      * File to log messages.
      */
-    const LOG_FILE = 'debug.log';
+    const LOG_DIR  = 'log/';
+    const LOG_FILE = 'debug_%s.log';
 
     /**
      * HTML code to display template/blocks path information.
@@ -70,21 +71,34 @@ class Debug
      * Log a message in the syslog.
      *
      * @param string $pMessage
-     * @return string
+     * @param bool $pForce Force log event if it is disabled
+     * @return null|string
      */
-    public static function log($pMessage)
+    public static function log($pMessage, $pForce = false)
     {
+        if (! $pForce and (! Agl::isInitialized() or ! Agl::app()->isLogEnabled())) {
+            return NULL;
+        }
+
         if (is_array($pMessage) or is_object($pMessage)) {
             $message = json_encode($pMessage);
         } else {
             $message = $pMessage;
         }
 
-        $logId  = uniqid();
-        $logged = FileData::write(APP_PATH . Agl::APP_VAR_DIR . 'debug.log', '[agl_' . $logId . '] ' . $message, true);
+        $dir = APP_PATH . Agl::APP_VAR_DIR . self::LOG_DIR;
+        if ((! is_dir($dir) and ! mkdir($dir, 0777)) or ! is_writable($dir)) {
+            throw new Exception("log() error: directory creation");
+        }
+
+        $file = $dir . sprintf(self::LOG_FILE, date('Y-m-d'));
+
+        $logId   = uniqid();
+        $message = '[agl_' . $logId . '] ' . "\n" . date('Y-m-d H:i:s') . "\n" . APP_PATH . "\n" . $message . "\n\n";
+        $logged  = FileData::write($file, $message, true);
 
         if (! $logged) {
-            throw new Exception("syslog() error");
+            throw new Exception("log() error: write");
         }
 
         return $logId;
