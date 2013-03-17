@@ -71,34 +71,35 @@ class Debug
      * Log a message in the syslog.
      *
      * @param string $pMessage
-     * @param bool $pForce Force log event if it is disabled
      * @return null|string
      */
-    public static function log($pMessage, $pForce = false)
+    public static function log($pMessage)
     {
-        if (! $pForce and (! Agl::isInitialized() or ! Agl::app()->isLogEnabled())) {
-            return NULL;
-        }
-
         if (is_array($pMessage) or is_object($pMessage)) {
             $message = json_encode($pMessage);
         } else {
-            $message = $pMessage;
+            $message = (string)$pMessage;
         }
-
-        $dir = APP_PATH . Agl::APP_VAR_DIR . self::LOG_DIR;
-        if ((! is_dir($dir) and ! mkdir($dir, 0777)) or ! is_writable($dir)) {
-            throw new Exception("log() error: directory creation");
-        }
-
-        $file = $dir . sprintf(self::LOG_FILE, date('Y-m-d'));
 
         $logId   = uniqid();
-        $message = '[agl_' . $logId . '] ' . "\n" . date('Y-m-d H:i:s') . "\n" . APP_PATH . "\n" . $message . "\n\n";
-        $logged  = FileData::write($file, $message, true);
 
-        if (! $logged) {
-            throw new Exception("log() error: write");
+        if (Agl::isInitialized()) {
+            $message = '[agl_' . $logId . '] [' . date('Y-m-d H:i:s') . '] [' . APP_PATH . '] ' . $message . "\n";
+
+            $dir = APP_PATH . Agl::APP_VAR_DIR . self::LOG_DIR;
+            if ((! is_dir($dir) and ! mkdir($dir, 0777)) or ! is_writable($dir)) {
+                throw new Exception("log() error: directory creation");
+            }
+
+            $file    = $dir . sprintf(self::LOG_FILE, date('Y-m-d'));
+            $logged  = FileData::write($file, $message, true);
+
+            if (! $logged) {
+                throw new Exception("log() error: write");
+            }
+        } else {
+            $message = '[agl_' . $logId . '] [' . APP_PATH . '] ' . $message;
+            syslog(LOG_DEBUG, $message);
         }
 
         return $logId;

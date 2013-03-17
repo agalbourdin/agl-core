@@ -64,13 +64,6 @@ final class Agl
     private $_debug = false;
 
     /**
-     * Log errors.
-     *
-     * @var bool
-     */
-    private $_log = false;
-
-    /**
      * Save the config instance.
      *
      * @var Xml
@@ -98,10 +91,10 @@ final class Agl
      * @param bool $pCache
      * @param bool $pDebug
      */
-    public static function run($pCache = false, $pLog = false, $pDebug = false)
+    public static function run($pCache = false, $pDebug = false)
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new self($pCache, $pLog, $pDebug);
+            self::$_instance = new self($pCache, $pDebug);
         } else {
             throw new Exception("The application has already been initialized - use app() to get access to it");
         }
@@ -298,14 +291,13 @@ final class Agl
      * @param bool $pCache
      * @param bool $pDebug
      */
-    private function __construct($pCache, $pLog, $pDebug)
+    private function __construct($pCache, $pDebug)
     {
         /*if (date_default_timezone_get() !== \Agl\Core\Data\Date::DEFAULT_TZ) {
             date_default_timezone_set(\Agl\Core\Data\Date::DEFAULT_TZ);
         }*/
 
         $this->_cache = ($pCache) ? true : false;
-        $this->_log   = ($pLog) ? true : false;
         $this->_debug = ($pDebug) ? true : false;
 
         error_reporting(-1);

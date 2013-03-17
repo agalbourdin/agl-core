@@ -48,4 +48,4 @@ require(__DIR__ . DS . 'Debug/Debug.php');
 /**
  * Run AGL.
  */
-\Agl\Core\Agl::run(AGL_CACHE_ENABLED, AGL_LOG_ENABLED, AGL_DEBUG_MODE);
+\Agl\Core\Agl::run(AGL_CACHE_ENABLED, AGL_DEBUG_MODE);

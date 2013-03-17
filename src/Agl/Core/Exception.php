@@ -53,7 +53,10 @@ class Exception
             }
         }
 
-        echo '<pre><strong>An error occured</strong> Logged: ' . $pLogId . '</pre>';
+        echo '<pre><strong>An error occured</strong></pre>';
+        if ($pLogId) {
+            echo '<pre>Error log ID: ' . $pLogId . '</pre>';
+        }
         exit;
     }
 
