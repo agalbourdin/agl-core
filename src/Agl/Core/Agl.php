@@ -98,10 +98,10 @@ final class Agl
      * @param bool $pCache
      * @param bool $pDebug
      */
-    public static function run($pCache = false, $pDebug = false)
+    public static function run($pCache = false, $pLog = false, $pDebug = false)
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new self($pCache, $pDebug);
+            self::$_instance = new self($pCache, $pLog, $pDebug);
         } else {
             throw new Exception("The application has already been initialized - use app() to get access to it");
         }
