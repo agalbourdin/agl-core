@@ -186,12 +186,12 @@ class Url
      */
     public static function getProtocol()
     {
-        switch ($_SERVER['SERVER_PROTOCOL']) {
-            case 'HTTP/1.1':
-                return 'http://';
-                break;
-            default:
-                throw new Exception("Protocol '" . $_SERVER['SERVER_PROTOCOL'] . "' is not supported");
+        if (isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) === 'on' or $_SERVER['HTTPS'] === '1')) {
+            return 'https://';
+        } else if (isset($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443') {
+            return 'https://';
         }
+
+        return 'http://';
     }
 }

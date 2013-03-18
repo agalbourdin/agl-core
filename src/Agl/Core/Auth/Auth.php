@@ -41,12 +41,22 @@ class Auth
 	 */
 	public function __construct()
 	{
-		$this->_user    = Agl::getModel(self::USER_DB_CONTAINER);
 		$this->_session = Agl::getSession();
+	}
 
+	/**
+	 * Initialize User (from DB if logged in).
+	 *
+	 * @return Auth
+	 */
+	private function _initUser()
+	{
+		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
 		if ($this->_session->hasUserId()) {
 			$this->_user->loadById($this->_session->getUserId());
 		}
+
+		return $this;
 	}
 
 	/**
@@ -122,7 +132,7 @@ class Auth
 	 */
 	public function isLogged()
 	{
-		return ($this->_user->getId()) ? true : false;
+		return ($this->_session->getUserId()) ? true : false;
 	}
 
 	/**
@@ -132,6 +142,10 @@ class Auth
 	 */
 	public function getUser()
 	{
+		if ($this->_user === NULL) {
+			$this->_initUser();
+		}
+
 		return $this->_user;
 	}
 
@@ -142,6 +156,10 @@ class Auth
 	 */
 	public function getRole()
 	{
+		if ($this->_user === NULL) {
+			$this->_initUser();
+		}
+
 		if ($this->_user->getRole()) {
 			return $this->_user->getRole();
 		}
