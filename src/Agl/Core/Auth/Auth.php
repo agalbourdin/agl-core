@@ -105,7 +105,7 @@ class Auth
 		}
 
 		$this->_user->load($conditions);
-		if ($this->isLogged()) {
+		if ($this->_user->getId()) {
 			$this->_session->setUserId($this->_user->getId());
 			return true;
 		}
