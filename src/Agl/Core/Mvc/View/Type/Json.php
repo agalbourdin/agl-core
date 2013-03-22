@@ -61,6 +61,13 @@ class Json
 	protected function _prepareRender($pBuffer)
 	{
 		if ($pBuffer === '') {
+			array_walk($this->_content, function(&$value)
+			{
+				if (! mb_check_encoding($value, 'UTF-8')) {
+					$value = utf8_encode($value);
+				}
+			});
+
 			$pBuffer = json_encode($this->_content);
 		}
 
