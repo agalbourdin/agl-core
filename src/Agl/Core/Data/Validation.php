@@ -22,23 +22,22 @@ class Validation
     public static function check(array $pParams)
     {
         foreach ($pParams as $type => $value) {
-            if (strpos($type, '/') === 0 or strpos($type, '#') === 0) {
+            $func = 'is' . $type;
+
+            if (method_exists(__CLASS__, $func)) {
+                if (is_array($value)) {
+                    foreach ($value as $subValue) {
+                        if (self::$func($subValue) === false) {
+                            return false;
+                        }
+                    }
+                } else if (self::$func($value) === false) {
+                    return false;
+                }
+            } else {
                 if (! self::isRegex($type, $value)) {
                     return false;
-                } else {
-                    continue;
                 }
-            }
-
-            $func = 'is' . $type;
-            if (is_array($value)) {
-                foreach ($value as $subValue) {
-                    if (self::$func($subValue) === false) {
-                        return false;
-                    }
-                }
-            } else if (self::$func($value) === false) {
-                return false;
             }
         }
 

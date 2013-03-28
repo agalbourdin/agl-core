@@ -317,7 +317,7 @@ final class Agl
      */
     public function __destruct()
     {
-        if ($this->_debug and Debug::canDisplayHtmlDebug()) {
+        if ($this->_debug and Debug::isHtmlView()) {
             var_dump(Debug::getInfos());
         }
     }

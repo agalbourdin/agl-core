@@ -352,7 +352,7 @@ class Request
 	 */
 	public static function redirect($pPath = '', array $pParams = array(), $pType = self::HTTP_CODE_REDIRECT_TEMPORARILY)
 	{
-		if (preg_match('#^[a-z0-9-_\*]+/[a-z0-9-_\*]+(/)?$#', $pPath)) {
+		if ($pPath === '' or preg_match('#^[a-z0-9-_\*]+/[a-z0-9-_\*]+(/)?$#', $pPath)) {
 			header('Location: ' . Url::get($pPath, $pParams), true, $pType);
 		} else {
 			header('Location: ' . $pPath, true, $pType);

@@ -198,24 +198,12 @@ abstract class ViewAbstract
 				        . $template['file']
 				        . static::FILE_EXT;
 
-			$debugMode           = \Agl::app()->isDebugMode();
-			$canDisplayHtmlDebug = Debug::canDisplayHtmlDebug();
-			if ($debugMode and $canDisplayHtmlDebug) {
-				echo Debug::DISPLAY_PATH_START;
-				echo sprintf(Debug::DISPLAY_PATH, $template);
-			}
-
 			require($template);
-
-			if ($debugMode and $canDisplayHtmlDebug) {
-				echo Debug::DISPLAY_PATH_END;
-			}
 		} else {
-			echo $this->getView();
+			require($this->_path);
 		}
 
-		ob_end_flush();
-		return $this;
+		return $this->_prepareRender(ob_get_clean());
 	}
 
 	/**
@@ -225,22 +213,8 @@ abstract class ViewAbstract
 	 */
 	public function getView()
 	{
-		$debugMode           = \Agl::app()->isDebugMode();
-		$canDisplayHtmlDebug = Debug::canDisplayHtmlDebug();
-
 		ob_start();
-
-		if ($debugMode and $canDisplayHtmlDebug) {
-			echo Debug::DISPLAY_PATH_START;
-			echo sprintf(Debug::DISPLAY_PATH, $this->_path);
-		}
-
 		require($this->_path);
-
-		if ($debugMode and $canDisplayHtmlDebug) {
-			echo Debug::DISPLAY_PATH_END;
-		}
-
 		return ob_get_clean();
 	}
 

@@ -57,31 +57,23 @@ class Controller
 			if ($apcEnabled) {
 				$content = Apc::get($cacheInstance[0]);
 	            if ($content !== false) {
-	            	echo $content;
-	                return $this;
+	                return $content;
 	            }
 			} else {
 	            $content = $cacheInstance->get();
 	            if ($content) {
-	                echo $content;
-	                return $this;
+	                return $content;
 	            }
 	        }
 		}
 
         $viewModel = $this->_setView();
 
-        if ($cacheInstance) {
-        	ob_start();
-		}
-
-		$viewModel
+		$content = $viewModel
 			->startBuffer()
 			->render();
 
 		if ($cacheInstance) {
-        	$content = ob_get_clean();
-
         	if ($apcEnabled) {
         		Apc::set($cacheInstance[0], $content, $cacheInstance[1]);
         	} else {
@@ -89,11 +81,9 @@ class Controller
 	                ->set($content)
 	                ->save();
         	}
-
-            echo $content;
 		}
 
-		return $this;
+		return $content;
 	}
 
 	/**
@@ -195,6 +185,6 @@ class Controller
 	 */
 	public function indexAction()
 	{
-		$this->_renderView();
+		return $this->_renderView();
 	}
 }

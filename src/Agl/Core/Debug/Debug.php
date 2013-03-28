@@ -25,13 +25,6 @@ class Debug
     const LOG_FILE = 'debug_%s.log';
 
     /**
-     * HTML code to display template/blocks path information.
-     */
-    const DISPLAY_PATH_START = '<div style="border: 1px dotted Darkred; padding: 5px;">';
-    const DISPLAY_PATH_END   = '</div>';
-    const DISPLAY_PATH       = '<span style="background-color: IndianRed; padding: 0 5px;">%s</span>';
-
-    /**
      * Is the current view of HTML type?
      *
      * @var null|bool
@@ -43,7 +36,7 @@ class Debug
      *
      * @return bool
      */
-    public static function canDisplayHtmlDebug()
+    public static function isHtmlView()
     {
         if (self::$_isHtmlView === NULL) {
             $view = Registry::get('view');

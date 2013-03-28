@@ -127,6 +127,6 @@ class Router
 			'router' => $this
 		));
 
-		$this->_controller->{$this->_actionMethod}();
+		echo $this->_controller->{$this->_actionMethod}();
 	}
 }
