@@ -194,7 +194,7 @@ class Json
         foreach ($files as $file) {
             $json = new JsonData();
             $json->loadFile($file, true);
-            $content['events'] = array_merge($json->getContent(), $content['events']);
+            $content['events'] = array_merge_recursive($json->getContent(), $content['events']);
         }
 
         return $content;
