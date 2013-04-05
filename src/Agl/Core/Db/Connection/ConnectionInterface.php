@@ -16,8 +16,10 @@ interface ConnectionInterface
      */
     const MYSQL = 'mysql';
 
-    public function connect($pHost, $pDb, $pUser = NULL, $pPass = NULL);
+    public function setConnection($pHost, $pName, $pUser = NULL, $pPassword = NULL);
     public function getConnection();
     public function incrementCounter();
     public function countQueries();
+    public function connect($pHost, $pDb, $pUser = NULL, $pPass = NULL);
+    public function listCollections($pWithJoinTo = NULL);
 }

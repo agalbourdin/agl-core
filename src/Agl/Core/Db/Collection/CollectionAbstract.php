@@ -298,7 +298,9 @@ abstract class CollectionAbstract
     {
         $this->resetPointer();
         while ($item = $this->next()) {
-            $item->save();
+            if ($item->getId()) {
+                $item->save();
+            }
         }
 
         return $this;

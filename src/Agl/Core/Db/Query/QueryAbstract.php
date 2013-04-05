@@ -18,14 +18,14 @@ abstract class QueryAbstract
      *
      * @var string
      */
-    protected $_dbPrefix = '';
+    private $_dbPrefix = NULL;
 
     /**
-     * Get the database prefix from configuration and register it.
+     * Set the database prefix from configuration.
      *
      * @return QueryAbstract
      */
-    protected function _setDbPrefix()
+    private function _setDbPrefix()
     {
         $dbPrefix = Agl::app()->getConfig('@app/db/prefix');
         if ($dbPrefix) {
@@ -33,5 +33,19 @@ abstract class QueryAbstract
         }
 
         return $this;
+    }
+
+    /**
+     * Get the database prefix.
+     *
+     * @return string
+     */
+    public function getDbPrefix()
+    {
+        if ($this->_dbPrefix === NULL) {
+            $this->_setDbPrefix();
+        }
+
+        return $this->_dbPrefix;
     }
 }

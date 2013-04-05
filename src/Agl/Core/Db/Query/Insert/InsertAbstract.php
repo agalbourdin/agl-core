@@ -42,7 +42,6 @@ abstract class InsertAbstract
         ));
 
         $this->_dbContainer = $pDbContainer;
-        $this->_setDbPrefix();
     }
 
     /**

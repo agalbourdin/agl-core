@@ -54,7 +54,7 @@ class Update
             if (! empty($toUpdate)) {
                 $query = "
                     UPDATE
-                        `" . $this->_dbPrefix . $this->_item->getDbContainer() . "`
+                        `" . $this->getDbPrefix() . $this->_item->getDbContainer() . "`
                     SET
                         " . $this->_getPreparedFields($toUpdate) . "
                     WHERE
@@ -77,7 +77,7 @@ class Update
 
                 if (! $prepared->execute(array_values($toUpdate))) {
                     $error = $prepared->errorInfo();
-                    throw new Exception("The update query failed (table '" . $this->_dbPrefix . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
+                    throw new Exception("The update query failed (table '" . $this->getDbPrefix() . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
                 }
 
                 if (Agl::app()->isDebugMode()) {

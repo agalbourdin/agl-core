@@ -30,6 +30,5 @@ abstract class DropAbstract
     public function __construct(Collection $pCollection)
     {
         $this->_collection = $pCollection;
-        $this->_setDbPrefix();
     }
 }

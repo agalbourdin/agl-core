@@ -30,7 +30,7 @@ class Delete
             $prepared = Agl::app()->getDb()->getConnection()->prepare("
                 DELETE
                 FROM
-                    `" . $this->_dbPrefix . $this->_item->getDbContainer() . "`
+                    `" . $this->getDbPrefix() . $this->_item->getDbContainer() . "`
                 WHERE
                     `" . $this->_item->getDbContainer() . ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD . "` = :" . ItemInterface::IDFIELD . "
             ");
@@ -41,7 +41,7 @@ class Delete
 
             if (! $prepared->execute($preparedValues)) {
                 $error = $prepared->errorInfo();
-                throw new Exception("The delete query failed (table '" . $this->_dbPrefix . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
+                throw new Exception("The delete query failed (table '" . $this->getDbPrefix() . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
             }
 
             $this->_item->removeJoinFromAllChilds();

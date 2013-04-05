@@ -97,7 +97,7 @@ class Select
                 SELECT
                     $fields
                 FROM
-                    `" . $this->_dbPrefix . $this->_dbContainer . "`";
+                    `" . $this->getDbPrefix() . $this->_dbContainer . "`";
 
             if ($this->_conditions->count()) {
                 $query .= "
@@ -122,7 +122,7 @@ class Select
 
             if (! $this->_stm->execute($this->_conditions->getPreparedValues())) {
                 $error = $this->_stm->errorInfo();
-                throw new Exception("The select query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
+                throw new Exception("The select query failed (table '" . $this->getDbPrefix() . $this->_dbContainer . "') with message '" . $error[2] . "'");
             }
 
             if (Agl::app()->isDebugMode()) {

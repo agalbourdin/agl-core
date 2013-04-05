@@ -56,7 +56,6 @@ abstract class CountAbstract
         ));
 
         $this->_dbContainer = $pDbContainer;
-        $this->_setDbPrefix();
 
         $this->_conditions  = new Conditions();
     }

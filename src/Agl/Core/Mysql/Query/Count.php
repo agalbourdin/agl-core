@@ -44,7 +44,7 @@ class Count
                 SELECT
                     $field AS nb
                 FROM
-                    `" . $this->_dbPrefix . $this->_dbContainer . "`";
+                    `" . $this->getDbPrefix() . $this->_dbContainer . "`";
 
             if ($this->_conditions->count()) {
                 $query .= "
@@ -57,11 +57,11 @@ class Count
             if ($prepared->execute($this->_conditions->getPreparedValues())) {
                 $result = $prepared->fetchObject();
                 if (! $result) {
-                    throw new Exception("The count query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "')");
+                    throw new Exception("The count query failed (table '" . $this->getDbPrefix() . $this->_dbContainer . "')");
                 }
             } else {
                 $error = $prepared->errorInfo();
-                throw new Exception("The count query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
+                throw new Exception("The count query failed (table '" . $this->getDbPrefix() . $this->_dbContainer . "') with message '" . $error[2] . "'");
             }
 
             if (Agl::app()->isDebugMode()) {

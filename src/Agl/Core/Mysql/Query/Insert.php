@@ -68,7 +68,7 @@ class Insert
         try {
             $prepared = Agl::app()->getDb()->getConnection()->prepare("
                 INSERT INTO
-                    `" . $this->_dbPrefix . $this->_dbContainer . "`
+                    `" . $this->getDbPrefix() . $this->_dbContainer . "`
                 (" . $this->_getFields() . ")
                 VALUES
                 (" . $this->_getPreparedFields() . ")
@@ -76,7 +76,7 @@ class Insert
 
             if (! $prepared->execute($this->_fields)) {
                 $error = $prepared->errorInfo();
-                throw new Exception("The insert query failed (table '" . $this->_dbPrefix . $this->_dbContainer . "') with message '" . $error[2] . "'");
+                throw new Exception("The insert query failed (table '" . $this->getDbPrefix() . $this->_dbContainer . "') with message '" . $error[2] . "'");
             }
 
             if (Agl::app()->isDebugMode()) {

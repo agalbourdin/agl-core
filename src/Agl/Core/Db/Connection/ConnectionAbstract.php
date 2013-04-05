@@ -1,7 +1,8 @@
 <?php
 namespace Agl\Core\Db\Connection;
 
-use \Agl\Core\Agl;
+use \Agl\Core\Agl,
+    \Agl\Core\Db\Query\QueryAbstract;
 
 /**
  * Abstract class - Connection
@@ -12,6 +13,7 @@ use \Agl\Core\Agl;
  */
 
 abstract class ConnectionAbstract
+    extends QueryAbstract
 {
     /**
      * Query counter.

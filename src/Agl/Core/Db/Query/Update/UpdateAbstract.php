@@ -43,8 +43,6 @@ abstract class UpdateAbstract
         } else {
             throw new Exception("Item cannot be updated, an ID is required");
         }
-
-        $this->_setDbPrefix();
     }
 
     /**

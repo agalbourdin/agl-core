@@ -35,7 +35,5 @@ abstract class DeleteAbstract
         } else {
             throw new Exception("Item cannot be deleted, an ID is required");
         }
-
-        $this->_setDbPrefix();
     }
 }

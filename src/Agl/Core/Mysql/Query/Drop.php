@@ -28,12 +28,12 @@ class Drop
         try {
             $prepared = Agl::app()->getDb()->getConnection()->prepare("
                 DROP TABLE
-                    `" . $this->_dbPrefix . $this->_collection->getDbContainer() . "`
+                    `" . $this->getDbPrefix() . $this->_collection->getDbContainer() . "`
             ");
 
             if (! $prepared->execute()) {
                 $error = $prepared->errorInfo();
-                throw new Exception("The drop query failed (table '" . $this->_dbPrefix . $this->_collection->getDbContainer() . "') with message '" . $error[2] . "'");
+                throw new Exception("The drop query failed (table '" . $this->getDbPrefix() . $this->_collection->getDbContainer() . "') with message '" . $error[2] . "'");
             }
 
             if (Agl::app()->isDebugMode()) {

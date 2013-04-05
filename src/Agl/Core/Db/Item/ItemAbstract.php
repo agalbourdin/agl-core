@@ -608,7 +608,7 @@ abstract class ItemAbstract
      */
     public function removeJoinFromAllChilds()
     {
-        $collections = Agl::app()->getDb()->listCollections();
+        $collections = Agl::app()->getDb()->listCollections($this->_dbContainer);
 
         foreach ($collections as $collection) {
             if ($collection == $this->_dbContainer) {

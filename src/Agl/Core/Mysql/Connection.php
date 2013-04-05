@@ -60,16 +60,27 @@ class Connection
     /**
      * List all the database's collections.
      *
+     * @param $pWithJoinTo Item DB container if we want to only get a list of
+     * tables with joins to a DB container.
      * @return array
      */
-    public function listCollections()
+    public function listCollections($pWithJoinTo = NULL)
     {
         $tables = array();
 
         $prepared = $this->getConnection()->prepare('SHOW TABLES FROM `' . $this->_dbName . '`');
         if ($prepared->execute()) {
             while ($row = $prepared->fetchObject()) {
-                $tables[] = current($row);
+                $table = str_replace($this->getDbPrefix(), '', current($row));
+
+                if ($pWithJoinTo !== NULL) {
+                    $preparedJoin = $this->getConnection()->prepare('SHOW COLUMNS FROM `' . current($row) . '` LIKE "' . $table . \Agl\Core\Db\Item\Item::PREFIX_SEPARATOR . \Agl\Core\Db\Item\Item::JOINS_FIELD_PREFIX . $pWithJoinTo . '"');
+                    if ($preparedJoin->execute() and $preparedJoin->rowCount()) {
+                        $tables[] = $table;
+                    }
+                } else {
+                    $tables[] = $table;
+                }
             }
 
         }
