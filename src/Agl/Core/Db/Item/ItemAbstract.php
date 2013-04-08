@@ -466,16 +466,18 @@ abstract class ItemAbstract
     /**
      * Delete the item from the database.
      *
+     * @param bool $withChilds Delete also all item's childs in other
+     * collections
      * @return bool
      */
-    public function delete()
+    public function delete($withChilds = false)
     {
         Observer::dispatch(Observer::EVENT_ITEM_DELETE_BEFORE, array(
             'item' => $this
         ));
 
         $delete = new Delete($this);
-        $delete->commit();
+        $delete->commit($withChilds);
 
         Observer::dispatch(Observer::EVENT_ITEM_DELETE_AFTER, array(
             'item' => $this
@@ -608,7 +610,8 @@ abstract class ItemAbstract
      */
     public function removeJoinFromAllChilds()
     {
-        $collections = Agl::app()->getDb()->listCollections($this->_dbContainer);
+        $field       = static::PREFIX_SEPARATOR . static::JOINS_FIELD_PREFIX . $this->_dbContainer;
+        $collections = Agl::app()->getDb()->listCollections(array($field));
 
         foreach ($collections as $collection) {
             if ($collection == $this->_dbContainer) {

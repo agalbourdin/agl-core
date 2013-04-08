@@ -22,9 +22,11 @@ class Delete
     /**
      * Commit the deletion to Mysql and check the query result.
      *
+     * @param bool $withChilds Delete also all item's childs in other
+     * collections
      * @return int Number of affected rows
      */
-    public function commit()
+    public function commit($withChilds = false)
     {
         try {
             $prepared = Agl::app()->getDb()->getConnection()->prepare("
@@ -44,7 +46,9 @@ class Delete
                 throw new Exception("The delete query failed (table '" . $this->getDbPrefix() . $this->_item->getDbContainer() . "') with message '" . $error[2] . "'");
             }
 
-            $this->_item->removeJoinFromAllChilds();
+            if ($withChilds) {
+                $this->_item->removeJoinFromAllChilds();
+            }
 
             if (Agl::app()->isDebugMode()) {
                 Agl::app()->getDb()->incrementCounter();

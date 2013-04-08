@@ -60,11 +60,11 @@ class Connection
     /**
      * List all the database's collections.
      *
-     * @param $pWithJoinTo Item DB container if we want to only get a list of
-     * tables with joins to a DB container.
+     * @param array $pWithFields Fields that must exist in collections
      * @return array
+     * @todo Test this method with $pWithFields
      */
-    public function listCollections($pWithJoinTo = NULL)
+    public function listCollections(array $pWithFields = array())
     {
         $tables = array();
 
@@ -73,14 +73,14 @@ class Connection
             while ($row = $prepared->fetchObject()) {
                 $table = str_replace($this->getDbPrefix(), '', current($row));
 
-                if ($pWithJoinTo !== NULL) {
-                    $preparedJoin = $this->getConnection()->prepare('SHOW COLUMNS FROM `' . current($row) . '` LIKE "' . $table . \Agl\Core\Db\Item\Item::PREFIX_SEPARATOR . \Agl\Core\Db\Item\Item::JOINS_FIELD_PREFIX . $pWithJoinTo . '"');
-                    if ($preparedJoin->execute() and $preparedJoin->rowCount()) {
-                        $tables[] = $table;
+                foreach ($pWithFields as $field) {
+                    $preparedJoin = $this->getConnection()->prepare('SHOW COLUMNS FROM `' . current($row) . '` LIKE "' . $table . $field . '"');
+                    if ($preparedJoin->execute() and ! $preparedJoin->rowCount()) {
+                        continue 1;
                     }
-                } else {
-                    $tables[] = $table;
                 }
+
+                $tables[] = $table;
             }
 
         }

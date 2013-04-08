@@ -309,14 +309,16 @@ abstract class CollectionAbstract
     /**
      * Delete all items from the database and reset the collection.
      *
+     * @param bool $withChilds Delete also all item's childs in other
+     * collections
      * @return CollectionAbstract
      */
-    public function deleteItems()
+    public function deleteItems($withChilds = false)
     {
         $this->resetPointer();
         while ($item = $this->next()) {
             if ($item->getId()) {
-                $item->delete();
+                $item->delete($withChilds);
             }
         }
 
