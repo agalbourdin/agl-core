@@ -17,6 +17,7 @@ class Observer
     /**
      * List of allowed events.
      */
+    const EVENT_AGL_INIT_AFTER            = 'agl_init_after';
     const EVENT_VIEW_RENDER_BUFFER_BEFORE = 'agl_view_render_buffer_before';
     const EVENT_SET_REQUEST_BEFORE        = 'agl_set_request_before';
     const EVENT_SET_REQUEST_AFTER         = 'agl_set_request_after';

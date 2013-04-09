@@ -49,3 +49,8 @@ require(__DIR__ . DS . 'Debug/Debug.php');
  * Run AGL.
  */
 \Agl\Core\Agl::run(AGL_CACHE_ENABLED, AGL_DEBUG_MODE);
+
+/**
+ * Call After Init events.
+ */
+Agl::app()->afterInit();

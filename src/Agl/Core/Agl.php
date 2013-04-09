@@ -7,6 +7,7 @@ use \Agl\Core\Config\Json\Json as JsonConfig,
     \Agl\Core\Db\Query\Conditions\Conditions,
     \Agl\Core\Debug\Debug,
     \Agl\Core\Loader\Loader,
+    \Agl\Core\Observer\Observer,
     \Agl\Core\Mvc\Controller\Router,
     \Exception;
 
@@ -320,6 +321,20 @@ final class Agl
         if ($this->_debug and Debug::isHtmlView()) {
             var_dump(Debug::getInfos());
         }
+    }
+
+    /**
+     * Post-init tasks.
+     *
+     * @return Agl
+     */
+    public function afterInit()
+    {
+        Observer::dispatch(Observer::EVENT_AGL_INIT_AFTER, array(
+            'agl' => $this
+        ));
+
+        return $this;
     }
 
     /**
