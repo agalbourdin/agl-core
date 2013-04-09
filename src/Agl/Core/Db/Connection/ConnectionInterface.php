@@ -21,5 +21,5 @@ interface ConnectionInterface
     public function incrementCounter();
     public function countQueries();
     public function connect($pHost, $pDb, $pUser = NULL, $pPass = NULL);
-    public function listCollections($pWithJoinTo = NULL);
+    public function listCollections(array $pWithFields = array());
 }
