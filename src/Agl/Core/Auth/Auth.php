@@ -70,7 +70,7 @@ class Auth
 		$this->logout();
 		$this->_user = $pUser;
 
-		if ($this->isLogged()) {
+		if ($this->_user->getId()) {
 			$this->_session->setUserId($this->_user->getId());
 			return true;
 		}
