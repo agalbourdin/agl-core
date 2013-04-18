@@ -15,6 +15,16 @@ use \Agl\Core\Debug\Debug,
 class Exception
 {
     /**
+     * Specific PHP errors that should be catched by script and not stop
+     * execution.
+     *
+     * @var array
+     */
+    private static $_ignoreErrors = array(
+        '/^POST Content-Length of [0-9]+ bytes exceeds the limit of [0-9]+ bytes$/'
+    );
+
+    /**
      * Handle exceptions and display error messages based on the app
      * configuration.
      *
@@ -70,6 +80,12 @@ class Exception
      */
     public static function errorHandler($pErrno, $pErrstr, $pErrfile, $pErrline)
     {
+        foreach (self::$_ignoreErrors as $pattern) {
+            if (preg_match($pattern, $pErrstr)) {
+                return;
+            }
+        }
+
         $logId = Debug::log("Error '$pErrstr' in '$pErrfile' on line $pErrline");
 
         $message = '<pre><strong>AGL Error</strong>
@@ -109,15 +125,7 @@ class Exception
     {
         $error = error_get_last();
         if ($error) {
-            $logId = Debug::log("Error '" . $error['message'] . "' in '" . $error['file'] . "' on line " . $error['line']);
-
-                    $message = '<pre><strong>AGL Error</strong>
-<strong>Message </strong>' . $error['message'] . '
-<strong>File</strong> ' . $error['file'] . '
-<strong>Line</strong> ' . $error['line'] . '
-</pre>';
-
-            self::render($message, $logId);
+            self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
         }
     }
 }
