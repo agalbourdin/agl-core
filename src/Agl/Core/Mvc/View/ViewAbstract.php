@@ -134,7 +134,7 @@ abstract class ViewAbstract
 	 */
 	public function startBuffer()
 	{
-		ob_start(array($this, 'getBuffer'));
+		ob_start(/*array($this, 'getBuffer')*/);
 		return $this;
 	}
 
@@ -144,7 +144,7 @@ abstract class ViewAbstract
 	 * @param string $pBuffer
 	 * @return string
 	 */
-	public function getBuffer($pBuffer)
+	/*public function getBuffer($pBuffer)
 	{
 		Agl::validateParams(array(
 			'String' => $pBuffer
@@ -158,7 +158,7 @@ abstract class ViewAbstract
 		$pBuffer = $this->_prepareRender($pBuffer);
 
 		return $pBuffer;
-	}
+	}*/
 
 	/**
 	 * Include the template in the current page.
@@ -203,7 +203,14 @@ abstract class ViewAbstract
 			require($this->_path);
 		}
 
-		return $this->_prepareRender(ob_get_clean());
+		$buffer = ob_get_clean();
+
+		Observer::dispatch(Observer::EVENT_VIEW_RENDER_BUFFER_BEFORE, array(
+			'view'   => $this,
+			'buffer' => &$buffer
+		));
+
+		return $this->_prepareRender($buffer);
 	}
 
 	/**

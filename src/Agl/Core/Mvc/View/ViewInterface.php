@@ -64,7 +64,7 @@ interface ViewInterface
 
     public function setFile($pFile);
     public function startBuffer();
-    public function getBuffer($pBuffer);
+    //public function getBuffer($pBuffer);
     public function render();
     public function getBlock($pBlock);
     public function getType();

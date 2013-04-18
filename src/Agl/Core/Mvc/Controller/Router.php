@@ -60,7 +60,12 @@ class Router
 	 */
 	public function __construct($pRequestUri)
 	{
-		$request       = Agl::getRequest($pRequestUri);
+		$request = Agl::getRequest($pRequestUri);
+
+		Observer::dispatch(Observer::EVENT_ROUTER_ROUTE_BEFORE, array(
+			'router' => $this
+		));
+
 		$this->_module = $request->getModule();
 		$this->_view   = $request->getView();
 		$this->_action = $request->getAction();
@@ -123,10 +128,6 @@ class Router
 	 */
 	public function route()
 	{
-		Observer::dispatch(Observer::EVENT_ROUTER_ROUTE_BEFORE, array(
-			'router' => $this
-		));
-
 		echo $this->_controller->{$this->_actionMethod}();
 	}
 }
