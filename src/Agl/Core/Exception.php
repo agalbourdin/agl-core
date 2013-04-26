@@ -104,7 +104,7 @@ class Exception
      */
     public static function exceptionHandler(\Exception $pException)
     {
-        $logId = Debug::log("Exception '" . $pException->getMessage() . "' in '" . $pException->getFile() . "' on line " . $pException->getLine());
+        $logId = Debug::log("Exception '" . $pException->getMessage() . "' in '" . $pException->getFile() . "' on line " . $pException->getLine() . "\n" . $pException->getTraceAsString());
 
         $message = '<pre><strong>AGL Exception</strong>
 <strong>Message </strong>' . $pException->getMessage() . '

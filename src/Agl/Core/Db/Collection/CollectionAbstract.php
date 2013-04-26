@@ -307,6 +307,23 @@ abstract class CollectionAbstract
     }
 
     /**
+     * Insert all collection's items that aren't already saved to database.
+     *
+     * @return CollectionAbstract
+     */
+    public function insert()
+    {
+        $this->resetPointer();
+        while ($item = $this->next()) {
+            if (! $item->getId()) {
+                $item->insert();
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Delete all items from the database and reset the collection.
      *
      * @param bool $withChilds Delete also all item's childs in other
