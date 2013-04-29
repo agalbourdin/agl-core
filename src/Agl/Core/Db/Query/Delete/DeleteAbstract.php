@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Query\Delete;
 
-use \Agl\Core\Db\Item\Item,
+use \Agl\Core\Db\Item\ItemAbstract,
     \Agl\Core\Db\Query\QueryAbstract,
     \Exception;
 
@@ -19,7 +19,7 @@ abstract class DeleteAbstract
     /**
      * Item to delete.
      *
-     * @var \Agl\Core\Db\Item\Item
+     * @var ItemAbstract|null
      */
     protected $_item = NULL;
 
@@ -28,7 +28,7 @@ abstract class DeleteAbstract
      *
      * @param Item $pItem
      */
-    public function __construct(Item $pItem)
+    public function __construct(ItemAbstract $pItem)
     {
         if ($pItem->getId()) {
             $this->_item = $pItem;

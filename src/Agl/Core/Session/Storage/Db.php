@@ -4,7 +4,6 @@ namespace Agl\Core\Session\Storage;
 use \Agl\Core\Agl,
     \Agl\Core\Db\Collection\Collection,
     \Agl\Core\Db\Query\Conditions\Conditions,
-    \Agl\Core\Db\Item\Item,
     \Agl\Core\Session\SessionAbstract,
     \Agl\Core\Session\SessionInterface;
 
@@ -79,7 +78,7 @@ class Db
     public function _read($pId)
     {
         if (! isset($this->_items[$pId])) {
-            $this->_items[$pId] = new Item(self::DB_COLLECTION);
+            $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
             $this->_items[$pId]->loadById($pId);
         }
 
@@ -106,7 +105,7 @@ class Db
         $access = time();
 
         if (! isset($this->_items[$pId])) {
-            $this->_items[$pId] = new Item(self::DB_COLLECTION);
+            $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
             $this->_items[$pId]->loadById($pId);
         }
 
@@ -133,7 +132,7 @@ class Db
     public function _destroy($pId)
     {
         if (! isset($this->_items[$pId])) {
-            $this->_items[$pId] = new Item(self::DB_COLLECTION);
+            $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
             $this->_items[$pId]->loadById($pId);
         }
 

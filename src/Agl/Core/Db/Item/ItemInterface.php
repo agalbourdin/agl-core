@@ -51,8 +51,8 @@ interface ItemInterface
     public function getDbContainer();
     public function save($pConditions = NULL);
     public function delete();
-    public function addParent(\Agl\Core\Db\Item\Item $pItem);
-    public function removeParent(\Agl\Core\Db\Item\Item $pItem);
+    public function addParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    public function removeParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
     public function getParents($pDbContainer, $pLimit = NULL, $pOrder = NULL);
     public function removeJoinFromAllChilds();
     public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL);

@@ -2,6 +2,7 @@
 namespace Agl\Core\Db\Query\Update;
 
 use \Agl\Core\Db\Query\Conditions\Conditions,
+    \Agl\Core\Db\Item\ItemAbstract,
     \Agl\Core\Db\Query\QueryAbstract,
     \Agl\Core\Db\Query\Update\Update,
     \Exception;
@@ -20,7 +21,7 @@ abstract class UpdateAbstract
     /**
      * Item to delete.
      *
-     * @var \Agl\Core\Db\Item\Item
+     * @var ItemAbstract|null
      */
     protected $_item = NULL;
 
@@ -36,7 +37,7 @@ abstract class UpdateAbstract
      *
      * @param Item $pItem
      */
-    public function __construct(\Agl\Core\Db\Item\Item $pItem)
+    public function __construct(ItemAbstract $pItem)
     {
         if ($pItem->getId()) {
             $this->_item = $pItem;

@@ -80,6 +80,10 @@ class Exception
      */
     public static function errorHandler($pErrno, $pErrstr, $pErrfile, $pErrline)
     {
+        if (error_reporting() === 0) {
+            return;
+        }
+
         foreach (self::$_ignoreErrors as $pattern) {
             if (preg_match($pattern, $pErrstr)) {
                 return;

@@ -5,7 +5,6 @@ use \Agl\Core\Agl,
     \Agl\Core\Data\Date as DateData,
     \Agl\Core\Data\String as StringData,
     \Agl\Core\Db\Id\Id,
-    \Agl\Core\Db\Item\Item,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Conditions\Conditions,
     \Agl\Core\Db\Query\Delete\Delete,
@@ -170,7 +169,7 @@ abstract class ItemAbstract
      * @param Item $pItem
      * @return bool
      */
-    protected function _joinExists(Item $pItem)
+    protected function _joinExists(ItemAbstract $pItem)
     {
         $joins = $this->getJoins($pItem->getDbContainer());
 
@@ -515,7 +514,7 @@ abstract class ItemAbstract
      * @param Item $pItem The item to join
      * @return Item
      */
-    public function addParent(Item $pItem)
+    public function addParent(ItemAbstract $pItem)
     {
         if (! $this->getId() or ! $pItem->getId()) {
             throw new Exception("The items must be existing in the database before being joined");
@@ -546,7 +545,7 @@ abstract class ItemAbstract
      * @param mixed $pId ID or array of IDs
      * @return Item
      */
-    public function removeParent(Item $pItem)
+    public function removeParent(ItemAbstract $pItem)
     {
         if (! $this->getId() or ! $pItem->getId()) {
             throw new Exception("The items must be existing in the database before being joined");

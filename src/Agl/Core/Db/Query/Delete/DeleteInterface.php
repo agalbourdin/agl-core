@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core\Db\Query\Delete;
 
-use \Agl\Core\Db\Item\Item;
+use \Agl\Core\Db\Item\ItemAbstract;
 
 /**
  * Interface - Delete
@@ -13,6 +13,6 @@ use \Agl\Core\Db\Item\Item;
 
 interface DeleteInterface
 {
-    public function __construct(Item $pItem);
+    public function __construct(ItemAbstract $pItem);
     public function commit();
 }

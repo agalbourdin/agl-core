@@ -2,7 +2,7 @@
 namespace Agl\Core\Db\Query\Update;
 
 use \Agl\Core\Db\Query\Conditions\Conditions,
-	\Agl\Core\Db\Item\Item;
+	\Agl\Core\Db\Item\ItemAbstract;
 
 /**
  * Interface - Update
@@ -14,7 +14,7 @@ use \Agl\Core\Db\Query\Conditions\Conditions,
 
 interface UpdateInterface
 {
-    public function __construct(Item $pItem);
+    public function __construct(ItemAbstract $pItem);
     public function loadConditions(Conditions $pConditions);
     public function commit();
 }
