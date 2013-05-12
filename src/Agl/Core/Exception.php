@@ -53,7 +53,7 @@ class Exception
     private static function aglError($pMessage, $pLogId)
     {
         if (Agl::isInitialized()) {
-            $file = Agl::app()->getConfig('@layout/errors/static/file');
+            $file = Agl::app()->getConfig('@layout/errors/static');
             if ($file) {
                 $path = APP_PATH . $file;
                 if (is_readable($path)) {

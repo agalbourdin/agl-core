@@ -171,7 +171,7 @@ abstract class ViewAbstract
 
 		if (! is_readable($this->_path)) {
 			Request::setHttpHeader(Request::HEADER_404);
-			$template404 = Agl::app()->getConfig('@layout/errors/404/module');
+			$template404 = Agl::app()->getConfig('@layout/errors/404');
 			if ($template404) {
 				$this->setFile($template404);
 				$this->_path = $this->getPath();

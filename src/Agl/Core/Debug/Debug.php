@@ -80,19 +80,18 @@ class Debug
             $message = '[agl_' . $logId . '] [' . date('Y-m-d H:i:s') . '] [' . APP_PATH . '] ' . $message . "\n";
 
             $dir = APP_PATH . Agl::APP_VAR_DIR . self::LOG_DIR;
-            if ((! is_dir($dir) and ! mkdir($dir, 0777)) or ! is_writable($dir)) {
-                throw new Exception("log() error: directory creation");
+            if (! is_writable(APP_PATH . Agl::APP_VAR_DIR) or (! is_dir($dir) and ! mkdir($dir, 0777)) or ! is_writable($dir)) {
+                return 0;
             }
 
             $file    = $dir . sprintf(self::LOG_FILE, date('Y-m-d'));
             $logged  = FileData::write($file, $message, true);
 
             if (! $logged) {
-                throw new Exception("log() error: write");
+                return 0;
             }
         } else {
-            $message = '[agl_' . $logId . '] [' . APP_PATH . '] ' . $message;
-            syslog(LOG_DEBUG, $message);
+            return 0;
         }
 
         return $logId;

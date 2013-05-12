@@ -1,7 +1,7 @@
 <?php
 namespace Agl\Core;
 
-use \Agl\Core\Config\Json\Json as JsonConfig,
+use \Agl\Core\Config\Config,
     \Agl\Core\Data\Validation,
     \Agl\Core\Db\Connection\Connection,
     \Agl\Core\Db\Query\Conditions\Conditions,
@@ -378,7 +378,7 @@ final class Agl
     public function getConfig($pPath, $pForceGlobalArray = false)
     {
         if ($this->_config === NULL) {
-            $this->_config = new JsonConfig();
+            $this->_config = new Config();
         }
 
         return $this->_config->getConfig($pPath, $pForceGlobalArray);
