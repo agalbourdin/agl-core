@@ -221,6 +221,8 @@ class Config
                 $nbKeys  = count($pathArr) - 1;
 
                 foreach($pathArr as $i => $key) {
+                    $key = str_replace('#', DS, $key);
+
                     if (! isset($content[$key])) {
                         $this->_cache[$pPath] = NULL;
                         break;

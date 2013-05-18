@@ -102,10 +102,10 @@ class Router
 	 */
 	private function _checkAcl()
 	{
-		$aclConfig = Agl::app()->getConfig('@layout/modules/' . $this->_module . '/views/' . $this->_view . '/actions/' . $this->_action . '/acl');
+		$aclConfig = Agl::app()->getConfig('@layout/modules/' . $this->_module . '#' . $this->_view . '#action#' . $this->_action . '/acl');
 
 		if ($aclConfig === NULL) {
-			$aclConfig = Agl::app()->getConfig('@layout/modules/' . $this->_module . '/views/' . $this->_view . '/acl');
+			$aclConfig = Agl::app()->getConfig('@layout/modules/' . $this->_module . '#' . $this->_view . '/acl');
 		}
 
 		if ($aclConfig === NULL) {

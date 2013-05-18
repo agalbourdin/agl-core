@@ -105,7 +105,7 @@ abstract class BlockAbstract
 	 */
 	public static function checkAcl($pGroupId, $pBlockId)
 	{
-		$blockConfig = Agl::app()->getConfig('@layout/blocks/' . $pGroupId . '/' . $pBlockId);
+		$blockConfig = Agl::app()->getConfig('@layout/blocks/' . $pGroupId . '#' . $pBlockId);
 		if (is_array($blockConfig) and isset($blockConfig['acl'])) {
 			$auth = Agl::getAuth();
 			$acl  = Agl::getSingleton(Agl::AGL_CORE_POOL . '/auth/acl');

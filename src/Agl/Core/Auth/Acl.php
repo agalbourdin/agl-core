@@ -2,6 +2,7 @@
 namespace Agl\Core\Auth;
 
 use \Agl\Core\Agl,
+	\Agl\Core\Mvc\View\ViewInterface,
 	\Agl\Core\Request\Request,
 	\Exception;
 
@@ -105,12 +106,7 @@ class Acl
 	 */
 	public function requestLogin()
 	{
-		$module = Agl::app()->getConfig('@layout/errors/403/module');
-		if (Agl::app()->isDebugMode() or ! $module) {
-			throw new Exception("Invalid ACL to access the view");
-		}
-
-		Request::redirect($module);
+		Request::redirect(ViewInterface::ERROR_403);
 		exit;
 	}
 }

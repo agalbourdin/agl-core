@@ -137,10 +137,10 @@ class Controller
 		$module      = $request->getModule();
 		$view        = $request->getView();
 		$action      = $request->getAction();
-		$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/actions/' . $action . '/cache');
+		$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/cache');
 
 		if ($cacheConfig === NULL) {
-			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/cache');
+			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/cache');
 		}
 
 		if ($cacheConfig === NULL) {

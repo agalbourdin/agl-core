@@ -2,6 +2,7 @@
 namespace Agl\Core {
 
 use \Agl\Core\Debug\Debug,
+    \Agl\Core\Mvc\View\ViewInterface,
     \Agl\Core\Request\Request;
 
 /**
@@ -52,15 +53,10 @@ class Exception
      */
     private static function aglError($pMessage, $pLogId)
     {
-        if (Agl::isInitialized()) {
-            $file = Agl::app()->getConfig('@layout/errors/static');
-            if ($file) {
-                $path = APP_PATH . $file;
-                if (is_readable($path)) {
-                    require($path);
-                    exit;
-                }
-            }
+        $path = APP_PATH . ViewInterface::ERROR_STATIC;
+        if (is_readable($path)) {
+            require($path);
+            exit;
         }
 
         echo '<pre><strong>An error occured</strong></pre>';

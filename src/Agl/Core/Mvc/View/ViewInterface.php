@@ -58,6 +58,21 @@ interface ViewInterface
     const CACHE_FILE_PREFIX = 'view_';
 
     /**
+     * 404 error page path.
+     */
+    const ERROR_404 = 'error/404';
+
+    /**
+     * Static error page path.
+     */
+    const ERROR_STATIC = 'public/error_static.phtml';
+
+    /**
+     * 403 error page path.
+     */
+    const ERROR_403 = 'error/auth';
+
+    /**
      * HTTP layouts directory.
      */
     const APP_HTTP_TEMPLATE_DIR = 'app/template';

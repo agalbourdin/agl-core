@@ -69,10 +69,10 @@ abstract class ViewAbstract
 			$view    = $request->getView();
 			$action  = $request->getAction();
 
-			self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/actions/' . $action . '/template');
+			self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/template');
 
 			if (self::$_templateConfig === NULL) {
-			    self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/views/' . $view . '/template');
+			    self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/template');
 			}
 
 			if (self::$_templateConfig === NULL) {
@@ -171,13 +171,10 @@ abstract class ViewAbstract
 
 		if (! is_readable($this->_path)) {
 			Request::setHttpHeader(Request::HEADER_404);
-			$template404 = Agl::app()->getConfig('@layout/errors/404');
-			if ($template404) {
-				$this->setFile($template404);
-				$this->_path = $this->getPath();
-			}
+			$this->setFile(static::ERROR_404);
+			$this->_path = $this->getPath();
 
-			if (! $template404 or ! is_readable($this->_path)) {
+			if (! is_readable($this->_path)) {
 				throw new Exception("View file '" . $this->_path . "' doesn't exists");
 			}
 		}
@@ -244,7 +241,7 @@ abstract class ViewAbstract
         	'block' => $blockPathInfos[2]
         );
 
-        $blockConfig = Agl::app()->getConfig('@layout/blocks/' . $blockPathInfos[1] . '/' . $blockPathInfos[2]);
+        $blockConfig = Agl::app()->getConfig('@layout/blocks/' . $blockPathInfos[1] . '#' . $blockPathInfos[2]);
 
 		if (! BlockAbstract::checkAcl($blockPathInfos[1], $blockPathInfos[2])) {
 			return '';

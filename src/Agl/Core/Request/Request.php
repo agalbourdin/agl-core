@@ -239,7 +239,7 @@ class Request
 	private function _sanitize($pValue)
 	{
 		$value = trim($pValue);
-		$value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 		$value = (string)$value;
 		return $value;
 	}
