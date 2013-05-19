@@ -36,20 +36,20 @@ class Composer
     {
         $package    = $pEvent->getOperation()->getPackage()->getName();
         $path       = realpath('.'
-                    . DS
+                    . DIRECTORY_SEPARATOR
                     . $pEvent->getComposer()->getConfig()->get('vendor-dir')
-                    . DS
+                    . DIRECTORY_SEPARATOR
                     . $package
-                    . DS
+                    . DIRECTORY_SEPARATOR
                     . self::SETUP_DIR
-        ) . DS;
+        ) . DIRECTORY_SEPARATOR;
 
         if ($path and is_readable($path . self::INSTALL_FILE)) {
             $installFile    = $path . self::INSTALL_FILE;
             $installContent = require($installFile);
 
             foreach ($installContent as $file => $config) {
-                $destination     = realpath('.' . DS) . DS . $config['dir'];
+                $destination     = realpath('.' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config['dir'];
                 $destinationFile = $destination . $config['file'];
 
                 if (is_readable($destinationFile)) {
