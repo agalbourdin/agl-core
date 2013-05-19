@@ -39,7 +39,7 @@ class Loader
     public static function getInstance($pClass, array $pArgs = array())
     {
         if (strpos($pClass, Agl::AGL_CORE_POOL) === 0 or strpos($pClass, Agl::AGL_MORE_POOL) === 0) {
-            $moduleArr = explode(DS, $pClass);
+            $moduleArr = explode('/', $pClass);
             $moduleArr = array_map('ucfirst', $moduleArr);
             if (count($moduleArr) == 2) {
                 $moduleArr[] = $moduleArr[1];
@@ -58,11 +58,11 @@ class Loader
                 return $reflect->newInstanceArgs($pArgs);
             }
         } else if (strpos($pClass, ModelInterface::APP_PHP_HELPER_DIR) === 0) {
-            return self::getHelper(str_replace(ModelInterface::APP_PHP_HELPER_DIR . DS, '', $pClass));
+            return self::getHelper(str_replace(ModelInterface::APP_PHP_HELPER_DIR . '/', '', $pClass));
         } else if (strpos($pClass, ModelInterface::APP_PHP_MODEL_DIR) === 0) {
-            return self::getModel(str_replace(ModelInterface::APP_PHP_MODEL_DIR . DS, '', $pClass));
+            return self::getModel(str_replace(ModelInterface::APP_PHP_MODEL_DIR . '/', '', $pClass));
         } else if (strpos($pClass, CollectionInterface::APP_PHP_DIR) === 0) {
-            return self::getCollection(str_replace(CollectionInterface::APP_PHP_DIR . DS, '', $pClass));
+            return self::getCollection(str_replace(CollectionInterface::APP_PHP_DIR . '/', '', $pClass));
         }
 
         try {
@@ -83,10 +83,10 @@ class Loader
     public static function getSingleton($pClass, array $pArgs = array())
     {
         if (strpos($pClass, Agl::AGL_CORE_POOL) === 0 or strpos($pClass, Agl::AGL_MORE_POOL) === 0) {
-            $moduleArr = explode(DS, $pClass);
+            $moduleArr = explode('/', $pClass);
             if (count($moduleArr) == 2) {
                 $moduleArr[] = $moduleArr[1];
-                $pClass      = implode(DS, $moduleArr);
+                $pClass      = implode('/', $moduleArr);
             }
         }
 
@@ -171,7 +171,7 @@ class Loader
      */
     public static function getHelper($pClass)
     {
-        $classArr = explode(DS, $pClass);
+        $classArr = explode('/', $pClass);
         if (count($classArr) != 2) {
             throw new Exception("Helper syntax is incorrect ('$pClass')");
         }
