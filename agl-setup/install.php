@@ -12,7 +12,7 @@ return array(
 	),
 
 	'config/acl.sample.php' => array(
-		'dir'  => 'app/etc/config/core/',
+		'dir'  => 'app/etc/config/core/samples/',
 		'file' => 'acl.sample.php'
 	),
 
@@ -22,7 +22,7 @@ return array(
 	),
 
 	'config/events.sample.php' => array(
-		'dir'  => 'app/etc/config/core/',
+		'dir'  => 'app/etc/config/core/samples/',
 		'file' => 'events.sample.php'
 	),
 
@@ -32,7 +32,7 @@ return array(
 	),
 
 	'config/layout.sample.php' => array(
-		'dir'  => 'app/etc/config/core/',
+		'dir'  => 'app/etc/config/core/samples/',
 		'file' => 'layout.sample.php'
 	)
 
