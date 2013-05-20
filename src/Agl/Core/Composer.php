@@ -49,7 +49,7 @@ class Composer
                     . self::SETUP_DIR
         ) . DIRECTORY_SEPARATOR;
 
-        if ($path and is_readable($path)) {
+        if ($path !== DIRECTORY_SEPARATOR and is_readable($path)) {
             $Directory = new RecursiveDirectoryIterator($path);
             $Iterator  = new RecursiveIteratorIterator($Directory);
             $Regex     = new RegexIterator($Iterator, '#^(.*)?' . self::SETUP_DIR . '([a-zA-Z0-9\./_-]+\.[a-z]+)$#i', RecursiveRegexIterator::GET_MATCH);
