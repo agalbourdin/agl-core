@@ -1,6 +1,11 @@
 <?php
 namespace Agl\Core\Data;
 
+use \RecursiveDirectoryIterator,
+    \RecursiveIteratorIterator,
+    \RecursiveRegexIterator,
+    \RegexIterator;
+
 /**
  * Generic methods to manipulate directories.
  *
@@ -66,9 +71,9 @@ class Dir
     public static function listFilesRecursive($pDir, $pRegex = '(.*)')
     {
         $content   = array();
-        $Directory = new \RecursiveDirectoryIterator($pDir);
-        $Iterator  = new \RecursiveIteratorIterator($Directory);
-        $Regex     = new \RegexIterator($Iterator, '/^(.*)' . $pRegex . '$/i', \RecursiveRegexIterator::GET_MATCH);
+        $Directory = new RecursiveDirectoryIterator($pDir);
+        $Iterator  = new RecursiveIteratorIterator($Directory);
+        $Regex     = new RegexIterator($Iterator, '/^(.*)' . $pRegex . '$/i', RecursiveRegexIterator::GET_MATCH);
         foreach ($Regex as $file) {
             $content[] = $file[0];
         }

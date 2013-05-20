@@ -1,11 +1,16 @@
 <?php
 namespace Agl\Core;
 
-use \Exception,
-    \Composer\Script\PackageEvent;
+use \Composer\Script\PackageEvent,
+    \Exception,
+    \RecursiveDirectoryIterator,
+    \RecursiveIteratorIterator,
+    \RecursiveRegexIterator,
+    \RegexIterator;
 
 /**
- * Composer events methods. Provide automatic installation of More packages.
+ * Composer Observer.
+ * Provide automatic installation of packages config files.
  *
  * @category Agl_Core
  * @package Agl_Core
@@ -15,42 +20,44 @@ use \Exception,
 class Composer
 {
     /**
-     * AGL setup directory.
+     * Package setup directory.
      */
     const SETUP_DIR = 'agl-setup';
 
     /**
-     * AGL install file.
+     * Application's etc directory.
+     * Config files will be copied in this directory.
      */
-    const INSTALL_FILE = 'install.php';
+    const DESTINATION_DIR = 'app/etc';
 
     /**
      * Post package install event, fired by Composer.
      * Create config directories and files in application if required by
-     * the package.
+     * package.
      *
      * @param PackageEvent $pEvent
      * @return bool
      */
     public static function postPackageInstall(PackageEvent $pEvent)
     {
-        $package    = $pEvent->getOperation()->getPackage()->getName();
         $path       = realpath('.'
                     . DIRECTORY_SEPARATOR
                     . $pEvent->getComposer()->getConfig()->get('vendor-dir')
                     . DIRECTORY_SEPARATOR
-                    . $package
+                    . $pEvent->getOperation()->getPackage()->getName()
                     . DIRECTORY_SEPARATOR
                     . self::SETUP_DIR
         ) . DIRECTORY_SEPARATOR;
 
-        if ($path and is_readable($path . self::INSTALL_FILE)) {
-            $installFile    = $path . self::INSTALL_FILE;
-            $installContent = require($installFile);
+        if ($path and is_readable($path)) {
+            $Directory = new RecursiveDirectoryIterator($path);
+            $Iterator  = new RecursiveIteratorIterator($Directory);
+            $Regex     = new RegexIterator($Iterator, '#^(.*)?' . self::SETUP_DIR . '([a-zA-Z0-9\./_-]+\.[a-z]+)$#i', RecursiveRegexIterator::GET_MATCH);
+            foreach ($Regex as $file) {
+                $fileInfo = pathinfo($file[2]);
 
-            foreach ($installContent as $file => $config) {
-                $destination     = realpath('.' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config['dir'];
-                $destinationFile = $destination . $config['file'];
+                $destination = realpath('.' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $fileInfo['dirname'] . DIRECTORY_SEPARATOR;
+                $destinationFile = $destination . $fileInfo['basename'];
 
                 if (is_readable($destinationFile)) {
                     continue;
@@ -58,9 +65,12 @@ class Composer
 
                 if ((is_dir($destination) and ! is_writable($destination))
                     or (! is_dir($destination) and ! mkdir($destination, 0777, true))
-                    or ! copy($path . $file, $destinationFile)) {
-                    throw new Exception("Installation failed. Check that 'app/etc/' has write permissions (recursively).");
+                    or ! copy($path . $file[2], $destinationFile)) {
+                    throw new Exception("Installation failed. Check that 'app/etc/' has write permissions (recursively) and that 'agl-core' package is installed.");
                 }
+
+                chmod($destinationFile, 0777);
+                chmod($destination, 0777);
             }
         }
 
