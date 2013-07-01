@@ -37,6 +37,13 @@ abstract class BlockAbstract
 	protected $_file = NULL;
 
 	/**
+	 * Array of variables (key => value) that will be passed to block.
+	 *
+	 * @var array
+	 */
+	protected $_vars = array();
+
+	/**
      * Create and get an instance of Raw Cache.
      *
      * @param array $pBlockConfig Block configuration
@@ -130,6 +137,18 @@ abstract class BlockAbstract
 	}
 
 	/**
+	 * Set block variables.
+	 *
+	 * @var array
+	 * @return BlockAbstract
+	 */
+	public function setVars(array $pVars = array())
+	{
+		$this->_vars = $pVars;
+		return $this;
+	}
+
+	/**
 	 * Get the parent View class.
 	 *
 	 * @return View
@@ -144,10 +163,13 @@ abstract class BlockAbstract
 	}
 
 	/**
-	 * Include the template in the current page.
+	 * Extract variables and include the template in the current page.
+	 *
 	 */
 	public function render()
 	{
+		extract($this->_vars);
+
 		$path = APP_PATH
 		        . ViewInterface::APP_HTTP_TEMPLATE_DIR
 		        . DS

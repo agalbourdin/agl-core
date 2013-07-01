@@ -40,8 +40,8 @@ class Html
         return $this->getView()->getMeta();
     }
 
-    public function getBlock($pBlock)
+    public function getBlock($pBlock, array $pVars = array())
     {
-        return $this->getView()->getBlock($pBlock);
+        return $this->getView()->getBlock($pBlock, $pVars);
     }
 }
