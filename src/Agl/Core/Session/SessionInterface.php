@@ -18,9 +18,7 @@ interface SessionInterface
     const STORAGE_DB   = 'db';
 
     public function __construct();
-    public function __call($pMethod, array $pArgs);
     public function __get($pVar);
     public function __set($pVar, $pValue);
     public function __unset($pVar);
-    public function hasAttribute($pVar);
 }

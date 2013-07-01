@@ -24,34 +24,6 @@ abstract class SessionAbstract
         }
 	}
 
-	/**
-     * Magic method - handle the set, get and remove call.
-     *
-     * @param string $pMethod Called method
-     * @param array $pArgs Arguments
-     * @return mixed
-     */
-    public function __call($pMethod, array $pArgs)
-    {
-        if (preg_match('/^get/', $pMethod)) {
-            $var = str_replace('get', '', $pMethod);
-            return $this->$var;
-        } else if (preg_match('/^set/', $pMethod) and array_key_exists(0, $pArgs)) {
-            $var = str_replace('set', '', $pMethod);
-            $this->$var = $pArgs[0];
-            return $this;
-        } else if (preg_match('/^remove/', $pMethod)) {
-            $var = str_replace('remove', '', $pMethod);
-            unset($this->$var);
-            return $this;
-        } else if (preg_match('/^has/', $pMethod)) {
-            $var = str_replace('has', '', $pMethod);
-            return $this->hasAttribute($var);
-        }
-
-        throw new Exception("Undefined method '$pMethod'");
-    }
-
     /**
      * Return the requested attribute value.
      *
@@ -93,17 +65,6 @@ abstract class SessionAbstract
         if (array_key_exists($attribute, $_SESSION)) {
             unset($_SESSION[$attribute]);
         }
-    }
-
-    /**
-     * Check if an attribute is set.
-     *
-     * @return bool
-     */
-    public function hasAttribute($pVar)
-    {
-    	$attribute = StringData::fromCamelCase($pVar);
-    	return (array_key_exists($attribute, $_SESSION));
     }
 
     /**

@@ -83,10 +83,15 @@ abstract class ItemAbstract
         if (strpos($pMethod, 'get') === 0) {
             $var = substr($pMethod, 3);
             return $this->$var;
-        } else if (strpos($pMethod, 'set') === 0 and isset($pArgs[0])) {
-            $var        = substr($pMethod, 3);
-            $this->$var = $pArgs[0];
-            return $this;
+        } else if (strpos($pMethod, 'set') === 0) {
+            $var = substr($pMethod, 3);
+            if (isset($pArgs[0])) {
+                $this->$var = $pArgs[0];
+                return $this;
+            } else {
+                unset($this->$var);
+                return true;
+            }
         } else if (strpos($pMethod, 'unset') === 0) {
             $var = substr($pMethod, 5);
             unset($this->$var);
