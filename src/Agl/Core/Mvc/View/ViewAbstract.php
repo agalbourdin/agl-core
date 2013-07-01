@@ -226,9 +226,11 @@ abstract class ViewAbstract
 	 * Create a block and include it into the view.
 	 *
 	 * @param string $pBlock Block identifier
+	 * @param array $pVars Array of variables (key => value) that will be
+	 * passed to block
 	 * @return Block
 	 */
-	public function getBlock($pBlock)
+	public function getBlock($pBlock, array $pVars = array())
 	{
 		if (! preg_match('#^([a-z0-9]+)/([a-z0-9_-]+)$#', $pBlock, $blockPathInfos)
 			or ! isset($blockPathInfos[1])
@@ -286,6 +288,7 @@ abstract class ViewAbstract
 
         $blockModel
 			->setFile($blockPathInfos[1] . DS . $blockPathInfos[2] . static::FILE_EXT)
+			->setVars($pVars)
 			->render();
 
 		$content = ob_get_clean();
