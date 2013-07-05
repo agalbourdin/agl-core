@@ -7,16 +7,67 @@ use \Agl\Core\Agl,
     \Exception;
 
 /**
- * Cahe management as PHP array.
+ * Cache management as PHP array.
  *
  * @category Agl_Core
- * @package Agl_Core_Cache_File_Format
+ * @package Agl_Core_Cache
  * @version 0.1.0
  */
 
 class File
     implements CacheInterface
 {
+    /**
+     * The directory name where to save cache files (file type only).
+     */
+    const AGL_VAR_CACHE_DIR = 'cache';
+
+    /**
+     * The extension to use for cache files (file type only).
+     */
+    const AGL_VAR_CACHE_EXT = '.cache';
+
+    /**
+     * Files default content (when created).
+     */
+    const DEFAULT_CONTENT = '[]';
+
+    /**
+     * Number of subdirectories to create to store a cache file.
+     */
+    const SUB_DIRS = 3;
+
+    /**
+     * Opened cached files.
+     *
+     * @var array
+     */
+    private $_files = array();
+
+    /**
+     * Return the cache file path.
+     *
+     * @param string $pKey
+     * @return string
+     */
+    private static function _getFilePath($pKey)
+    {
+        if (strpos($pKey, static::SECTION_DELIMITER) !== false) {
+            $keyArr   = explode(static::SECTION_DELIMITER, $pKey, 2);
+            $fileName = md5($keyArr[0]);
+        } else {
+            $fileName = md5($pKey);
+        }
+
+        return APP_PATH
+             . Agl::APP_VAR_DIR
+             . self::AGL_VAR_CACHE_DIR
+             . DS
+             . FileData::getSubPath($fileName, self::SUB_DIRS)
+             . $fileName
+             . self::AGL_VAR_CACHE_EXT;
+    }
+
     /**
      * Create the requested cache file and directories.
      *
@@ -32,7 +83,7 @@ class File
             throw new Exception("Unable to create the cache directory '$dir'");
         }
 
-        if (! FileData::create($pFile)) {
+        if (! FileData::create($pFile, self::DEFAULT_CONTENT)) {
             throw new Exception("Unable to create the cache file '$pFile'");
         }
 
@@ -40,68 +91,55 @@ class File
     }
 
     /**
-     * Check if the TTL is set and if the cache has expired.
+     * Remove cache entry if expired.
      *
-     * @param int $pTtl Cache Time to Live in seconds, 0 = never expires
-     * @return File
+     * @param string $pFile
+     * @param string $pKey
+     * @return bool
      */
-    private function _checkTtl($pTtl)
+    private function _checkTtl($pFile, $pKey)
     {
-        $file = $this->getFullPath();
-        if ($pTtl and is_writable($file) and (time() - filemtime($file)) > $pTtl) {
-            FileData::write($file, '');
+        if ($this->_files[$pFile][$pKey][static::AGL_CACHE_EXPIRE] < time()) {
+            unset($this->_files[$pFile][$pKey]);
+            $this->_save($pFile);
+
+            return false;
         }
 
-        return $this;
+        return true;
     }
 
+    /**
+     * Load the requested cache file, and create it if required.
+     *
+     * @param string $pKey
+     * @return string File path
+     */
     private function _loadFile($pKey)
     {
-        $file = $this->_getFile($pKey);
-        if (array_key_exists($file, $this->_files)) {
+        $file = self::_getFilePath($pKey);
+        if (isset($this->_files[$file])) {
             return $file;
         }
 
         $this->_createFile($file);
         $this->_files[$file] = json_decode(file_get_contents($file), true);
 
-        if ($this->_files[$file] === NULL) {
-            $this->_files[$file] = array();
-        }
-
         return $file;
     }
 
     /**
-     * Return the cache file path.
+     * Save cache of the specified file.
      *
-     * @param string $pKey
-     * @return string
+     * @param string $pFile
+     * @return bool
      */
-    private function _getFile($pKey)
+    private function _save($pFile)
     {
-        if (strpos($pKey, '.') !== false) {
-            $keyArr   = explode('.', $pKey);
-            $fileName = md5($keyArr[0]);
-        } else {
-            $fileName = md5($pKey);
+        if (isset($this->_files[$pFile])) {
+            return FileData::write($pFile, json_encode($this->_files[$pFile]));
         }
-
-        return APP_PATH
-             . Agl::APP_VAR_DIR
-             . static::AGL_VAR_CACHE_DIR
-             . DS
-             . FileData::getSubPath($fileName)
-             . $fileName
-             . static::AGL_VAR_CACHE_EXT;
     }
-
-    /**
-     * Opened cached files.
-     *
-     * @var array
-     */
-    private $_files = array();
 
     /**
      * Set a value to the cached array.
@@ -114,22 +152,18 @@ class File
      */
     public function set($pKey, $pValue, $pTtl = 0)
     {
-        Agl::validateParams(array(
-            'String' => $pKey
-        ));
-
         $file = $this->_loadFile($pKey);
 
-        if (array_key_exists($pKey, $this->_files[$file])) {
+        $previousValue = $this->get($pKey);
 
-        } else {
-            $this->_files[$file][$pKey] = array(
-                'expire' => ($pTtl) ? (time() + $pTtl) : $pTtl,
-                'value'  => $pValue
-            );
+        $this->_files[$file][$pKey] = array(
+            static::AGL_CACHE_EXPIRE => ($pTtl) ? (time() + $pTtl) : $pTtl,
+            static::AGL_CACHE_VALUE  => $pValue
+        );
+
+        if ($previousValue !== $pValue) {
+            $this->_save($file);
         }
-
-        var_dump($this->_files);
 
         return $this;
     }
@@ -142,16 +176,31 @@ class File
      */
     public function get($pKey)
     {
-        if (array_key_exists($pKey, $this->_array)) {
-            return $this->_array[$pKey];
+        $file = $this->_loadFile($pKey);
+
+        if (isset($this->_files[$file][$pKey]) and $this->_checkTtl($file, $pKey)) {
+            return $this->_files[$file][$pKey][static::AGL_CACHE_VALUE];
         }
 
-        return static::AGL_CACHE_TAG_NOT_FOUND;
+        return NULL;
     }
 
+    /**
+     * Check if key exists in cache (a key is considered existing when its value
+     * is NULL).
+     *
+     * @param string $pKey
+     * @return bool
+     */
     public function has($pKey)
     {
+        $file = $this->_loadFile($pKey);
 
+        if (isset($this->_files[$file][$pKey]) and $this->_checkTtl($file, $pKey)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -162,8 +211,42 @@ class File
      */
     public function remove($pKey)
     {
-        if (array_key_exists($pKey, $this->_array)) {
-            unset($this->_array[$pKey]);
+        $file = $this->_loadFile($pKey);
+
+        if (isset($this->_files[$file][$pKey])) {
+            unset($this->_files[$file][$pKey]);
+            $this->_save($file);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Flush the entire cache or a cache section.
+     *
+     * @param string $pSection
+     * @return File
+     */
+    public function flush($pSection = '')
+    {
+        if ($pSection) {
+            $file = self::_getFilePath($pSection);
+            FileData::delete($file);
+
+            $path = realpath(dirname($file));
+            for ($i = 0; $i < self::SUB_DIRS; $i++) {
+                $current = $path;
+                $path    = realpath($path . '/../');
+                if (count(glob($current . '/*')) === 0) {
+                    DirecoryData::delete($current);
+                }
+            }
+        } else {
+            DirecoryData::deleteRecursive(
+                APP_PATH
+                . Agl::APP_VAR_DIR
+                . self::AGL_VAR_CACHE_DIR
+            );
         }
 
         return $this;

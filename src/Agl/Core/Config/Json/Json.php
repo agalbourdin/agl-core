@@ -16,6 +16,7 @@ use \Agl\Core\Agl,
  * @category Agl_Core
  * @package Agl_Core_Config_Json
  * @version 0.1.0
+ * @deprecated
  */
 
 class Json
@@ -264,7 +265,7 @@ class Json
                     return $this->_cache[$pPath];
                 }
             } else {
-                $value = self::$_cacheInstance->get($pPath);
+                $value = self::$_cacheInstance->get($pPath, false);
                 if ($value !== FileInterface::AGL_CACHE_TAG_NOT_FOUND) {
                     return $value;
                 }

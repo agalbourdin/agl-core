@@ -12,6 +12,7 @@ use \Agl\Core\Agl,
  * @category Agl_Core
  * @package Agl_Core_Cache_File
  * @version 0.1.0
+ * @deprecated
  */
 
 abstract class FileAbstract

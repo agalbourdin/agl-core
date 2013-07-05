@@ -7,6 +7,7 @@ namespace Agl\Core\Cache\File;
  * @category Agl_Core
  * @package Agl_Core_Cache_File
  * @version 0.1.0
+ * @deprecated
  */
 
 interface FileInterface

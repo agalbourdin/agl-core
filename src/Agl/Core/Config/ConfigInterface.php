@@ -25,22 +25,15 @@ interface ConfigInterface
     const CONFIG_CACHE_TYPE_DYNAMIC = 'dynamic';
 
     /**
-     * Environment prefix name in the $_SERVER array (optional).
-     */
-    const ENV_PREFIX_NAME      = 'AGL_ENV';
-    const ENV_PREFIX_SEPARATOR = '_';
-
-    /**
      * Ajax tag for config keys.
      */
     const CONFIG_CACHE_KEY_AJAX = 'ajax';
 
     /**
-     * Events path (rewrited as events are splitted into multiple files).
+     * Key separator.
      */
-    const CONFIG_EVENTS_PATH = '@app/events';
+    const CACHE_KEY_SEPARATOR = '_';
 
     public function __construct();
-    public static function getCacheSingleton();
     public function getConfig($pPath);
 }

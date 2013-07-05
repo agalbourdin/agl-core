@@ -7,6 +7,7 @@ namespace Agl\Core\Cache\Apc;
  * @category Agl_Core
  * @package Agl_Core_Cache_Apc
  * @version 0.1.0
+ * @deprecated
  */
 
 class Apc

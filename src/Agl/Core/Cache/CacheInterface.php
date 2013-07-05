@@ -18,22 +18,19 @@ interface CacheInterface
     const TYPE_APC  = 'apc';
 
     /**
-     * The directory name where to save cache files.
+     * Keys to store cache value and expire timestamp.
      */
-    const AGL_VAR_CACHE_DIR = 'cache';
+    const AGL_CACHE_VALUE  = 'value';
+    const AGL_CACHE_EXPIRE = 'expire';
 
     /**
-     * The extension to use for cache files.
+     * Section delimiter.
      */
-    const AGL_VAR_CACHE_EXT = '.cache';
-
-    /**
-     * The tag returned when the requested cache path doesn't exist (file type).
-     */
-    const AGL_CACHE_TAG_NOT_FOUND = '_agl_not_found';
+    const SECTION_DELIMITER = '.';
 
     public function set($pKey, $pValue, $pTtl = 0);
     public function get($pKey);
     public function has($pKey);
     public function remove($pKey);
+    public function flush($pSection = '');
 }

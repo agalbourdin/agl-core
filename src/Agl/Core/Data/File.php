@@ -38,14 +38,21 @@ class File
      * Create an empty file.
      *
      * @param string $pPath Absolute path to the file to create
+     * @param string $pContent Optional file content
      * @return bool
      */
-    public static function create($pPath)
+    public static function create($pPath, $pContent = '')
     {
         if (! file_exists($pPath)) {
-            if (! fopen($pPath, 'w') or ! chmod($pPath, 0777)) {
+            if (! $fp = fopen($pPath, 'w') or ! chmod($pPath, 0777)) {
                 return false;
             }
+
+            if ($pContent) {
+                fwrite($fp, $pContent);
+            }
+
+            fclose($fp);
         }
 
         return true;

@@ -41,6 +41,21 @@ class Dir
     }
 
     /**
+     * Delete a directory.
+     *
+     * @param string $pDir
+     * @return bool
+     */
+    public static function delete($pDir)
+    {
+        if (is_dir($pDir)) {
+            rmdir($pDir);
+        }
+
+        return true;
+    }
+
+    /**
      * Return a list of the sub directories of $pDir.
      *
      * @param string $pDir The directory to scan

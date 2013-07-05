@@ -4,6 +4,7 @@ namespace Agl\Core\Debug;
 use \Agl\Core\Agl,
     \Agl\Core\Data\File as FileData,
     \Agl\Core\Mvc\View\View,
+    \Agl\Core\Mvc\View\ViewAbstract,
     \Agl\Core\Mvc\View\ViewInterface,
     \Agl\Core\Registry\Registry,
     \Exception;
@@ -39,11 +40,18 @@ class Debug
     public static function isHtmlView()
     {
         if (self::$_isHtmlView === NULL) {
+            self::$_isHtmlView = false;
+
             $view = Registry::get('view');
-            if ($view instanceof View and $view->getType() == ViewInterface::TYPE_HTML) {
+            if ($view === NULL) {
+                $template = ViewAbstract::getTemplateConfig();
+                if (is_array($template)
+                    and isset($template['type'])
+                    and $template['type'] === ViewInterface::TYPE_HTML) {
+                    self::$_isHtmlView = true;
+                }
+            } else if ($view instanceof View and $view->getType() == ViewInterface::TYPE_HTML) {
                 self::$_isHtmlView = true;
-            } else {
-                self::$_isHtmlView = false;
             }
         }
 

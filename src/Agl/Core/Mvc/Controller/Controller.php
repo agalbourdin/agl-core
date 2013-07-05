@@ -2,9 +2,6 @@
 namespace Agl\Core\Mvc\Controller;
 
 use \Agl\Core\Agl,
-	\Agl\Core\Cache\Apc\Apc,
-	\Agl\Core\Cache\File\FileInterface,
-	\Agl\Core\Cache\File\Format\Raw as RawCache,
 	\Agl\Core\Config\ConfigInterface,
 	\Agl\Core\Data\String as StringData,
 	\Agl\Core\Mvc\View\View,
@@ -43,28 +40,26 @@ class Controller
 	const APP_PHP_CONTROLLER_DIR = 'controller';
 
 	/**
+	 * Cache info key name.
+	 */
+	const CACHE_KEY = 'key';
+
+	/**
 	 * Render the view page.
 	 *
 	 * @return Controller
 	 */
-	protected function _renderView()
+	private function _renderView()
 	{
-		$cacheInstance = $this->getCacheInstance();
+		$isCacheEnabled = Agl::app()->isCacheEnabled();
 
-		if ($cacheInstance) {
-			$apcEnabled = Apc::isEnabled();
+		if ($isCacheEnabled) {
+			$cacheInfo     = $this->_getCacheInfo();
+			$cacheInstance = Agl::getCache();
 
-			if ($apcEnabled) {
-				$content = Apc::get($cacheInstance[0]);
-	            if ($content !== false) {
-	                return $content;
-	            }
-			} else {
-	            $content = $cacheInstance->get();
-	            if ($content) {
-	                return $content;
-	            }
-	        }
+			if ($cacheInstance->has($cacheInfo[self::CACHE_KEY])) {
+				return $cacheInstance->get($cacheInfo[self::CACHE_KEY]);
+			}
 		}
 
         $viewModel = $this->_setView();
@@ -73,14 +68,8 @@ class Controller
 			->startBuffer()
 			->render();
 
-		if ($cacheInstance) {
-        	if ($apcEnabled) {
-        		Apc::set($cacheInstance[0], $content, $cacheInstance[1]);
-        	} else {
-        		$cacheInstance
-	                ->set($content)
-	                ->save();
-        	}
+		if ($isCacheEnabled) {
+        	$cacheInstance->set($cacheInfo[self::CACHE_KEY], $content, $cacheInfo[ConfigInterface::CONFIG_CACHE_TTL_NAME]);
 		}
 
 		return $content;
@@ -91,7 +80,7 @@ class Controller
 	 *
 	 * @return mixed
 	 */
-	protected function _setView()
+	private function _setView()
 	{
 		$request = Agl::getRequest();
 		$module  = $request->getModule();
@@ -121,63 +110,57 @@ class Controller
 	}
 
 	/**
-	 * Instanciate the cache if required.
-	 * Tha cache key is composed of the module, the view and the actions names,
-	 * and of the locale code and the request string if required.
+	 * Return a TTL and acache key composed of the module, the view, the
+	 * actions and of the locale code and the request string if required.
 	 *
-	 * @return null|Raw|array
+	 * @return array
 	 */
-	public function getCacheInstance()
+	private function _getCacheInfo()
 	{
-		if (! Agl::app()->isCacheEnabled()) {
-			return NULL;
-		}
-
 		$request     = Agl::getRequest();
 		$module      = $request->getModule();
 		$view        = $request->getView();
 		$action      = $request->getAction();
-		$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/cache');
+		$cacheInfo   = array();
+		$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/' . ConfigInterface::CONFIG_CACHE_NAME);
 
 		if ($cacheConfig === NULL) {
-			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/cache');
+			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/' . ConfigInterface::CONFIG_CACHE_NAME);
 		}
 
 		if ($cacheConfig === NULL) {
-			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/cache');
+			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/' . ConfigInterface::CONFIG_CACHE_NAME);
 		}
 
-		if ($cacheConfig !== NULL and is_array($cacheConfig)) {
+		if ($cacheConfig === NULL) {
+			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . ConfigInterface::CONFIG_CACHE_NAME);
+		}
+
+		if (is_array($cacheConfig)) {
 			$configCacheTtlName  = ConfigInterface::CONFIG_CACHE_TTL_NAME;
 			$configCacheTypeName = ConfigInterface::CONFIG_CACHE_TYPE_NAME;
 
-			$ttl = (isset($cacheConfig[$configCacheTtlName]) and ctype_digit($cacheConfig[$configCacheTtlName])) ? (int)$cacheConfig[$configCacheTtlName] : 0;
+			$cacheInfo[$configCacheTtlName] = (isset($cacheConfig[$configCacheTtlName]) and ctype_digit($cacheConfig[$configCacheTtlName])) ? (int)$cacheConfig[$configCacheTtlName] : 0;
 
 			$type = (isset($cacheConfig[$configCacheTypeName])) ? $cacheConfig[$configCacheTypeName] : ConfigInterface::CONFIG_CACHE_TYPE_STATIC;
 
-			$configKeySeparator = FileInterface::CACHE_FILE_SEPARATOR;
+			$configKeySeparator = ConfigInterface::CACHE_KEY_SEPARATOR;
 
-			$configKey = ViewInterface::CACHE_FILE_PREFIX . $module . $configKeySeparator . $view . $configKeySeparator . $action;
+			$cacheInfo[self::CACHE_KEY] = ViewInterface::CACHE_FILE_PREFIX . $module . $configKeySeparator . $view . $configKeySeparator . $action;
 
 			if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale')) {
-	            $configKey .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getLanguage();
+	            $cacheInfo[self::CACHE_KEY] .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getLanguage();
 	        }
 
 			if ($type == ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
-				$configKey .= $configKeySeparator . StringData::rewrite($request->getReq());
+				$cacheInfo[self::CACHE_KEY] .= $configKeySeparator . StringData::rewrite($request->getReq());
 				if (Request::isAjax()) {
-					$configKey .= $configKeySeparator . ConfigInterface::CONFIG_CACHE_KEY_AJAX;
+					$cacheInfo[self::CACHE_KEY] .= $configKeySeparator . ConfigInterface::CONFIG_CACHE_KEY_AJAX;
 				}
-			}
-
-			if (Apc::isEnabled()) {
-				return array($configKey, $ttl);
-			} else {
-				return new RawCache($configKey, $ttl);
 			}
 		}
 
-		return NULL;
+		return $cacheInfo;
 	}
 
 	/**

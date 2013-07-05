@@ -2,9 +2,7 @@
 namespace Agl\Core\Config;
 
 use \Agl\Core\Agl,
-    \Agl\Core\Cache\Apc\Apc,
-    \Agl\Core\Cache\File\FileInterface,
-    \Agl\Core\Cache\File\Format\Arr as CacheArr,
+    \Agl\Core\Cache\CacheInterface,
     \Agl\Core\Data\Dir as DirData,
     \Agl\Core\Mvc\View\ViewInterface;
 
@@ -19,6 +17,17 @@ use \Agl\Core\Agl,
 class Config
     implements ConfigInterface
 {
+        /**
+     * Environment prefix name in the $_SERVER array (optional).
+     */
+    const ENV_PREFIX_NAME      = 'AGL_ENV';
+    const ENV_PREFIX_SEPARATOR = '_';
+
+    /**
+     * Events path (rewrited as events are splitted into multiple files).
+     */
+    const CONFIG_EVENTS_PATH = '@app/events';
+
     /**
      * Global configuration file.
      */
@@ -32,31 +41,12 @@ class Config
     /**
      * Extension used by configuration files.
      */
-    const CONFIG_EXT = '.php';
+    const EXT = '.php';
 
     /**
      * The modules config directory.
      */
-    const CONFIG_MODULES_DIR = 'config';
-
-    /**
-     * Identifier for the configuration cache file.
-     */
-    const CONFIG_CACHE_ID = 'config_php';
-
-    /**
-     * Cache instance if required.
-     *
-     * @var null|Arr
-     */
-    private static $_cacheInstance = NULL;
-
-    /**
-     * Register Data Json instance.
-     *
-     * @var array
-     */
-    private $_instance = array();
+    const MAIN_DIR = 'config';
 
     /**
      * Config values are saved in this array when requested for the
@@ -67,18 +57,11 @@ class Config
     private $_cache = array();
 
     /**
-     * Is configuration cache enabled?
+     * Config files loaded are stored in this array.
      *
-     * @var bool
+     * @var array
      */
-    private $_cacheEnabled = NULL;
-
-    /**
-     * Is APC enabled?
-     *
-     * @var bool
-     */
-    private $_apcEnabled = NULL;
+    private $_instance = array();
 
     /**
      * Environment prefix to use to load configuration files.
@@ -88,41 +71,13 @@ class Config
     private $_envPrefix = '';
 
     /**
-     * Create / Get an instance of Array Cache.
-     *
-     * @return Arr
-     */
-    public static function getCacheSingleton()
-    {
-        if (self::$_cacheInstance === NULL) {
-            self::$_cacheInstance = new CacheArr(self::CONFIG_CACHE_ID);
-        }
-
-        return self::$_cacheInstance;
-    }
-
-    /**
-     * Initialize the APC cache if enabled.
+     * Initialize the environment prefix.
      */
     public function __construct()
     {
-        $envPrefixName = static::ENV_PREFIX_NAME;
+        $envPrefixName = self::ENV_PREFIX_NAME;
         if (isset($_SERVER[$envPrefixName]) and $_SERVER[$envPrefixName]) {
-            $this->_envPrefix = $_SERVER[$envPrefixName] . static::ENV_PREFIX_SEPARATOR;
-        }
-
-        $this->_cacheEnabled = Agl::app()->isCacheEnabled();
-
-        if ($this->_cacheEnabled) {
-            $this->_apcEnabled   = Apc::isEnabled();
-            if ($this->_apcEnabled) {
-                $cache = Apc::get(self::CONFIG_CACHE_ID);
-                if (is_array($cache)) {
-                    $this->_cache = $cache;
-                }
-            } else {
-                self::getCacheSingleton();
-            }
+            $this->_envPrefix = $_SERVER[$envPrefixName] . self::ENV_PREFIX_SEPARATOR;
         }
     }
 
@@ -135,7 +90,7 @@ class Config
     {
         return APP_PATH
              . Agl::APP_ETC_DIR
-             . self::CONFIG_MODULES_DIR
+             . self::MAIN_DIR
              . DS;
     }
 
@@ -157,18 +112,18 @@ class Config
                     $file .= strtolower($matches[1])
                            . DS
                            . $matches[2]
-                           . self::CONFIG_EXT;
+                           . self::EXT;
                 } else {
                     $file .= strtolower($matches[1])
                            . DS
                            . $matches[2]
                            . DS
                            . self::MAIN_CONFIG_FILE
-                           . self::CONFIG_EXT;
+                           . self::EXT;
                 }
         } else {
             $file .= self::MAIN_CONFIG_FILE
-                   . self::CONFIG_EXT;
+                   . self::EXT;
         }
 
         if (! isset($this->_instance[$file])) {
@@ -185,7 +140,7 @@ class Config
      */
     private function _getEventsConfig()
     {
-        $files = DirData::listFilesRecursive(self::_getConfigPath(), self:: MAIN_EVENTS_FILE . self::CONFIG_EXT);
+        $files = DirData::listFilesRecursive(self::_getConfigPath(), self:: MAIN_EVENTS_FILE . self::EXT);
 
         $content = array(self:: MAIN_EVENTS_FILE => array());
         foreach ($files as $file) {
@@ -206,39 +161,37 @@ class Config
      */
     private function _getConfigValues($pPath, $pForceGlobalArray)
     {
-        if (! array_key_exists($pPath, $this->_cache)) {
-            if ($pPath === static::CONFIG_EVENTS_PATH) {
-                $content = $this->_getEventsConfig();
-            } else {
-                $content = $this->_getInstance($pPath);
-            }
+        if ($pPath === self::CONFIG_EVENTS_PATH) {
+            $content = $this->_getEventsConfig();
+        } else {
+            $content = $this->_getInstance($pPath);
+        }
 
-            $path = str_replace('@app/', '', $pPath);
-            $path = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)(/)?#', '', $path);
+        $path = str_replace('@app/', '', $pPath);
+        $path = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)(/)?#', '', $path);
 
-            if ($path) {
-                $pathArr = explode('/', $path);
-                $nbKeys  = count($pathArr) - 1;
+        if ($path) {
+            $pathArr = explode('/', $path);
+            $nbKeys  = count($pathArr) - 1;
 
-                foreach($pathArr as $i => $key) {
-                    $key = str_replace('#', '/', $key);
+            foreach($pathArr as $i => $key) {
+                $key = str_replace('#', '/', $key);
 
-                    if (! isset($content[$key])) {
-                        $this->_cache[$pPath] = NULL;
-                        break;
-                    } else if ($i < $nbKeys) {
-                        $content = $content[$key];
-                    } else if ($i == $nbKeys) {
-                        $this->_cache[$pPath] = (isset($content[$this->_envPrefix . $key])) ? $content[$this->_envPrefix . $key] : $content[$key];
-                    }
+                if (! isset($content[$key])) {
+                    $this->_cache[$pPath] = NULL;
+                    break;
+                } else if ($i < $nbKeys) {
+                    $content = $content[$key];
+                } else if ($i == $nbKeys) {
+                    $this->_cache[$pPath] = (isset($content[$this->_envPrefix . $key])) ? $content[$this->_envPrefix . $key] : $content[$key];
                 }
-            } else {
-                $this->_cache[$pPath] = $content;
             }
+        } else {
+            $this->_cache[$pPath] = $content;
+        }
 
-            if ($pForceGlobalArray and (! is_array($this->_cache[$pPath]) or (is_array($this->_cache[$pPath]) and ! array_key_exists(0, $this->_cache[$pPath])))) {
-                $this->_cache[$pPath] = array($this->_cache[$pPath]);
-            }
+        if ($pForceGlobalArray and (! is_array($this->_cache[$pPath]) or (is_array($this->_cache[$pPath]) and ! array_key_exists(0, $this->_cache[$pPath])))) {
+            $this->_cache[$pPath] = array($this->_cache[$pPath]);
         }
 
         return $this->_cache[$pPath];
@@ -254,31 +207,12 @@ class Config
      */
     public function getConfig($pPath, $pForceGlobalArray = false)
     {
-        if ($this->_cacheEnabled) {
-            if ($this->_apcEnabled) {
-                if (array_key_exists($pPath, $this->_cache)) {
-                    return $this->_cache[$pPath];
-                }
-            } else {
-                $value = self::$_cacheInstance->get($pPath);
-                if ($value !== FileInterface::AGL_CACHE_TAG_NOT_FOUND) {
-                    return $value;
-                }
-            }
+        if (array_key_exists($pPath, $this->_cache)) {
+            return $this->_cache[$pPath];
         }
 
-        $value = $this->_getConfigValues($pPath, $pForceGlobalArray);
+        $this->_cache[$pPath] = $this->_getConfigValues($pPath, $pForceGlobalArray);
 
-        if ($this->_cacheEnabled) {
-            if ($this->_apcEnabled) {
-                Apc::set(self::CONFIG_CACHE_ID, $this->_cache);
-            } else {
-                self::$_cacheInstance
-                    ->set($pPath, $value)
-                    ->save();
-            }
-        }
-
-        return $value;
+        return $this->_cache[$pPath];
     }
 }

@@ -217,6 +217,16 @@ final class Agl
     }
 
     /**
+     * Get the application's Cache class as a singleton.
+     *
+     * @return Cache
+     */
+    public static function getCache()
+    {
+        return self::getSingleton(self::AGL_CORE_POOL . '/cache/cache');
+    }
+
+    /**
      * Check if Agl has been initialized.
      *
      * @return bool

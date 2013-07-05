@@ -2,7 +2,7 @@
 namespace Agl\Core\Cache;
 
 use \Agl\Core\Agl,
-	//\Agl\Core\Cache\Apc as ApcCache,
+	\Agl\Core\Cache\Apc as ApcCache,
 	\Agl\Core\Cache\File as FileCache,
 	\Exception;
 
@@ -16,9 +16,9 @@ use \Agl\Core\Agl,
  */
 
 switch(Agl::app()->getConfig('@app/cache/type')) {
-    /*case CacheInterface::TYPE_APC:
+    case CacheInterface::TYPE_APC:
         class Cache extends ApcCache { }
-        break;*/
+        break;
     case CacheInterface::TYPE_FILE:
         class Cache extends FileCache { }
         break;
