@@ -2,7 +2,8 @@
 namespace Agl\Core\Mvc\View;
 
 use \Agl\Core\Agl,
-	\Agl\Core\Cache\Apc\Apc,
+	\Agl\Core\Cache\CacheInterface,
+	\Agl\Core\Config\ConfigInterface,
 	\Agl\Core\Debug\Debug,
 	\Agl\Core\Mvc\Block\Block,
 	\Agl\Core\Mvc\Block\BlockAbstract,
@@ -244,28 +245,24 @@ abstract class ViewAbstract
         );
 
         $blockConfig = Agl::app()->getConfig('@layout/blocks/' . $blockPathInfos[1] . '#' . $blockPathInfos[2]);
+        if ($blockConfig === NULL) {
+        	$blockConfig = array();
+        }
 
 		if (! BlockAbstract::checkAcl($blockPathInfos[1], $blockPathInfos[2])) {
 			return '';
 		}
 
-		$cacheEnabled = BlockAbstract::isCacheEnabled($blockConfig);
+		$isCacheEnabled = Agl::app()->isCacheEnabled();
 
-		if ($cacheEnabled) {
-			$apcEnabled = Apc::isEnabled();
-			$cache      = BlockAbstract::getCacheInstance($blockPathInfos, $blockConfig);
+		if ($isCacheEnabled) {
+			$cacheInfo = BlockAbstract::getCacheInfo($blockPathInfos, $blockConfig);
 
-			if ($apcEnabled) {
-				$content = Apc::get($cache[0]);
-	            if ($content !== false) {
-	                return $content;
-	            }
-			} else {
-	            $content = $cache->get();
-	            if ($content) {
-	                return $content;
-	            }
-	        }
+			if (! empty($cacheInfo)
+				and $cacheInstance = Agl::getCache()
+				and $cacheInstance->has($cacheInfo[CacheInterface::CACHE_KEY])) {
+				return $cacheInstance->get($cacheInfo[CacheInterface::CACHE_KEY]);
+			}
 		}
 
 		$blockPath = APP_PATH
@@ -293,14 +290,8 @@ abstract class ViewAbstract
 
 		$content = ob_get_clean();
 
-		if ($cacheEnabled) {
-        	if ($apcEnabled) {
-        		Apc::set($cache[0], $content, $cache[1]);
-        	} else {
-        		$cache
-	                ->setContent($content)
-	                ->save();
-        	}
+		if ($isCacheEnabled and ! empty($cacheInfo)) {
+        	$cacheInstance->set($cacheInfo[CacheInterface::CACHE_KEY], $content, $cacheInfo[ConfigInterface::CONFIG_CACHE_TTL_NAME]);
 		}
 
 		return $content;

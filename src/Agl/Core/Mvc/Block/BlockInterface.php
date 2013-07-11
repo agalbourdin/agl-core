@@ -35,6 +35,6 @@ interface BlockInterface
     public function getView();
     public function render();
     public static function isCacheEnabled($pBlockConfig);
-    public static function getCacheInstance(array $blockPathInfos, array $pBlockConfig);
+    public static function getCacheInfo(array $blockPathInfos, array $pBlockConfig);
     public static function checkAcl($pGroupId, $pBlockId);
 }

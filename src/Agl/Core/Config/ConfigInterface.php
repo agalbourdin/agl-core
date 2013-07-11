@@ -29,11 +29,6 @@ interface ConfigInterface
      */
     const CONFIG_CACHE_KEY_AJAX = 'ajax';
 
-    /**
-     * Key separator.
-     */
-    const CACHE_KEY_SEPARATOR = '_';
-
     public function __construct();
     public function getConfig($pPath);
 }

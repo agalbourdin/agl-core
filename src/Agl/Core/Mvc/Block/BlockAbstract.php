@@ -2,9 +2,7 @@
 namespace Agl\Core\Mvc\Block;
 
 use \Agl\Core\Agl,
-	\Agl\Core\Cache\Apc\Apc,
-	\Agl\Core\Cache\File\FileInterface,
-	\Agl\Core\Cache\File\Format\Raw as RawCache,
+	\Agl\Core\Cache\CacheInterface,
 	\Agl\Core\Config\ConfigInterface,
 	\Agl\Core\Debug\Debug,
 	\Agl\Core\Mvc\View\ViewInterface,
@@ -44,49 +42,54 @@ abstract class BlockAbstract
 	protected $_vars = array();
 
 	/**
-     * Create and get an instance of Raw Cache.
-     *
-     * @param array $pBlockConfig Block configuration
-     * @return Raw|array
-     */
-    public static function getCacheInstance(array $blockPathInfos, array $pBlockConfig)
+	 * Return a TTL and a cache key.
+	 *
+	 * @return array
+	 */
+    public static function getCacheInfo(array $blockPathInfos, array $pBlockConfig)
     {
-		$request             = Agl::getRequest();
-		$configCacheName     = ConfigInterface::CONFIG_CACHE_NAME;
+    	$configCacheName     = ConfigInterface::CONFIG_CACHE_NAME;
 		$configCacheTtlName  = ConfigInterface::CONFIG_CACHE_TTL_NAME;
 		$configCacheTypeName = ConfigInterface::CONFIG_CACHE_TYPE_NAME;
+		$cacheInfo           = array();
 
-        $ttl = (isset($pBlockConfig[$configCacheName])
-        		and is_array($pBlockConfig[$configCacheName])
-        		and isset($pBlockConfig[$configCacheName][$configCacheTtlName])
-        		and ctype_digit($pBlockConfig[$configCacheName][$configCacheTtlName])
-        	   ) ? (int)$pBlockConfig[$configCacheName][$configCacheTtlName] : 0;
+    	if (! self::isCacheEnabled($pBlockConfig)) {
+    		$cacheConfig = Agl::app()->getConfig('@layout/blocks/' . ConfigInterface::CONFIG_CACHE_NAME);
+    		if ($cacheConfig === NULL) {
+	    		return $cacheInfo;
+	    	}
+    	} else {
+    		$cacheConfig = $pBlockConfig[$configCacheName];
+    	}
 
-        $type = (isset($pBlockConfig[$configCacheName])
-        		 and is_array($pBlockConfig[$configCacheName])
-        		 and isset($pBlockConfig[$configCacheName][$configCacheTypeName])
-        		) ? $pBlockConfig[$configCacheName][$configCacheTypeName] : ConfigInterface::CONFIG_CACHE_TYPE_STATIC;
+		$request   = Agl::getRequest();
 
-		$configKeySeparator = FileInterface::CACHE_FILE_SEPARATOR;
-		$configKey          = static::CACHE_FILE_PREFIX . $blockPathInfos[1] . $configKeySeparator . $blockPathInfos[2];
+        $cacheInfo[$configCacheTtlName] = (isset($cacheConfig[$configCacheTtlName])
+        		                           and ctype_digit($cacheConfig[$configCacheTtlName])
+        	                              ) ? (int)$cacheConfig[$configCacheTtlName] : 0;
+
+        $type = (isset($cacheConfig[$configCacheTypeName])) ? $cacheConfig[$configCacheTypeName] : ConfigInterface::CONFIG_CACHE_TYPE_STATIC;
+
+		$cacheInfo[CacheInterface::CACHE_KEY] = static::CACHE_FILE_PREFIX
+		                                        . $blockPathInfos[1]
+		                                        . CacheInterface::CACHE_KEY_SEPARATOR
+		                                        . $blockPathInfos[2];
 
 		if (Agl::isModuleLoaded(Agl::AGL_MORE_POOL . '/locale/locale')) {
-			$configKey .= $configKeySeparator . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getLanguage();
+			$cacheInfo[CacheInterface::CACHE_KEY] .= CacheInterface::CACHE_KEY_SEPARATOR
+			                                         . Agl::getSingleton(Agl::AGL_MORE_POOL . '/locale')->getLanguage();
 		}
 
 		if ($type == ConfigInterface::CONFIG_CACHE_TYPE_DYNAMIC) {
-			$configKey .= $configKeySeparator . \Agl\Core\Data\String::rewrite($request->getReq());
+			$cacheInfo[CacheInterface::CACHE_KEY] .= CacheInterface::CACHE_KEY_SEPARATOR
+			                                         . \Agl\Core\Data\String::rewrite($request->getReq());
 			if (Request::isAjax()) {
-				$configKey .= $configKeySeparator . ConfigInterface::CONFIG_CACHE_KEY_AJAX;
+				$cacheInfo[CacheInterface::CACHE_KEY] .= CacheInterface::CACHE_KEY_SEPARATOR
+				                                         . ConfigInterface::CONFIG_CACHE_KEY_AJAX;
 			}
 		}
 
-		$apcEnabled = Apc::isEnabled();
-		if ($apcEnabled) {
-			return array($configKey, $ttl);
-		} else {
-			return new RawCache($configKey, $ttl);
-		}
+		return $cacheInfo;
     }
 
     /**

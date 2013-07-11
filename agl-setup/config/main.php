@@ -94,6 +94,7 @@ return array(
 		 * Correct values are:
 		 * - file [default]
 		 * - apc
+		 * - apcu
 		 */
 		'type' => 'file'
 	)

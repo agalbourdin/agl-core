@@ -16,6 +16,7 @@ interface CacheInterface
      */
     const TYPE_FILE = 'file';
     const TYPE_APC  = 'apc';
+    const TYPE_APCU = 'apcu';
 
     /**
      * Keys to store cache value and expire timestamp.
@@ -27,6 +28,16 @@ interface CacheInterface
      * Section delimiter.
      */
     const SECTION_DELIMITER = '.';
+
+    /**
+     * Cache info key name.
+     */
+    const CACHE_KEY = 'key';
+
+    /**
+     * Key separator.
+     */
+    const CACHE_KEY_SEPARATOR = '_';
 
     public function set($pKey, $pValue, $pTtl = 0);
     public function get($pKey);
