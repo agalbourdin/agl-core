@@ -31,10 +31,11 @@ interface BlockInterface
      */
     const CACHE_FILE_PREFIX = 'block_';
 
+    public static function getCacheInfo(array $blockPathInfos, array $pBlockConfig);
+    public static function isCacheEnabled($pBlockConfig);
+    public static function checkAcl($pGroupId, $pBlockId);
     public function setFile($pFile);
+    public function setVars(array $pVars = array());
     public function getView();
     public function render();
-    public static function isCacheEnabled($pBlockConfig);
-    public static function getCacheInfo(array $blockPathInfos, array $pBlockConfig);
-    public static function checkAcl($pGroupId, $pBlockId);
 }

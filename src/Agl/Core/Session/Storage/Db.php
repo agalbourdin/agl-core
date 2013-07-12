@@ -30,7 +30,7 @@ class Db
      *
      * @var array
      */
-    $_items = array();
+    private $_items = array();
 
     /**
      * Initialize the session and register the session handler methods.

@@ -23,7 +23,7 @@ use \Agl\Core\Agl,
 abstract class ViewAbstract
 {
 	/**
-	 * Template configuration loaded from JSON config files.
+	 * Template configuration loaded from config files.
 	 *
 	 * @var mixed
 	 */
@@ -269,13 +269,13 @@ abstract class ViewAbstract
 					. Agl::APP_PHP_DIR
                     . BlockInterface::APP_PHP_BLOCK_DIR
                     . DS
-                    . strtolower($blockPathInfos[1])
+                    . $blockPathInfos[1]
                     . DS
-                    . strtolower($blockPathInfos[2])
+                    . $blockPathInfos[2]
                     . Agl::PHP_EXT;
 
         if (file_exists($blockPath)) {
-            $className = ucfirst($blockPathInfos[1]) . ucfirst($blockPathInfos[2]) . BlockInterface::APP_BLOCK_SUFFIX;
+            $className = $blockPathInfos[1] . ucfirst($blockPathInfos[2]) . BlockInterface::APP_BLOCK_SUFFIX;
             $blockModel = Agl::getInstance($className);
         } else {
             $blockModel = new Block();

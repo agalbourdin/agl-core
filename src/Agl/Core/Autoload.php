@@ -37,6 +37,7 @@ class Autoload
         'Dir'        => '\Agl\Core\Data\Dir',
         'File'       => '\Agl\Core\Data\File',
         'Model'      => '\Agl\Core\Mvc\Model\Model',
+        'Observer'   => '\Agl\Core\Observer\Observer',
         'Registry'   => '\Agl\Core\Registry\Registry',
         'Select'     => '\Agl\Core\Db\Query\Select\Select',
         'String'     => '\Agl\Core\Data\String',

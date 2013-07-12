@@ -113,8 +113,8 @@ class Loader
      */
     public static function getModel($pModel, array $pFields = array())
     {
-        $className = ucfirst($pModel) . ModelInterface::APP_MODEL_SUFFIX;
         $fileName  = strtolower($pModel);
+        $className = $fileName . ModelInterface::APP_MODEL_SUFFIX;
 
         if (Agl::isInitialized()) {
             $modelPath = APP_PATH
@@ -142,8 +142,8 @@ class Loader
      */
     public static function getCollection($pCollection)
     {
-        $className = ucfirst($pCollection) . CollectionInterface::APP_SUFFIX;
         $fileName  = strtolower($pCollection);
+        $className = $fileName . CollectionInterface::APP_SUFFIX;
 
         if (Agl::isInitialized()) {
             $collectionPath = APP_PATH
@@ -176,7 +176,7 @@ class Loader
             throw new Exception("Helper syntax is incorrect ('$pClass')");
         }
 
-        $className = ucfirst($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
+        $className = strtolower($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
         return $className;
         return self::getSingleton($className);
     }
