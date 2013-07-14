@@ -82,7 +82,7 @@ class Debug
             $message = (string)$pMessage;
         }
 
-        $logId   = uniqid();
+        $logId   = mt_rand();
 
         if (Agl::isInitialized()) {
             $message = '[agl_' . $logId . '] [' . date('Y-m-d H:i:s') . '] [' . APP_PATH . '] ' . $message . "\n";

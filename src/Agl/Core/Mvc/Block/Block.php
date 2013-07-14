@@ -21,5 +21,5 @@ switch($view->getType()) {
         class Block extends HtmlBlock { }
         break;
     default:
-        throw new Exception("View type '" . $view->getType() . "' is not valid");
+        throw new Exception("Block type '" . $view->getType() . "' is not valid");
 }

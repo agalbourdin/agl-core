@@ -66,7 +66,7 @@ class Composer
                 if ((is_dir($destination) and ! is_writable($destination))
                     or (! is_dir($destination) and ! mkdir($destination, 0777, true))
                     or ! copy($path . $file[2], $destinationFile)) {
-                    throw new Exception("Installation failed. Check that 'app/etc/' has write permissions (recursively) and that 'agl-core' package is installed.");
+                    throw new Exception("Installation failed. Check that 'app/etc/' has write permissions (recursively).");
                 }
 
                 chmod($destinationFile, 0777);
