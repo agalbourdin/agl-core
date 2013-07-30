@@ -28,7 +28,7 @@ class Controller
 	/**
 	 * Default action to trigger.
 	 */
-	const DEFAULT_ACTION = 'index';
+	const DEFAULT_ACTION = 'get';
 
 	/**
 	 * The suffix used by the application's controller class names.
@@ -173,7 +173,7 @@ class Controller
 	/**
 	 * Default index action.
 	 */
-	public function indexAction()
+	public function getAction()
 	{
 		return $this->_renderView();
 	}

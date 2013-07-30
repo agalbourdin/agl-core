@@ -164,21 +164,14 @@ class Loader
     }
 
     /**
-     * Create a singleton instance of the requested helper class.
+     * Return helper class name.
      *
      * @param string $pClass
-     * @return mixed
+     * @return string
      */
     public static function getHelper($pClass)
     {
-        $classArr = explode('/', $pClass);
-        if (count($classArr) != 2) {
-            throw new Exception("Helper syntax is incorrect ('$pClass')");
-        }
-
-        $className = strtolower($classArr[0]) . ucfirst($classArr[1]) . ModelInterface::APP_HELPER_SUFFIX;
-        return $className;
-        return self::getSingleton($className);
+        return strtolower($pClass) . ModelInterface::APP_HELPER_SUFFIX;
     }
 
     /**

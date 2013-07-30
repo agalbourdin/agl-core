@@ -48,9 +48,19 @@ class Request
 	const DEFAULT_MODULE = 'home';
 
 	/**
+	 * Default view.
+	 */
+	const DEFAULT_VIEW = 'index';
+
+	/**
 	 * Action parameter name.
 	 */
 	const ACTION_PARAM = 'action';
+
+	/**
+	 * Default param name (when only one param value is passed).
+	 */
+	const DEFAULT_PARAM = 'id';
 
 	/**
      * The original request URI.
@@ -156,13 +166,13 @@ class Request
 		if ($this->_requestUri !== NULL) {
             $this->_request = preg_replace('#(^/)|(^' . ROOT . ')|(/$)#', '', $this->_requestUri);
             if (! $this->_request) {
-            	$this->_request = self::DEFAULT_MODULE . '/' . Controller::DEFAULT_ACTION;
+            	$this->_request = self::DEFAULT_MODULE . '/' . self::DEFAULT_VIEW;
             }
 
             $this->_requestVars = explode('/', $this->_request);
             if (count($this->_requestVars) == 1) {
-				$this->_request       .= '/' . Controller::DEFAULT_ACTION;
-				$this->_requestVars[] = Controller::DEFAULT_ACTION;
+				$this->_request       .= '/' . self::DEFAULT_VIEW;
+				$this->_requestVars[]  = self::DEFAULT_VIEW;
             }
 
             return $this;
@@ -210,21 +220,23 @@ class Request
 	 */
 	private function _setParams()
 	{
-		if (count($this->_requestVars) > 2) {
-			$nbElements = count($this->_requestVars);
-			$i = 2;
-			while ($i < $nbElements and $i + 1 < $nbElements) {
-				$this->_params[$this->_requestVars[$i]] = $this->_sanitize($this->_requestVars[$i + 1]);
-				$i += 2;
-			}
-		}
-
 		foreach ($_GET as $key => $value) {
 			$this->_params[$key] = $this->_sanitize($value);
 		}
 
 		foreach ($_POST as $key => $value) {
 			$_POST[$key] = $this->_sanitize($value);
+		}
+
+		$nbElements = count($this->_requestVars);
+		if ($nbElements > 3) {
+			$i = 2;
+			while ($i < $nbElements and $i + 1 < $nbElements) {
+				$this->_params[$this->_requestVars[$i]] = $this->_sanitize($this->_requestVars[$i + 1]);
+				$i += 2;
+			}
+		} else if ($nbElements == 3) {
+			$this->_params[self::DEFAULT_PARAM] = $this->_sanitize($this->_requestVars[2]);
 		}
 
 		return $this;
@@ -271,8 +283,8 @@ class Request
 	 */
 	public function getAction()
 	{
-		$action = $this->getParam(self::ACTION_PARAM);
-		if (! preg_match('/^[a-z0-9_-]+$/', $action)) {
+		$action = strtolower($this->getParam(self::ACTION_PARAM));
+		if ($action === '' or ! preg_match('/^[a-z0-9_-]+$/', $action)) {
 			return Controller::DEFAULT_ACTION;
 		}
 
