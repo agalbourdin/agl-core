@@ -99,7 +99,8 @@ class File
      */
     private function _checkTtl($pFile, $pKey)
     {
-        if ($this->_files[$pFile][$pKey][static::AGL_CACHE_EXPIRE] < time()) {
+        $ttl = $this->_files[$pFile][$pKey][static::AGL_CACHE_EXPIRE];
+        if ($ttl > 0 and $ttl < time()) {
             unset($this->_files[$pFile][$pKey]);
             $this->_save($pFile);
 
