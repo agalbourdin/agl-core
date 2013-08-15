@@ -128,10 +128,11 @@ class Debug
             $debugInfos['db']['queries']   = Agl::app()->getDb()->countQueries();
         }
 
-        $debugInfos['apc(u)']  = (ini_get('apc.enabled')) ? true : false;
-        $debugInfos['xdebug']  = $xDebugEnabled;
+        $debugInfos['opcache']      = (ini_get('opcache.enable')) ? true : false;
+        $debugInfos['apc(u)']       = (ini_get('apc.enabled')) ? true : false;
+        $debugInfos['xdebug']       = $xDebugEnabled;
         $debugInfos['more_modules'] = Agl::getLoadedModules();
-        $debugInfos['request'] = Agl::getRequest();
+        $debugInfos['request']      = Agl::getRequest();
 
         return $debugInfos;
     }
