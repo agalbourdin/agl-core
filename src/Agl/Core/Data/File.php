@@ -53,9 +53,11 @@ class File
             }
 
             fclose($fp);
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**

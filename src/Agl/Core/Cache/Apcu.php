@@ -105,7 +105,6 @@ class Apcu
     public function flush($pSection = '')
     {
         $info = apcu_cache_info();
-        var_dump($info);
         if (! $info or ! isset($info['cache_list'])) {
             return $this;
         }

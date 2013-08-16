@@ -110,7 +110,7 @@ class Conditions
                         }
                     }
                 } else {
-                    $prepared[] = '`' . $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $field . '` = ?';
+                    $prepared[] = '(`' . $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $field . '` = ?)';
                 }
 
                 if (! empty($subPrepared)) {

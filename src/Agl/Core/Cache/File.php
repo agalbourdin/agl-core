@@ -45,12 +45,19 @@ class File
     private $_files = array();
 
     /**
+     * Directory where cache files are stored.
+     *
+     * @var string
+     */
+    private $_dir = NULL;
+
+    /**
      * Return the cache file path.
      *
      * @param string $pKey
      * @return string
      */
-    private static function _getFilePath($pKey)
+    private function _getFilePath($pKey)
     {
         if (strpos($pKey, static::SECTION_DELIMITER) !== false) {
             $keyArr   = explode(static::SECTION_DELIMITER, $pKey, 2);
@@ -59,13 +66,27 @@ class File
             $fileName = md5($pKey);
         }
 
-        return APP_PATH
-             . Agl::APP_VAR_DIR
-             . self::AGL_VAR_CACHE_DIR
-             . DS
+        return $this->_dir
              . FileData::getSubPath($fileName, self::SUB_DIRS)
              . $fileName
              . self::AGL_VAR_CACHE_EXT;
+    }
+
+    /**
+     * Set the Cache directory.
+     *
+     * @param $pDir null|string
+     */
+    public function __construct($pDir = NULL)
+    {
+        if ($pDir === NULL) {
+            $this->_dir = APP_PATH
+                          . Agl::APP_VAR_DIR
+                          . self::AGL_VAR_CACHE_DIR
+                          . DS;
+        } else {
+            $this->_dir = $pDir;
+        }
     }
 
     /**
@@ -83,7 +104,7 @@ class File
             throw new Exception("Unable to create the cache directory '$dir'");
         }
 
-        if (! FileData::create($pFile, self::DEFAULT_CONTENT)) {
+        if (! is_readable($pFile) and ! FileData::create($pFile, self::DEFAULT_CONTENT)) {
             throw new Exception("Unable to create the cache file '$pFile'");
         }
 
@@ -118,7 +139,7 @@ class File
      */
     private function _loadFile($pKey)
     {
-        $file = self::_getFilePath($pKey);
+        $file = $this->_getFilePath($pKey);
         if (isset($this->_files[$file])) {
             return $file;
         }
@@ -231,8 +252,12 @@ class File
     public function flush($pSection = '')
     {
         if ($pSection) {
-            $file = self::_getFilePath($pSection);
+            $file = $this->_getFilePath($pSection);
             FileData::delete($file);
+
+            if (array_key_exists($file, $this->_files)) {
+                unset($this->_files[$file]);
+            }
 
             $path = realpath(dirname($file));
             for ($i = 0; $i < self::SUB_DIRS; $i++) {
@@ -243,11 +268,8 @@ class File
                 }
             }
         } else {
-            DirecoryData::deleteRecursive(
-                APP_PATH
-                . Agl::APP_VAR_DIR
-                . self::AGL_VAR_CACHE_DIR
-            );
+            DirecoryData::deleteRecursive($this->_dir);
+            $this->_files = array();
         }
 
         return $this;

@@ -49,10 +49,10 @@ class Dir
     public static function delete($pDir)
     {
         if (is_dir($pDir)) {
-            rmdir($pDir);
+            return rmdir($pDir);
         }
 
-        return true;
+        return false;
     }
 
     /**
