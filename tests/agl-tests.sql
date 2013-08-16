@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `comment_date_add` datetime NOT NULL,
   `comment_date_update` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `comment_text` text NOT NULL,
   PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_date_add` datetime NOT NULL,
   `user_date_update` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `user_email` varchar( 255 ) NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
