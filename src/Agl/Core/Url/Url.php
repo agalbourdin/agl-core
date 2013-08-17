@@ -124,17 +124,11 @@ class Url
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function getSkin($pUrl, $pRelative = true, $pDir = NULL)
+    public static function getSkin($pUrl, $pRelative = true)
     {
-        if ($pDir === NULL) {
-            $pDir = Agl::app()->getConfig('@app/global/theme');
-        }
-
         $url = Agl::APP_PUBLIC_DIR
                . DS
                . ViewInterface::APP_HTTP_SKIN_DIR
-               . DS
-               . $pDir
                . DS
                . $pUrl;
 

@@ -110,8 +110,6 @@ abstract class ViewAbstract
 			   . Agl::APP_PUBLIC_DIR
 			   . DS
 			   . static::APP_HTTP_SKIN_DIR
-			   . DS
-			   . Agl::app()->getConfig('@app/global/theme')
 			   . DS;
 	}
 
@@ -190,8 +188,6 @@ abstract class ViewAbstract
 		if (isset($template['file'])) {
 			$template = APP_PATH
 				        . static::APP_HTTP_TEMPLATE_DIR
-				        . DS
-	           			. Agl::app()->getConfig('@app/global/theme')
 				        . DS
 				        . $template['file']
 				        . static::FILE_EXT;
@@ -316,8 +312,6 @@ abstract class ViewAbstract
 	{
 		return APP_PATH
 	           . static::APP_HTTP_TEMPLATE_DIR
-	           . DS
-               . Agl::app()->getConfig('@app/global/theme')
 	           . DS
 	           . static::APP_HTTP_VIEW_DIR
 	           . DS

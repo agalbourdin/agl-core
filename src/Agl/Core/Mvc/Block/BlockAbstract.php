@@ -176,8 +176,6 @@ abstract class BlockAbstract
 		$path = APP_PATH
 		        . ViewInterface::APP_HTTP_TEMPLATE_DIR
 		        . DS
-                . Agl::app()->getConfig('@app/global/theme')
-		        . DS
 		        . static::APP_HTTP_BLOCK_DIR
 		        . DS
 		        . $this->_file;

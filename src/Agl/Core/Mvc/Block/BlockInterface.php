@@ -24,7 +24,7 @@ interface BlockInterface
     /**
      * The application's HTTP block directory.
      */
-    const APP_HTTP_BLOCK_DIR = 'blocks';
+    const APP_HTTP_BLOCK_DIR = 'block';
 
     /**
      * Prefix for the cache files.

@@ -34,7 +34,7 @@ interface ViewInterface
     /**
      *  The default Web Modules directory.
      */
-    const APP_HTTP_VIEW_DIR = 'views';
+    const APP_HTTP_VIEW_DIR = 'view';
 
     /**
      *  The Web module config file name.
