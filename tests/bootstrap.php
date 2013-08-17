@@ -2,9 +2,9 @@
 /**
  * Edit this part with your MySQL configuration.
  */
-define('MYSQL_HOST', 'localhost');
-define('MYSQL_DBNAME', '');
-define('MYSQL_USER', '');
+define('MYSQL_HOST', '127.0.0.1');
+define('MYSQL_DBNAME', 'agl_core_tests');
+define('MYSQL_USER', 'travis');
 define('MYSQL_PASSWORD', '');
 
 /**

@@ -15,7 +15,6 @@ interface CacheInterface
      * Cache types.
      */
     const TYPE_FILE = 'file';
-    const TYPE_APC  = 'apc';
     const TYPE_APCU = 'apcu';
 
     /**

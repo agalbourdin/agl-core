@@ -78,16 +78,16 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSkin($pUrl, $pRelative, $pExpected)
     {
-        $this->assertEquals($pExpected, \Agl\Core\Url\Url::getSkin($pUrl, $pRelative, 'default'));
+        $this->assertEquals($pExpected, \Agl\Core\Url\Url::getSkin($pUrl, $pRelative));
     }
 
     public function getSkinData()
     {
         return array(
-            array('css/main.css', true, '/public/skin/default/css/main.css'),
-            array('main.swf', true, '/public/skin/default/main.swf'),
-            array('css/main.css', false, 'http://' . self::DOMAIN . '/public/skin/default/css/main.css'),
-            array('main.swf', false, 'http://' . self::DOMAIN . '/public/skin/default/main.swf')
+            array('css/main.css', true, '/public/skin/css/main.css'),
+            array('main.swf', true, '/public/skin/main.swf'),
+            array('css/main.css', false, 'http://' . self::DOMAIN . '/public/skin/css/main.css'),
+            array('main.swf', false, 'http://' . self::DOMAIN . '/public/skin/main.swf')
         );
     }
 

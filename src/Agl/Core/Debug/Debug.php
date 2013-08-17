@@ -129,7 +129,7 @@ class Debug
         }
 
         $debugInfos['opcache']      = (ini_get('opcache.enable')) ? true : false;
-        $debugInfos['apc(u)']       = (ini_get('apc.enabled')) ? true : false;
+        $debugInfos['apcu']         = (ini_get('apc.enabled')) ? true : false;
         $debugInfos['xdebug']       = $xDebugEnabled;
         $debugInfos['more_modules'] = Agl::getLoadedModules();
         $debugInfos['request']      = Agl::getRequest();
