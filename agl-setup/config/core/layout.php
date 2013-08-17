@@ -3,7 +3,7 @@ return array(
 
 	'template' => array(
 		'type' => 'html',
-		'file' => 'default',
+		'file' => 'main',
 
 		'css' => array(
 			'normalize.css',
