@@ -188,13 +188,13 @@ class Request
 	 */
 	private function _setModule()
 	{
-		if (isset($this->_requestVars[0])
-			and preg_match('/^[a-z0-9_-]+$/', $this->_requestVars[0])) {
+		if (preg_match('/^[a-z0-9_-]+$/', $this->_requestVars[0])) {
 			$this->_module = $this->_requestVars[0];
-			return $this;
+        } else {
+        	$this->_module = $this->_requestVars[0] = self::DEFAULT_MODULE;
         }
 
-        throw new Exception('Bad request: the requested module is not valid (syntax)');
+        return $this;
 	}
 
 	/**
@@ -204,13 +204,13 @@ class Request
 	 */
 	private function _setView()
 	{
-		if (isset($this->_requestVars[1])
-			and preg_match('/^[a-z0-9_-]+$/', $this->_requestVars[1])) {
+		if (preg_match('/^[a-z0-9_-]+$/', $this->_requestVars[1])) {
 			$this->_view = $this->_requestVars[1];
-			return $this;
+        } else {
+        	$this->_view = $this->_requestVars[1] = self::DEFAULT_VIEW;
         }
 
-        throw new Exception('Bad request: the requested view is not valid (syntax)');
+        return $this;
 	}
 
 	/**
