@@ -6,7 +6,7 @@ php:
   - "5.3"
 
 before_script:
-  - pecl install "channel://pecl.php.net/APCu-4.0.1"
+  - printf "\n" | pecl install channel://pecl.php.net/APCu-4.0.1
   - echo "extension = apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - "mysql -e 'create database agl_core_tests;'"
   - "mysql -D 'agl_core_tests' -e 'CREATE TABLE IF NOT EXISTS `comment` (`comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,`comment_date_add` datetime NOT NULL,`comment_date_update` datetime NOT NULL DEFAULT \"0000-00-00 00:00:00\",`comment_text` text NOT NULL,PRIMARY KEY (`comment_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'"
