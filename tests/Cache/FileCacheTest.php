@@ -9,6 +9,5 @@ class FileCacheTest
     public static function setUpBeforeClass()
     {
         self::$_instance = new self::$_className('/tmp/cache/');
-        self::$_enabled  = true;
     }
 }

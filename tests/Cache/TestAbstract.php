@@ -3,7 +3,6 @@ class TestAbstract
     extends PHPUnit_Framework_TestCase
 {
     protected static $_instance = NULL;
-    protected static $_enabled  = false;
 
     public function dataProvider()
     {
@@ -28,9 +27,7 @@ class TestAbstract
 
     public function testSet()
     {
-        if (self::$_enabled) {
-            $this->assertInstanceOf(static::$_className, self::$_instance->set('key', 'value'));
-        }
+        $this->assertInstanceOf(static::$_className, self::$_instance->set('key', 'value'));
     }
 
     /**
@@ -38,9 +35,7 @@ class TestAbstract
      */
     public function testGet($pKey, $pResult)
     {
-        if (self::$_enabled) {
-            $this->assertEquals($pResult, self::$_instance->get($pKey));
-        }
+        $this->assertEquals($pResult, self::$_instance->get($pKey));
     }
 
     /**
@@ -57,9 +52,7 @@ class TestAbstract
      */
     public function testHas($pKey, $pResult, $pHas)
     {
-        if (self::$_enabled) {
-            $this->assertEquals($pHas, self::$_instance->has($pKey));
-        }
+        $this->assertEquals($pHas, self::$_instance->has($pKey));
     }
 
     /**
@@ -76,10 +69,8 @@ class TestAbstract
      */
     public function testRemove($pKey)
     {
-        if (self::$_enabled) {
-            self::$_instance->remove($pKey);
-            $this->assertNull(self::$_instance->get($pKey));
-        }
+        self::$_instance->remove($pKey);
+        $this->assertNull(self::$_instance->get($pKey));
     }
 
     /**
@@ -93,25 +84,21 @@ class TestAbstract
 
     public function testFlushSection()
     {
-        if (self::$_enabled) {
-            self::$_instance
-                ->set('section1.key', 'value')
-                ->set('section2.key', 'value')
-                ->flush('section1');
+        self::$_instance
+            ->set('section1.key', 'value')
+            ->set('section2.key', 'value')
+            ->flush('section1');
 
-            $this->assertNull(self::$_instance->get('section1.key'));
-        }
+        $this->assertNull(self::$_instance->get('section1.key'));
     }
 
     public function testFlush()
     {
-        if (self::$_enabled) {
-            self::$_instance
-                ->set('section1.key', 'value')
-                ->set('section2.key', 'value')
-                ->flush();
+        self::$_instance
+            ->set('section1.key', 'value')
+            ->set('section2.key', 'value')
+            ->flush();
 
-            $this->assertNull(self::$_instance->get('section2.key'));
-        }
+        $this->assertNull(self::$_instance->get('section2.key'));
     }
 }

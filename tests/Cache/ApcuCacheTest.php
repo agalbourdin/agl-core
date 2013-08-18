@@ -9,9 +9,5 @@ class ApcuCacheTest
     public static function setUpBeforeClass()
     {
         self::$_instance = new self::$_className();
-
-        if (ini_get('apc.enable_cli')) {
-            self::$_enabled = true;
-        }
     }
 }
