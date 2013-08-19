@@ -6,7 +6,8 @@ php:
   - "5.3"
 
 before_script:
-  - wget http://pear.phpunit.de/get/phpunit.phar
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar install --prefer-source --no-interaction --dev
   - printf "\n" | pecl install channel://pecl.php.net/APCu-4.0.1
   - echo "extension=apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -14,4 +15,4 @@ before_script:
   - "mysql -D 'agl_core_tests' -e 'CREATE TABLE IF NOT EXISTS `comment` (`comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,`comment_date_add` datetime NOT NULL,`comment_date_update` datetime NOT NULL DEFAULT \"0000-00-00 00:00:00\",`comment_text` text NOT NULL,PRIMARY KEY (`comment_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'"
   - "mysql -D 'agl_core_tests' -e 'CREATE TABLE IF NOT EXISTS `user` (`user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,`user_date_add` datetime NOT NULL,`user_date_update` datetime NOT NULL DEFAULT \"0000-00-00 00:00:00\",`user_email` varchar( 255 ) NOT NULL,PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'"
 
-script: php phpunit.phar
+script: phpunit

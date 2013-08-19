@@ -52,7 +52,10 @@ class String
             $pStr[0] = strtoupper($pStr[0]);
         }
 
-        return preg_replace('/_([a-z])/e', "strtoupper('\\1')", $pStr);
+        return preg_replace_callback('/_([a-z])/', function ($pMatches)
+            {
+                return strtoupper($pMatches[1]);
+            }, $pStr);
     }
 
     /**
@@ -68,7 +71,11 @@ class String
         }
 
         $pStr[0] = strtolower($pStr[0]);
-        return preg_replace('/([A-Z])/e', "'_' . strtolower('\\1')", $pStr);
+
+        return preg_replace_callback('/([A-Z])/', function ($pMatches)
+            {
+                return '_' . strtolower($pMatches[0]);
+            }, $pStr);
     }
 
     /**

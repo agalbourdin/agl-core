@@ -14,10 +14,13 @@ session_start();
 
 define('AGL_PATH', dirname(__DIR__) . '/src/Agl/Core/');
 define('APP_PATH', dirname(__DIR__) . '/');
+define('COMPOSER_DIR', dirname(__DIR__) . '/vendor/');
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', '/');
 
 setlocale(LC_ALL, 'en_GB.utf8');
+
+require(COMPOSER_DIR . 'autoload.php');
 
 require(AGL_PATH . 'Agl.php');
 require(AGL_PATH . 'Autoload.php');
