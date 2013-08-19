@@ -20,7 +20,6 @@ class TestAbstract
     public function exceptionDataProvider()
     {
         return array(
-            array(array()),
             array(new stdClass())
         );
     }
