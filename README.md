@@ -1,6 +1,9 @@
 AGL Core
 ========
 
-The AGL application base structure is [**available here**](https://github.com/agl-php/agl-app). Download it to start using AGL.
+[![Latest Stable Version](https://poser.pugx.org/agl/core/v/stable.png)](https://packagist.org/packages/agl/core)
+[![Build Status](https://travis-ci.org/agl-php/agl-core.png)](https://travis-ci.org/agl-php/agl-core)
 
-Learn more about AGL by visiting [**www.agl.io**](http://www.agl.io)
+This is the Core module of AGL.
+
+To create a new application with AGL, go to the [**agl-app**](https://github.com/agl-php/agl-app) repository.

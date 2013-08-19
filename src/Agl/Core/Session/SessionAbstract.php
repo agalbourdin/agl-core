@@ -22,7 +22,23 @@ abstract class SessionAbstract
         if (! isset($_SESSION)) {
     		session_start();
         }
+
+        $this->_setCsrfToken();
 	}
+
+    /**
+     * Set a CSRF Token to the Session.
+     *
+     * @return string
+     */
+    protected function _setCsrfToken()
+    {
+        if (! $this->csrfToken) {
+            $this->csrfToken = base64_encode(openssl_random_pseudo_bytes(32));
+        }
+
+        return $this->csrfToken;
+    }
 
     /**
      * Return the requested attribute value.
@@ -88,6 +104,26 @@ abstract class SessionAbstract
             );
         }
 
-        return session_destroy();
+        if (! session_destroy()) {
+            throw new Exception('Failed to destroy session');
+        }
+
+        $this->_setCsrfToken();
+
+        return true;
+    }
+
+    /**
+     * Check if the passed token and the session token are the same.
+     *
+     * @return bool
+     */
+    public function checkCsrfToken($pToken)
+    {
+        if ($this->csrfToken === $pToken) {
+            return true;
+        }
+
+        return false;
     }
 }

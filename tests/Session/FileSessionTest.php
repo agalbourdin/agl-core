@@ -52,4 +52,34 @@ class FileSessionTest
         self::$_instance->destroy();
         $this->assertNull(self::$_instance->key);
     }
+
+    public function testGetCsrf()
+    {
+        $this->assertTrue(is_string(self::$_instance->csrfToken));
+    }
+
+    public function testCheckCsrfSuccess()
+    {
+        $this->assertTrue(self::$_instance->checkCsrfToken(self::$_instance->csrfToken));
+    }
+
+    /**
+     * @dataProvider csrfData
+     */
+    public function testCheckCsrfFail($pToken)
+    {
+        $this->assertFalse(self::$_instance->checkCsrfToken($pToken));
+    }
+
+    public function csrfData()
+    {
+        return array(
+            array('string'),
+            array(1),
+            array(true),
+            array(NULL),
+            array(array()),
+            array(new stdClass())
+        );
+    }
 }
