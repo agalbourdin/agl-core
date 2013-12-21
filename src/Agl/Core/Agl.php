@@ -309,7 +309,7 @@ final class Agl
         }*/
 
         $this->_cache = ($pCache) ? true : false;
-        $this->_debug = ($pDebug) ? true : false;
+        $this->_debug = ($pDebug or CLI) ? true : false;
 
         error_reporting(-1);
 
@@ -328,7 +328,7 @@ final class Agl
      */
     public function __destruct()
     {
-        if ($this->_debug and Debug::isHtmlView()) {
+        if ($this->_debug and Debug::isHtmlView() AND ! CLI) {
             var_dump(Debug::getInfos());
         }
     }

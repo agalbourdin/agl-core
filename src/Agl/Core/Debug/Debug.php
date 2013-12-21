@@ -82,7 +82,7 @@ class Debug
             $message = (string)$pMessage;
         }
 
-        $logId   = mt_rand();
+        $logId = mt_rand();
 
         if (Agl::isInitialized()) {
             $message = '[agl_' . $logId . '] [' . date('Y-m-d H:i:s') . '] [' . APP_PATH . '] ' . $message . "\n";
@@ -92,8 +92,8 @@ class Debug
                 return 0;
             }
 
-            $file    = $dir . sprintf(self::LOG_FILE, date('Y-m-d'));
-            $logged  = FileData::write($file, $message, true);
+            $file   = $dir . sprintf(self::LOG_FILE, date('Y-m-d'));
+            $logged = FileData::write($file, $message, true);
 
             if (! $logged) {
                 return 0;

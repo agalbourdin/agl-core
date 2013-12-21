@@ -1,12 +1,7 @@
 <?php
 namespace Agl\Core;
 
-use \Composer\Script\PackageEvent,
-    \Exception,
-    \RecursiveDirectoryIterator,
-    \RecursiveIteratorIterator,
-    \RecursiveRegexIterator,
-    \RegexIterator;
+use \Composer\Script\PackageEvent;
 
 /**
  * Composer Observer.
@@ -25,10 +20,23 @@ class Composer
     const SETUP_DIR = 'agl-setup';
 
     /**
-     * Application's etc directory.
-     * Config files will be copied in this directory.
+     * Package CLI configuration file.
      */
-    const DESTINATION_DIR = 'app/etc';
+    const CLI_FILE = 'cli.php';
+
+    /**
+     * Execute the requested command with passed arguments.
+     *
+     * @param string $pCmd
+     * @param array $pArgs
+     * @return array
+     */
+    private static function _execute($pCmd, array $pArgs)
+    {
+        $result = array();
+        exec('php agl.php ' . $pCmd . ' ' . implode(' ', $pArgs), $result);
+        return $result;
+    }
 
     /**
      * Post package install event, fired by Composer.
@@ -38,39 +46,34 @@ class Composer
      * @param PackageEvent $pEvent
      * @return bool
      */
-    public static function postPackageInstall(PackageEvent $pEvent)
+    public static function postPackageInstall(/*PackageEvent $pEvent*/)
     {
-        $path       = realpath('.'
-                    . DIRECTORY_SEPARATOR
-                    . $pEvent->getComposer()->getConfig()->get('vendor-dir')
-                    . DIRECTORY_SEPARATOR
-                    . $pEvent->getOperation()->getPackage()->getName()
-                    . DIRECTORY_SEPARATOR
-                    . self::SETUP_DIR
-        ) . DIRECTORY_SEPARATOR;
+        $path = realpath('.'
+              . DS
+              . $pEvent->getComposer()->getConfig()->get('vendor-dir')
+              . DS
+              . $pEvent->getOperation()->getPackage()->getName()
+              . DS
+              . self::SETUP_DIR
+              . DS
+              . self::CLI_FILE
+        );
 
-        if ($path !== DIRECTORY_SEPARATOR and is_readable($path)) {
-            $Directory = new RecursiveDirectoryIterator($path);
-            $Iterator  = new RecursiveIteratorIterator($Directory);
-            $Regex     = new RegexIterator($Iterator, '#^(.*)?' . self::SETUP_DIR . '([a-zA-Z0-9\./_-]+\.[a-z]+)$#i', RecursiveRegexIterator::GET_MATCH);
-            foreach ($Regex as $file) {
-                $fileInfo = pathinfo($file[2]);
+        if ($path and is_readable($path)) {
+            $config = require($path);
 
-                $destination = realpath('.' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $fileInfo['dirname'] . DIRECTORY_SEPARATOR;
-                $destinationFile = $destination . $fileInfo['basename'];
-
-                if (is_readable($destinationFile)) {
-                    continue;
+            if (is_array($config)) {
+                foreach ($config as $cmd => $args) {
+                    if (! is_array($args)) {
+                        continue;
+                    } else if (count($args) == count($args, COUNT_RECURSIVE)) {
+                        self::_execute($cmd, $args);
+                    } else {
+                        foreach ($args as $cmdArgs) {
+                            self::_execute($cmd, $cmdArgs);
+                        }
+                    }
                 }
-
-                if ((is_dir($destination) and ! is_writable($destination))
-                    or (! is_dir($destination) and ! mkdir($destination, 0777, true))
-                    or ! copy($path . $file[2], $destinationFile)) {
-                    throw new Exception("Installation failed. Check that 'app/etc/' has write permissions (recursively).");
-                }
-
-                chmod($destinationFile, 0777);
-                chmod($destination, 0777);
             }
         }
 
