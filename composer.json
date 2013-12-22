@@ -11,6 +11,7 @@
         }
     ],
     "require": {
+        "agl/cli": "*",
         "php": ">=5.3.0"
     },
     "require-dev": {

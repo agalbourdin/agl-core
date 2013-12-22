@@ -34,7 +34,7 @@ class Composer
     private static function _execute($pCmd, array $pArgs)
     {
         $result = array();
-        exec('php agl.php ' . $pCmd . ' ' . implode(' ', $pArgs), $result);
+        exec('php agl ' . $pCmd . ' ' . implode(' ', $pArgs), $result);
         return $result;
     }
 
@@ -48,6 +48,8 @@ class Composer
      */
     public static function postPackageInstall(PackageEvent $pEvent)
     {
+        $appPath = realpath('.') . DIRECTORY_SEPARATOR;
+
         $path = realpath('.'
               . DIRECTORY_SEPARATOR
               . $pEvent->getComposer()->getConfig()->get('vendor-dir')
