@@ -22,7 +22,7 @@ class Debug
     /**
      * File to log messages.
      */
-    const LOG_DIR  = 'log/';
+    const LOG_DIR  = 'log/%s/%s/';
     const LOG_FILE = 'debug_%s.log';
 
     /**
@@ -87,8 +87,8 @@ class Debug
         if (Agl::isInitialized()) {
             $message = '[agl_' . $logId . '] [' . date('Y-m-d H:i:s') . '] [' . APP_PATH . '] ' . $message . "\n";
 
-            $dir = APP_PATH . Agl::APP_VAR_DIR . self::LOG_DIR;
-            if (! is_writable(APP_PATH . Agl::APP_VAR_DIR) or (! is_dir($dir) and ! mkdir($dir, 0777)) or ! is_writable($dir)) {
+            $dir = APP_PATH . Agl::APP_VAR_DIR . sprintf(self::LOG_DIR, date('Y'), date('m'));
+            if (! is_writable(APP_PATH . Agl::APP_VAR_DIR) or (! is_dir($dir) and ! mkdir($dir, 0777, true)) or ! is_writable($dir)) {
                 return 0;
             }
 

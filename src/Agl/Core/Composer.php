@@ -49,13 +49,13 @@ class Composer
     public static function postPackageInstall(/*PackageEvent $pEvent*/)
     {
         $path = realpath('.'
-              . DS
+              . DIRECTORY_SEPARATOR
               . $pEvent->getComposer()->getConfig()->get('vendor-dir')
-              . DS
+              . DIRECTORY_SEPARATOR
               . $pEvent->getOperation()->getPackage()->getName()
-              . DS
+              . DIRECTORY_SEPARATOR
               . self::SETUP_DIR
-              . DS
+              . DIRECTORY_SEPARATOR
               . self::CLI_FILE
         );
 
