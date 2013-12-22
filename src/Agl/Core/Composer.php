@@ -46,7 +46,7 @@ class Composer
      * @param PackageEvent $pEvent
      * @return bool
      */
-    public static function postPackageInstall(/*PackageEvent $pEvent*/)
+    public static function postPackageInstall(PackageEvent $pEvent)
     {
         $path = realpath('.'
               . DIRECTORY_SEPARATOR
