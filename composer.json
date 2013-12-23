@@ -25,5 +25,7 @@
         "psr-0": {
             "Agl\\Core": "src/"
         }
-    }
+    },
+
+    "minimum-stability": "dev"
 }
