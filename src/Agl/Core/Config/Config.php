@@ -126,8 +126,10 @@ class Config
                    . self::EXT;
         }
 
-        if (! isset($this->_instance[$file])) {
+        if (! isset($this->_instance[$file]) and is_readable($file)) {
             $this->_instance[$file] = require($file);
+        } else {
+            $this->_instance[$file] = array();
         }
 
         return $this->_instance[$file];
