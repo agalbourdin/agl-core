@@ -128,7 +128,7 @@ class Config
 
         if (! isset($this->_instance[$file]) and is_readable($file)) {
             $this->_instance[$file] = require($file);
-        } else {
+        } else if (! isset($this->_instance[$file])) {
             $this->_instance[$file] = array();
         }
 
