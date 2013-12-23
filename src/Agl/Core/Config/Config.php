@@ -140,11 +140,16 @@ class Config
      */
     private function _getEventsConfig()
     {
-        $files = DirData::listFilesRecursive(self::_getConfigPath(), self:: MAIN_EVENTS_FILE . self::EXT);
-
         $content = array(self:: MAIN_EVENTS_FILE => array());
+
+        $configPath = self::_getConfigPath();
+        if (! is_dir($configPath)) {
+            return $content;
+        }
+
+        $files = DirData::listFilesRecursive($configPath, self:: MAIN_EVENTS_FILE . self::EXT);
         foreach ($files as $file) {
-            $content['events'] = array_merge_recursive(require($file), $content['events']);
+            $content[self:: MAIN_EVENTS_FILE] = array_merge_recursive(require($file), $content[self:: MAIN_EVENTS_FILE]);
         }
 
         return $content;
