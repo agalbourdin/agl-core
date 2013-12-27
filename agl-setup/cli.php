@@ -33,5 +33,11 @@ return array(
             $currentDir . 'app/etc/config/core/samples/layout.sample.php',
             $appPath    . 'app/etc/config/core/samples/layout.sample.php'
         )
+    ),
+
+    // CHMOD app/var
+    'chmod' => array(
+        $appPath . 'app/var/',
+        777
     )
 );
