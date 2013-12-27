@@ -1,7 +1,8 @@
 <?php
 namespace Agl\Core;
 
-use \Composer\Script\PackageEvent;
+use \Composer\Script\PackageEvent,
+    \Exception;
 
 /**
  * Composer Observer.
@@ -48,13 +49,21 @@ class Composer
      */
     public static function postPackageInstall(PackageEvent $pEvent)
     {
+        if ($pEvent->getOperation() instanceof \Composer\DependencyResolver\Operation\InstallOperation) {
+            $packageName = $pEvent->getOperation()->getPackage()->getName();
+        } else if ($pEvent->getOperation() instanceof \Composer\DependencyResolver\Operation\UpdateOperation) {
+            $packageName = $pEvent->getOperation()->getInitialPackage()->getName();
+        } else {
+            throw new Exception("Event is not supported.");
+        }
+
         $appPath = realpath('.') . DIRECTORY_SEPARATOR;
 
         $path = realpath('.'
               . DIRECTORY_SEPARATOR
               . $pEvent->getComposer()->getConfig()->get('vendor-dir')
               . DIRECTORY_SEPARATOR
-              . $pEvent->getOperation()->getPackage()->getName()
+              . $packageName
               . DIRECTORY_SEPARATOR
               . self::SETUP_DIR
               . DIRECTORY_SEPARATOR
