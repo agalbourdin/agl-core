@@ -231,13 +231,6 @@ class Html
 			));
 		}
 
-		if (! isset($this->_meta['dc.title'])) {
-			$this->addMeta('dc.title', array(
-				'name'    => 'dc.title',
-				'content' => $title
-			));
-		}
-
 		if (! isset($this->_meta['og:title'])) {
 			$this->addMeta('og:title', array(
 				'property' => 'og:title',
@@ -475,11 +468,6 @@ class Html
 			'content'  => $pDescription
 		));
 
-		$this->addMeta('dc.description', array(
-			'name'    => 'dc.description',
-			'content' => $pDescription
-		));
-
 		$this->addMeta('og:description', array(
 			'property' => 'og:description',
 			'content'  => $pDescription
@@ -498,11 +486,6 @@ class Html
 	{
 		$this->addMeta('keywords', array(
 			'name'    => 'keywords',
-			'content' => $pKeywords
-		));
-
-		$this->addMeta('dc.keywords', array(
-			'name'    => 'dc.keywords',
 			'content' => $pKeywords
 		));
 
