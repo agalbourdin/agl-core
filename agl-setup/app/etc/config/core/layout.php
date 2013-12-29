@@ -12,7 +12,7 @@ return array(
 		),
 
 		'js' => array(
-			'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+			'//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
 			'vendor/modernizr-2.6.2.min.js',
 			'plugins.js',
 			'main.js'
