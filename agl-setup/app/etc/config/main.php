@@ -2,18 +2,9 @@
 return array(
 
 	/**
-	 * Global configuration (theme, timezone).
+	 * Global configuration.
 	 */
 	'global' => array(
-
-		/**
-		 * Name of the theme to use when rendering pages.
-		 * A theme is a set of CSS / JS files, images and template files.
-		 *
-		 * "default" refers to "/public/skin/default/" and
-		 * "/app/template/default/"
-		 */
-		'theme' => 'default',
 
 		/**
 		 * Application's timezone.
