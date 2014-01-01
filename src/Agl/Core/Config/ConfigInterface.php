@@ -29,6 +29,11 @@ interface ConfigInterface
      */
     const CONFIG_CACHE_KEY_AJAX = 'ajax';
 
+    /**
+     * Cache type configuration key.
+     */
+    const CONFIG_CACHE_TYPE_KEY = '@app/cache/type';
+
     public function __construct();
     public function getConfig($pPath);
 }

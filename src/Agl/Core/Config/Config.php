@@ -234,7 +234,7 @@ class Config
             return $this->_cache[$pPath];
         }
 
-        if ($this->_cacheEnabled and $pPath != '@app/cache/type') {
+        if ($this->_cacheEnabled and $pPath != static::CONFIG_CACHE_TYPE_KEY) {
             if ($this->_cacheInstance === NULL) {
                 $this->_cacheInstance = Agl::getCache();
             }
