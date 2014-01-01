@@ -52,25 +52,18 @@ class File
     private $_dir = NULL;
 
     /**
-     * Return the cache file path.
+     * Resolved paths cache.
      *
-     * @param string $pKey
-     * @return string
+     * @var array
      */
-    private function _getFilePath($pKey)
-    {
-        if (strpos($pKey, static::SECTION_DELIMITER) !== false) {
-            $keyArr   = explode(static::SECTION_DELIMITER, $pKey, 2);
-            $fileName = md5($keyArr[0]);
-        } else {
-            $fileName = md5($pKey);
-        }
+    private $_paths = array();
 
-        return $this->_dir
-             . FileData::getSubPath($fileName, self::SUB_DIRS)
-             . $fileName
-             . self::AGL_VAR_CACHE_EXT;
-    }
+    /**
+     * Reference time for TTL checking.
+     *
+     * @var int
+     */
+    private $_time = 0;
 
     /**
      * Set the Cache directory.
@@ -87,6 +80,32 @@ class File
         } else {
             $this->_dir = $pDir;
         }
+
+        $this->_time = time();
+    }
+
+    /**
+     * Return the cache file path.
+     *
+     * @param string $pKey
+     * @return string
+     */
+    private function _getFilePath($pKey)
+    {
+        $keyArr   = explode(static::SECTION_DELIMITER, $pKey, 2);
+        $fileName = $keyArr[0];
+
+        if (! isset($this->_paths[$fileName])) {
+            $encodedFileName         = md5($fileName);
+            $this->_paths[$fileName] = $this->_dir
+                                     . FileData::getSubPath($encodedFileName, self::SUB_DIRS)
+                                     . $encodedFileName
+                                     . self::AGL_VAR_CACHE_EXT;
+        }
+
+        $this->_paths[$pKey] = $this->_paths[$fileName];
+
+        return $this->_paths[$fileName];
     }
 
     /**
@@ -121,7 +140,7 @@ class File
     private function _checkTtl($pFile, $pKey)
     {
         $ttl = $this->_files[$pFile][$pKey][static::AGL_CACHE_EXPIRE];
-        if ($ttl > 0 and $ttl < time()) {
+        if ($ttl > 0 and $ttl < $this->_time) {
             unset($this->_files[$pFile][$pKey]);
             $this->_save($pFile);
 
@@ -139,7 +158,7 @@ class File
      */
     private function _loadFile($pKey)
     {
-        $file = $this->_getFilePath($pKey);
+        $file = (isset($this->_paths[$pKey])) ? $this->_paths[$pKey] : $this->_getFilePath($pKey);
         if (isset($this->_files[$file])) {
             return $file;
         }
@@ -176,14 +195,12 @@ class File
     {
         $file = $this->_loadFile($pKey);
 
-        $previousValue = $this->get($pKey);
+        if (! $this->has($pKey) or $this->get($pKey) !== $pValue) {
+            $this->_files[$file][$pKey] = array(
+                static::AGL_CACHE_EXPIRE => ($pTtl) ? ($this->_time + $pTtl) : $pTtl,
+                static::AGL_CACHE_VALUE  => $pValue
+            );
 
-        $this->_files[$file][$pKey] = array(
-            static::AGL_CACHE_EXPIRE => ($pTtl) ? (time() + $pTtl) : $pTtl,
-            static::AGL_CACHE_VALUE  => $pValue
-        );
-
-        if ($previousValue !== $pValue) {
             $this->_save($file);
         }
 

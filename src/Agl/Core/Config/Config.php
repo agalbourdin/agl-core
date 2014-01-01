@@ -71,6 +71,20 @@ class Config
     private $_envPrefix = '';
 
     /**
+     * Is AGL cache enabled?
+     *
+     * @var bool
+     */
+    private $_cacheEnabled = false;
+
+    /**
+     * Cache instance.
+     *
+     * @var Cache
+     */
+    private $_cacheInstance = NULL;
+
+    /**
      * Initialize the environment prefix.
      */
     public function __construct()
@@ -79,6 +93,8 @@ class Config
         if (isset($_SERVER[$envPrefixName]) and $_SERVER[$envPrefixName]) {
             $this->_envPrefix = $_SERVER[$envPrefixName] . self::ENV_PREFIX_SEPARATOR;
         }
+
+        $this->_cacheEnabled = Agl::app()->isCacheEnabled();
     }
 
     /**
@@ -218,7 +234,22 @@ class Config
             return $this->_cache[$pPath];
         }
 
+        if ($this->_cacheEnabled and $pPath != '@app/cache/type') {
+            if ($this->_cacheInstance === NULL) {
+                $this->_cacheInstance = Agl::getCache();
+            }
+
+            if ($this->_cacheInstance->has('config.' . $pPath)) {
+                $this->_cache[$pPath] = $this->_cacheInstance->get('config.' . $pPath);
+                return $this->_cache[$pPath];
+            }
+        }
+
         $this->_cache[$pPath] = $this->_getConfigValues($pPath, $pForceGlobalArray);
+
+        if ($this->_cacheInstance !== NULL) {
+            $this->_cacheInstance->set('config.' . $pPath, $this->_cache[$pPath]);
+        }
 
         return $this->_cache[$pPath];
     }
