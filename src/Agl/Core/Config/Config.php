@@ -111,41 +111,38 @@ class Config
     }
 
     /**
-     * Get informations about the JSON instance to call to resolve the
-     * requested path.
+     * Load configuration file content if not already loaded.
      *
      * @param string $pPath Path to resolve
      * @return array File and updated path
      */
     private function _getInstance($pPath)
     {
-        $path = str_replace('@layout', '@module[' . Agl::AGL_CORE_POOL . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
+        $path     = str_replace('@layout', '@module[' . Agl::AGL_CORE_POOL . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
+        $filePath = self::_getConfigPath();
 
-        $file = self::_getConfigPath();
-
-        if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_POOL . '|' . Agl::AGL_MORE_DIR . ')/([a-z0-9]+)\]#i', $path, $matches)) {
+        if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_POOL . '|' . Agl::AGL_MORE_POOL . ')/([a-z0-9]+)\]#i', $path, $matches)) {
                 if ($matches[1] === Agl::AGL_CORE_POOL) {
-                    $file .= strtolower($matches[1])
-                           . DS
-                           . $matches[2]
-                           . self::EXT;
+                    $filePath    .= strtolower($matches[1]) . DS;
+                    $fileName = $matches[2] . self::EXT;
                 } else {
-                    $file .= strtolower($matches[1])
-                           . DS
-                           . $matches[2]
-                           . DS
-                           . self::MAIN_CONFIG_FILE
-                           . self::EXT;
+                    $filePath    .= strtolower($matches[1]) . DS . $matches[2] . DS;
+                    $fileName = self::MAIN_CONFIG_FILE . self::EXT;
                 }
         } else {
-            $file .= self::MAIN_CONFIG_FILE
-                   . self::EXT;
+            $fileName = self::MAIN_CONFIG_FILE . self::EXT;
         }
 
-        if (! isset($this->_instance[$file]) and is_readable($file)) {
-            $this->_instance[$file] = require($file);
-        } else if (! isset($this->_instance[$file])) {
-            $this->_instance[$file] = array();
+        $file = $filePath . $this->_envPrefix . $fileName;
+
+        if (! isset($this->_instance[$file])) {
+            if (is_readable($file)) {
+                $this->_instance[$file] = require($file);
+            } else if ($this->_envPrefix and is_readable($filePath . $fileName)) {
+                $this->_instance[$file] = require($filePath . $fileName);
+            } else {
+                $this->_instance[$file] = array();
+            }
         }
 
         return $this->_instance[$file];
@@ -206,7 +203,7 @@ class Config
                 } else if ($i < $nbKeys) {
                     $content = $content[$key];
                 } else if ($i == $nbKeys) {
-                    $this->_cache[$pPath] = (isset($content[$this->_envPrefix . $key])) ? $content[$this->_envPrefix . $key] : $content[$key];
+                    $this->_cache[$pPath] = $content[$key];
                 }
             }
         } else {
