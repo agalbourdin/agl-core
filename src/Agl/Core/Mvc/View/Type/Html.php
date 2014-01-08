@@ -328,12 +328,12 @@ class Html
 			$this->_loadCssFromArray($templateConfig['css']);
 		}
 
-		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/css'));
-		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/css'));
-		$this->_loadCssFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/css'));
+		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/css'));
+		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/css'));
+		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '/css'));
 
 		foreach ($this->_blocks as $block) {
-			$this->_loadCssFromArray(Agl::app()->getConfig('@layout/blocks/' . $block['group'] . '#' . $block['block'] . '/css'));
+			$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/blocks/' . $block['group'] . '#' . $block['block'] . '/css'));
 		}
 
 		return $this;
@@ -359,12 +359,12 @@ class Html
 			$this->_loadJsFromArray($templateConfig['js']);
 		}
 
-		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/js'));
-		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/js'));
-		$this->_loadJsFromArray(Agl::app()->getConfig('@layout/modules/' . $module . '/js'));
+		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/js'));
+		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/js'));
+		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '/js'));
 
 		foreach ($this->_blocks as $block) {
-			$this->_loadJsFromArray(Agl::app()->getConfig('@layout/blocks/' . $block['group'] . '#' . $block['block'] . '/js'));
+			$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/blocks/' . $block['group'] . '#' . $block['block'] . '/js'));
 		}
 
 		return $this;

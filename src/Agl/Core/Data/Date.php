@@ -56,7 +56,7 @@ class Date
     public static function toTz($pDate, $pTimezone = NULL)
     {
     	if ($pTimezone === NULL) {
-    		$pTimezone = Agl::app()->getConfig('@app/global/timezone');
+    		$pTimezone = Agl::app()->getConfig('main/global/timezone');
     	}
 
     	$time_object = new DateTime($pDate, new DateTimeZone(self::DEFAULT_TZ));
@@ -73,7 +73,7 @@ class Date
     public static function toDefault($pDate, $pTimezone = NULL)
     {
     	if ($pTimezone === NULL) {
-    		$pTimezone = Agl::app()->getConfig('@app/global/timezone');
+    		$pTimezone = Agl::app()->getConfig('main/global/timezone');
     	}
 
     	$time_object = new DateTime($pDate, new DateTimeZone($pTimezone));

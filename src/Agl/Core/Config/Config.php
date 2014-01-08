@@ -26,7 +26,7 @@ class Config
     /**
      * Events path (rewrited as events are splitted into multiple files).
      */
-    const CONFIG_EVENTS_PATH = '@app/events';
+    const CONFIG_EVENTS_PATH = 'main/events';
 
     /**
      * Global configuration file.
@@ -113,33 +113,25 @@ class Config
     /**
      * Load configuration file content if not already loaded.
      *
-     * @param string $pPath Path to resolve
-     * @return array File and updated path
+     * @param string $pFileStr File path to resolve
+     * @return array Configuration file content
      */
-    private function _getInstance($pPath)
+    private function _getInstance($pFileStr)
     {
-        $path     = str_replace('@layout', '@module[' . Agl::AGL_CORE_POOL . '/' . ViewInterface::CONFIG_FILE . ']', $pPath);
         $filePath = self::_getConfigPath();
+        $file     = $filePath . str_replace('-', DS, $pFileStr) . self::EXT;
 
-        if (strpos($path, '@module') === 0 and preg_match('#^@module\[(' . Agl::AGL_CORE_POOL . '|' . Agl::AGL_MORE_POOL . ')/([a-z0-9]+)\]#i', $path, $matches)) {
-                if ($matches[1] === Agl::AGL_CORE_POOL) {
-                    $filePath    .= strtolower($matches[1]) . DS;
-                    $fileName = $matches[2] . self::EXT;
-                } else {
-                    $filePath    .= strtolower($matches[1]) . DS . $matches[2] . DS;
-                    $fileName = self::MAIN_CONFIG_FILE . self::EXT;
-                }
-        } else {
-            $fileName = self::MAIN_CONFIG_FILE . self::EXT;
+        if ($this->_envPrefix) {
+            $file = preg_replace('/([a-z0-9]+\.)/i', $this->_envPrefix . '$1', $file);
         }
-
-        $file = $filePath . $this->_envPrefix . $fileName;
 
         if (! isset($this->_instance[$file])) {
             if (is_readable($file)) {
                 $this->_instance[$file] = require($file);
-            } else if ($this->_envPrefix and is_readable($filePath . $fileName)) {
-                $this->_instance[$file] = require($filePath . $fileName);
+            } else if ($this->_envPrefix
+                and $file = $filePath . str_replace('-', DS, $pFileStr) . self::EXT
+                and is_readable($file)) {
+                $this->_instance[$file] = require($file);
             } else {
                 $this->_instance[$file] = array();
             }
@@ -181,14 +173,18 @@ class Config
      */
     private function _getConfigValues($pPath, $pForceGlobalArray)
     {
+        $pathArr = explode(DS, $pPath, 2);
+        if (! isset($pathArr[1])) {
+            return NULL;
+        }
+
+        $path = rtrim($pathArr[1], '/');
+
         if ($pPath === self::CONFIG_EVENTS_PATH) {
             $content = $this->_getEventsConfig();
         } else {
-            $content = $this->_getInstance($pPath);
+            $content = $this->_getInstance($pathArr[0]);
         }
-
-        $path = str_replace('@app/', '', $pPath);
-        $path = preg_replace('#^(@module\[([a-z0-9/]+)\]|@layout)(/)?#', '', $path);
 
         if ($path) {
             $pathArr = explode('/', $path);

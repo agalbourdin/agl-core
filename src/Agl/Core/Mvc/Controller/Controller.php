@@ -53,18 +53,18 @@ class Controller
 		$view        = $request->getView();
 		$action      = $request->getAction();
 		$cacheInfo   = array();
-		$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/' . ConfigInterface::CONFIG_CACHE_NAME);
+		$cacheConfig = Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/' . ConfigInterface::CONFIG_CACHE_NAME);
 
 		if ($cacheConfig === NULL) {
-			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/' . ConfigInterface::CONFIG_CACHE_NAME);
+			$cacheConfig = Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/' . ConfigInterface::CONFIG_CACHE_NAME);
 		}
 
 		if ($cacheConfig === NULL) {
-			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/' . ConfigInterface::CONFIG_CACHE_NAME);
+			$cacheConfig = Agl::app()->getConfig('core-layout/modules/' . $module . '/' . ConfigInterface::CONFIG_CACHE_NAME);
 		}
 
 		if ($cacheConfig === NULL) {
-			$cacheConfig = Agl::app()->getConfig('@layout/modules/' . ConfigInterface::CONFIG_CACHE_NAME);
+			$cacheConfig = Agl::app()->getConfig('core-layout/modules/' . ConfigInterface::CONFIG_CACHE_NAME);
 		}
 
 		if (is_array($cacheConfig)) {

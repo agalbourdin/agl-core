@@ -15,7 +15,7 @@ use \Agl\Core\Agl,
  * @version 0.1.0
  */
 
-switch(Agl::app()->getConfig('@app/cache/type')) {
+switch(Agl::app()->getConfig('main/cache/type')) {
     case CacheInterface::TYPE_APCU:
         class Cache extends ApcuCache { }
         break;
@@ -23,5 +23,5 @@ switch(Agl::app()->getConfig('@app/cache/type')) {
         class Cache extends FileCache { }
         break;
     default:
-        throw new Exception("Cache type '" . Agl::app()->getConfig('@app/cache/type') . "' is not allowed");
+        throw new Exception("Cache type '" . Agl::app()->getConfig('main/cache/type') . "' is not allowed");
 }

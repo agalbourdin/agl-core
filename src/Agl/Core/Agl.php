@@ -401,7 +401,7 @@ final class Agl
      */
     public function getDb()
     {
-        if ($this->_db === NULL and $this->getConfig('@app/db/engine')) {
+        if ($this->_db === NULL and $this->getConfig('main/db/engine')) {
             $this->_db = new Connection();
         }
 

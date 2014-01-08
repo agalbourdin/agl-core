@@ -46,7 +46,7 @@ class Acl
 	public function __construct($aclConfig = NULL)
 	{
 		if ($aclConfig === NULL) {
-			$aclConfig = Agl::app()->getConfig('@module[' . Agl::AGL_CORE_POOL . '/acl]');
+			$aclConfig = Agl::app()->getConfig(Agl::AGL_CORE_POOL . '-acl/');
 		}
 
 		if (is_array($aclConfig)) {

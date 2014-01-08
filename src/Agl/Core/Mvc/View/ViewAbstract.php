@@ -70,18 +70,18 @@ abstract class ViewAbstract
 			$view    = $request->getView();
 			$action  = $request->getAction();
 
-			self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '#action#' . $action . '/template');
+			self::$_templateConfig = Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/template');
 
 			if (self::$_templateConfig === NULL) {
-			    self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '#' . $view . '/template');
+			    self::$_templateConfig = Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/template');
 			}
 
 			if (self::$_templateConfig === NULL) {
-			    self::$_templateConfig = Agl::app()->getConfig('@layout/modules/' . $module . '/template');
+			    self::$_templateConfig = Agl::app()->getConfig('core-layout/modules/' . $module . '/template');
 			}
 
 			if (self::$_templateConfig === NULL) {
-				self::$_templateConfig = Agl::app()->getConfig('@layout/template');
+				self::$_templateConfig = Agl::app()->getConfig('core-layout/template');
 			}
 		}
 
@@ -240,7 +240,7 @@ abstract class ViewAbstract
         	'block' => $blockPathInfos[2]
         );
 
-        $blockConfig = Agl::app()->getConfig('@layout/blocks/' . $blockPathInfos[1] . '#' . $blockPathInfos[2]);
+        $blockConfig = Agl::app()->getConfig('core-layout/blocks/' . $blockPathInfos[1] . '#' . $blockPathInfos[2]);
         if ($blockConfig === NULL) {
         	$blockConfig = array();
         }

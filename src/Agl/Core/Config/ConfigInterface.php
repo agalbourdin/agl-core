@@ -32,7 +32,7 @@ interface ConfigInterface
     /**
      * Cache type configuration key.
      */
-    const CONFIG_CACHE_TYPE_KEY = '@app/cache/type';
+    const CONFIG_CACHE_TYPE_KEY = 'main/cache/type';
 
     public function __construct();
     public function getConfig($pPath);

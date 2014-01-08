@@ -124,7 +124,7 @@ class Debug
         }
 
         if (Agl::app()->getDb() !== NULL) {
-            $debugInfos['db']['db_engine'] = Agl::app()->getConfig('@app/db/engine');
+            $debugInfos['db']['db_engine'] = Agl::app()->getConfig('main/db/engine');
             $debugInfos['db']['queries']   = Agl::app()->getDb()->countQueries();
         }
 

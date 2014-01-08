@@ -31,7 +31,7 @@ abstract class QueryAbstract
             return $this;
         }
 
-        $dbPrefix = Agl::app()->getConfig('@app/db/prefix');
+        $dbPrefix = Agl::app()->getConfig('main/db/prefix');
         if ($dbPrefix) {
             $this->_dbPrefix = $dbPrefix;
         }

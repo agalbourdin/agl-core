@@ -61,10 +61,10 @@ abstract class ConnectionAbstract
     {
         if (is_null($this->_connection)) {
             $this->setConnection(
-                Agl::app()->getConfig('@app/db/host'),
-                Agl::app()->getConfig('@app/db/name'),
-                Agl::app()->getConfig('@app/db/user'),
-                Agl::app()->getConfig('@app/db/password')
+                Agl::app()->getConfig('main/db/host'),
+                Agl::app()->getConfig('main/db/name'),
+                Agl::app()->getConfig('main/db/user'),
+                Agl::app()->getConfig('main/db/password')
             );
         }
 

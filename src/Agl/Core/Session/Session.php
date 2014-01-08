@@ -15,7 +15,7 @@ use \Agl\Core\Agl,
  * @version 0.1.0
  */
 
-switch(Agl::app()->getConfig('@app/session/storage')) {
+switch(Agl::app()->getConfig('main/session/storage')) {
     case SessionInterface::STORAGE_FILE:
         class Session extends FileSession { }
         break;
@@ -23,5 +23,5 @@ switch(Agl::app()->getConfig('@app/session/storage')) {
         class Session extends DbSession { }
         break;
     default:
-        throw new Exception("Session storage type '" . Agl::app()->getConfig('@app/session:storage') . "' is not allowed");
+        throw new Exception("Session storage type '" . Agl::app()->getConfig('main/session/storage') . "' is not allowed");
 }

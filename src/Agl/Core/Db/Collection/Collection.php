@@ -15,10 +15,10 @@ use \Agl\Core\Agl,
  * @version 0.1.0
  */
 
-switch(Agl::app()->getConfig('@app/db/engine')) {
+switch(Agl::app()->getConfig('main/db/engine')) {
     case ConnectionInterface::MYSQL:
         class Collection extends MysqlCollection { }
         break;
     default:
-        throw new Exception("DB Engine '" . Agl::app()->getConfig('@app/db/engine') . "' is not allowed");
+        throw new Exception("DB Engine '" . Agl::app()->getConfig('main/db/engine') . "' is not allowed");
 }
