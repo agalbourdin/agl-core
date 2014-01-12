@@ -20,7 +20,7 @@ abstract class SessionAbstract
 	public function __construct()
 	{
         if (! isset($_SESSION)) {
-    		session_start();
+    		@session_start();
         }
 
         $this->_setCsrfToken();

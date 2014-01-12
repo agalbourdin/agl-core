@@ -52,8 +52,8 @@ class Auth
 	private function _initUser()
 	{
 		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
-		if ($this->_session->hasUserId()) {
-			$this->_user->loadById($this->_session->getUserId());
+		if ($this->_session->userId) {
+			$this->_user->loadById($this->_session->userId);
 		}
 
 		return $this;
@@ -71,7 +71,7 @@ class Auth
 		$this->_user = $pUser;
 
 		if ($this->_user->getId()) {
-			$this->_session->setUserId($this->_user->getId());
+			$this->_session->userId = $this->_user->getId();
 			return true;
 		}
 
@@ -106,7 +106,7 @@ class Auth
 
 		$this->_user->load($conditions);
 		if ($this->_user->getId()) {
-			$this->_session->setUserId($this->_user->getId());
+			$this->_session->userId = $this->_user->getId();
 			return true;
 		}
 
@@ -121,7 +121,7 @@ class Auth
 	public function logout()
 	{
 		$this->_user = Agl::getModel(self::USER_DB_CONTAINER);
-		$this->_session->removeUserId();
+		unset($this->_session->userId);
 		return $this;
 	}
 
@@ -132,7 +132,7 @@ class Auth
 	 */
 	public function isLogged()
 	{
-		return ($this->_session->getUserId()) ? true : false;
+		return ($this->_session->UserId) ? true : false;
 	}
 
 	/**

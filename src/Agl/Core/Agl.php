@@ -91,11 +91,12 @@ final class Agl
      *
      * @param bool $pCache
      * @param bool $pDebug
+     * @param null|string $pConfigPath Optional custom configuration path
      */
-    public static function run($pCache = false, $pDebug = false)
+    public static function run($pCache = false, $pDebug = false, $pConfigPath = NULL)
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new self($pCache, $pDebug);
+            self::$_instance = new self($pCache, $pDebug, $pConfigPath);
         } else {
             throw new Exception("The application has already been initialized - use app() to get access to it");
         }
@@ -301,15 +302,22 @@ final class Agl
      *
      * @param bool $pCache
      * @param bool $pDebug
+     * @param null|string $pConfigPath
      */
-    private function __construct($pCache, $pDebug)
+    private function __construct($pCache = false, $pDebug = false, $pConfigPath = NULL)
     {
         /*if (date_default_timezone_get() !== \Agl\Core\Data\Date::DEFAULT_TZ) {
             date_default_timezone_set(\Agl\Core\Data\Date::DEFAULT_TZ);
         }*/
 
         $this->_cache = ($pCache) ? true : false;
-        $this->_debug = ($pDebug or CLI) ? true : false;
+        $this->_debug = ($pDebug or (defined('CLI') and CLI)) ? true : false;
+
+        if ($pConfigPath === NULL) {
+            $this->_configPath = APP_PATH . self::APP_ETC_DIR . Config::MAIN_DIR . DS;
+        } else {
+            $this->_configPath = $pConfigPath;
+        }
 
         error_reporting(-1);
 
@@ -328,7 +336,7 @@ final class Agl
      */
     public function __destruct()
     {
-        if ($this->_debug and Debug::isHtmlView() and ! CLI) {
+        if ($this->_debug and Debug::isHtmlView() and defined('CLI') and ! CLI) {
             var_dump(Debug::getInfos());
         }
     }
@@ -375,6 +383,18 @@ final class Agl
     public function isLogEnabled()
     {
         return $this->_log;
+    }
+
+    /**
+     * Get custom configuration path.
+     *
+     * @return null|string
+     *
+     * @return bool
+     */
+    public function getConfigPath()
+    {
+        return $this->_configPath;
     }
 
     /**

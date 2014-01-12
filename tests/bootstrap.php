@@ -10,8 +10,6 @@ define('MYSQL_PASSWORD', '');
 /**
  * You shouldn't have to edit following lines.
  */
-session_start();
-
 define('AGL_PATH', dirname(__DIR__) . '/src/Agl/Core/');
 define('APP_PATH', dirname(__DIR__) . '/');
 define('COMPOSER_DIR', dirname(__DIR__) . '/vendor/');
@@ -25,3 +23,5 @@ require(COMPOSER_DIR . 'autoload.php');
 require(AGL_PATH . 'Agl.php');
 require(AGL_PATH . 'Autoload.php');
 new \Agl\Core\Autoload();
+
+Agl\Core\Agl::run(false, false, dirname(__FILE__) . DS . 'etc/config1/');

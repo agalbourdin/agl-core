@@ -23,7 +23,7 @@ class Db
     /**
      * The database collection to store the sessions.
      */
-    const DB_COLLECTION = 'sessions';
+    const DB_COLLECTION = 'session';
 
     /**
      * Database Items.
@@ -79,7 +79,7 @@ class Db
     {
         if (! isset($this->_items[$pId])) {
             $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
-            $this->_items[$pId]->loadById($pId);
+            $this->_items[$pId]->loadByRealId($pId);
         }
 
         if ($this->_items[$pId]->getId()) {
@@ -106,15 +106,15 @@ class Db
 
         if (! isset($this->_items[$pId])) {
             $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
-            $this->_items[$pId]->loadById($pId);
+            $this->_items[$pId]->loadByRealId($pId);
         }
 
         $this->_items[$pId]
+            ->setRealId($pId)
             ->setAccess($access)
             ->setData($pData);
 
         if (! $this->_items[$pId]->getId()) {
-            $this->_items[$pId]->setId($pId);
             $this->_items[$pId]->insert();
         } else {
             $this->_items[$pId]->save();
@@ -133,7 +133,7 @@ class Db
     {
         if (! isset($this->_items[$pId])) {
             $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
-            $this->_items[$pId]->loadById($pId);
+            $this->_items[$pId]->loadByRealId($pId);
         }
 
         if ($this->_items[$pId]->getId()) {
@@ -163,10 +163,7 @@ class Db
         $conditions->add('access', Conditions::LT, $old);
 
         $collection->load($conditions);
-
-        while ($item = $collection->next()) {
-            $item->delete();
-        }
+        $collection->deleteItems();
 
         return true;
     }

@@ -6,26 +6,13 @@ class MysqlConnectionTest
 
 	private $_dbStructure = array(
 		'comment',
+        'session',
 		'user'
 	);
 
     public static function setUpBeforeClass()
     {
-        self::$_instance = new \Agl\Core\Mysql\Connection();
-    }
-
-    /**
-     * @expectedException Exception
-     */
-    public function testSetConnectionException()
-    {
-    	self::$_instance->setConnection('host', 'dbname');
-    }
-
-    public function testSetConnection()
-    {
-    	self::$_instance->setConnection(MYSQL_HOST, MYSQL_DBNAME, MYSQL_USER, MYSQL_PASSWORD);
-    	$this->assertInstanceOf('PDO', self::$_instance->getConnection());
+        self::$_instance = Agl::app()->getDb();
     }
 
     public function testDefaultCount()

@@ -57,6 +57,13 @@ class Config
     private $_cache = array();
 
     /**
+     * Main configuration directory absolute path.
+     *
+     * @var string
+     */
+    private $_configPath = NULL;
+
+    /**
      * Config files loaded are stored in this array.
      *
      * @var array
@@ -95,19 +102,7 @@ class Config
         }
 
         $this->_cacheEnabled = Agl::app()->isCacheEnabled();
-    }
-
-    /**
-     * Return absolute path to the config directory.
-     *
-     * @return string
-     */
-    private static function _getConfigPath()
-    {
-        return APP_PATH
-             . Agl::APP_ETC_DIR
-             . self::MAIN_DIR
-             . DS;
+        $this->_configPath   = Agl::app()->getConfigPath();
     }
 
     /**
@@ -118,7 +113,7 @@ class Config
      */
     private function _getInstance($pFileStr)
     {
-        $filePath = self::_getConfigPath();
+        $filePath = $this->_configPath;
         $file     = $filePath . str_replace('-', DS, $pFileStr) . self::EXT;
 
         if ($this->_envPrefix) {
@@ -149,7 +144,7 @@ class Config
     {
         $content = array(self:: MAIN_EVENTS_FILE => array());
 
-        $configPath = self::_getConfigPath();
+        $configPath = $this->_configPath;
         if (! is_dir($configPath)) {
             return $content;
         }

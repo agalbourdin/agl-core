@@ -59,11 +59,6 @@ class Html
     const CSS_EXT = '.css';
 
     /**
-     * CSS file extension.
-     */
-    const LESSCSS_EXT = '.less';
-
-    /**
      * JS file extension.
      */
     const JS_EXT = '.js';
@@ -173,11 +168,7 @@ class Html
 				$filePath = $css;
 			}
 
-			if (strpos($filePath, self::LESSCSS_EXT) === false) {
-				$cssTags[] = '<link href="' . $filePath . '" rel="stylesheet" type="text/css">';
-			} else {
-				$cssTags[] = '<link href="' . $filePath . '" rel="stylesheet/less" type="text/css">';
-			}
+			$cssTags[] = '<link href="' . $filePath . '" rel="stylesheet" type="text/css">';
 		}
 
 		$pBuffer = str_replace(self::getCssMarker(), implode("\n", $cssTags) . "\n", $pBuffer);
