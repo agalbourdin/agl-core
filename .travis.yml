@@ -15,6 +15,7 @@ before_script:
   - "mysql -D 'agl_core_tests' -e 'CREATE TABLE IF NOT EXISTS `comment` (`comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,`comment_date_add` datetime NOT NULL,`comment_date_update` datetime NOT NULL DEFAULT \"0000-00-00 00:00:00\",`comment_text` text NOT NULL,PRIMARY KEY (`comment_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'"
   - "mysql -D 'agl_core_tests' -e 'CREATE TABLE IF NOT EXISTS `user` (`user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,`user_date_add` datetime NOT NULL,`user_date_update` datetime NOT NULL DEFAULT \"0000-00-00 00:00:00\",`user_email` varchar( 255 ) NOT NULL,PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'"
   - "mysql -D 'agl_core_tests' -e 'CREATE TABLE IF NOT EXISTS `session` (`session_id` int(10) unsigned NOT NULL AUTO_INCREMENT,`session_date_add` datetime NOT NULL,`session_date_update` datetime NOT NULL DEFAULT \"0000-00-00 00:00:00\",`session_data` text NOT NULL,`session_real_id` char( 32 ) NOT NULL,`session_access` int(10) unsigned NOT NULL,PRIMARY KEY (`session_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'"
-  - "mysql -D 'agl_core_tests' -e 'INSERT INTO `user` (`user_date_add`,`user_email`) VALUES (NOW(),\"ask@agl.io\");'"
+  - "mysql -D 'agl_core_tests' -e 'INSERT INTO `user` (`user_date_add`,`user_email`) VALUES (NOW(),\"test1@agl.io\");'"
+  - "mysql -D 'agl_core_tests' -e 'INSERT INTO `user` (`user_date_add`,`user_email`) VALUES (NOW(),\"test2@agl.io\");'"
 
 script: phpunit

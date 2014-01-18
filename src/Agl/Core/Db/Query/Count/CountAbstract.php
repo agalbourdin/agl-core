@@ -31,13 +31,6 @@ abstract class CountAbstract
     protected $_conditions = NULL;
 
     /**
-     * Set a limit to the count query.
-     *
-     * @var int
-     */
-    protected $_limit = 0;
-
-    /**
      * Specific field to count.
      *
      * @var array
@@ -69,22 +62,6 @@ abstract class CountAbstract
     public function loadConditions(Conditions $pConditions)
     {
         $this->_conditions = $pConditions;
-        return $this;
-    }
-
-    /**
-     * Set the count limit.
-     *
-     * @param int $pNb
-     * @return CountAbstract
-     */
-    public function limit($pNb)
-    {
-        Agl::validateParams(array(
-            'Int' => $pNb
-        ));
-
-        $this->_limit = $pNb;
         return $this;
     }
 

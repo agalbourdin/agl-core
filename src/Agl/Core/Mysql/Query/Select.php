@@ -170,31 +170,44 @@ class Select
     }
 
     /**
-     * Fetch the result row corresponding to the requested pointer.
+     * Fetch all the results as array.
      *
-     * @param int $pPointer
-     * @return bool|array
-     */
-    public function fetch($pPointer)
-    {
-        if ($this->_stm === false) {
-            return false;
-        }
-
-        return $this->_stm->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_ABS, $pPointer);
-    }
-
-    /**
-     * Fetch all the results.
-     *
-     * @return bool|array
+     * @return array
      */
     public function fetchAll()
     {
         if ($this->_stm === false) {
-            return false;
+            return array();
         }
 
         return $this->_stm->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Fetch all the results as array of items.
+     *
+     * @return array
+     */
+    public function fetchAllAsItems()
+    {
+        $data = array();
+
+        if ($this->_stm === false) {
+            return $data;
+        }
+
+        while ($row = $this->_stm->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = Agl::getModel($this->_dbContainer, $row);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Close cursor.
+     */
+    public function closeCursor()
+    {
+        $this->_stm->closeCursor();
     }
 }

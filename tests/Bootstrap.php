@@ -24,4 +24,4 @@ require(AGL_PATH . 'Agl.php');
 require(AGL_PATH . 'Autoload.php');
 new \Agl\Core\Autoload();
 
-Agl\Core\Agl::run(false, false, dirname(__FILE__) . DS . 'etc/config1/');
+Agl\Core\Agl::run(false, false, dirname(__FILE__) . DS . 'etc/config/');

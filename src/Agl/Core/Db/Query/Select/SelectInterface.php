@@ -27,6 +27,6 @@ interface SelectInterface
     public function find();
     public function findOne();
     public function count();
-    public function fetch($pPointer);
     public function fetchAll();
+    public function closeCursor();
 }

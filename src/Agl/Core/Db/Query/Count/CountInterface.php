@@ -18,6 +18,5 @@ interface CountInterface
 
     public function __construct($pDbContainer);
     public function loadConditions(Conditions $pConditions);
-    public function limit($pNb);
     public function setField($pField, $pDistinct = false);
 }

@@ -21,16 +21,23 @@ interface CollectionInterface
      */
     const APP_PHP_DIR = 'collection';
 
+    /**
+     * Load filters options.
+     */
+    const FILTER_CONDITIONS = 'conditions';
+    const FILTER_LIMIT      = 'limit';
+    const FILTER_ORDER      = 'order';
+
     public function __construct($pDbContainer);
     public function __call($pMethod, array $pArgs);
-    public function load($pConditions = NULL, $pLimit = NULL, $pOrder = NULL);
+    public function load(array $pArgs);
     public function getDbContainer();
-    public function current();
-    public function next();
-    public function prev();
-    public function count($pConditions = NULL, $pLimit = NULL);
+    public function count($pConditions = NULL);
     public function save();
     public function deleteItems();
-    public function drop();
-    public function resetPointer();
+    public function rewind();
+    public function current();
+    public function key();
+    public function next();
+    public function valid();
 }
