@@ -2,6 +2,7 @@
 namespace Agl\Core\Mysql\Query;
 
 use \Agl\Core\Agl,
+    \Agl\Core\Db\DbInterface,
     \Agl\Core\Db\Query\Select\SelectAbstract,
     \Agl\Core\Db\Query\Select\SelectInterface,
     \Exception,
@@ -21,16 +22,6 @@ class Select
         implements SelectInterface
 {
     /**
-     * Order ASC keyword.
-     */
-    const ORDER_ASC = 'ASC';
-
-    /**
-     * Order DESC keyword.
-     */
-    const ORDER_DESC = 'DESC';
-
-    /**
      * PDO Statement.
      *
      * @var bool|PDOStatement
@@ -46,7 +37,7 @@ class Select
     {
         $orders = array();
 
-        if (isset($this->_order[static::ORDER_RAND])) {
+        if (isset($this->_order[DbInterface::ORDER_RAND])) {
             $orders[] = 'RAND()';
         } else {
             foreach ($this->_order as $field => $order) {

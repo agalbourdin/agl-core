@@ -13,11 +13,6 @@ use \Agl\Core\Db\Query\Conditions\Conditions;
 
 interface SelectInterface
 {
-    /**
-     * Order RANDOM keyword.
-     */
-    const ORDER_RAND = 'RAND';
-
     public function __construct($pDbContainer);
     public function addFields(array $pFields);
     public function addOrder(array $pFields);

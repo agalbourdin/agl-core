@@ -21,13 +21,6 @@ interface CollectionInterface
      */
     const APP_PHP_DIR = 'collection';
 
-    /**
-     * Load filters options.
-     */
-    const FILTER_CONDITIONS = 'conditions';
-    const FILTER_LIMIT      = 'limit';
-    const FILTER_ORDER      = 'order';
-
     public function __construct($pDbContainer);
     public function __call($pMethod, array $pArgs);
     public function load(array $pArgs);

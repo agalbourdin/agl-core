@@ -54,7 +54,7 @@ class MysqlItemTest
     public function testLoadByWithConditionsNoResults()
     {
         self::$_instance->loadByEmail('test1@agl.io', array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('id', Conditions::EQ, 10)
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('id', Conditions::EQ, 10)
         ));
         $this->assertEquals(NULL, self::$_instance->getEmail());
     }
@@ -62,7 +62,7 @@ class MysqlItemTest
     public function testLoadByWithConditionsResults()
     {
         self::$_instance->loadByEmail('test1@agl.io', array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('id', Conditions::IN, array(1, 2))
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('id', Conditions::IN, array(1, 2))
         ));
         $this->assertEquals('test1@agl.io', self::$_instance->getEmail());
     }
@@ -70,7 +70,7 @@ class MysqlItemTest
     public function testLoadWithOrder()
     {
         self::$_instance->load(array(
-            Collection::FILTER_ORDER => array('id' => Select::ORDER_ASC)
+            Db::FILTER_ORDER => array('id' => Db::ORDER_ASC)
         ));
         $this->assertEquals('test1@agl.io', self::$_instance->getEmail());
     }

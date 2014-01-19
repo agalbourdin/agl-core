@@ -1,18 +1,18 @@
 <?php
-namespace Agl\Core\Db\Connection;
+namespace Agl\Core\Db;
 
 use \Agl\Core\Agl,
     \Agl\Core\Db\Query\QueryAbstract;
 
 /**
- * Abstract class - Connection
+ * Abstract class - Db
  *
  * @category Agl_Core
- * @package Agl_Core_Db_Connection
+ * @package Agl_Core_Db
  * @version 0.1.0
  */
 
-abstract class ConnectionAbstract
+abstract class DbAbstract
     extends QueryAbstract
 {
     /**
@@ -43,7 +43,7 @@ abstract class ConnectionAbstract
      * @param string $pName
      * @param null|string $pUser
      * @param null|string $pPassword
-     * @return ConnectionAbstract
+     * @return Db
      */
     public function setConnection($pHost, $pName, $pUser = NULL, $pPassword = NULL)
     {

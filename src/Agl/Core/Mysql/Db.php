@@ -2,8 +2,8 @@
 namespace Agl\Core\Mysql;
 
 use \Agl\Core\Agl,
-    \Agl\Core\Db\Connection\ConnectionAbstract,
-    \Agl\Core\Db\Connection\ConnectionInterface,
+    \Agl\Core\Db\DbAbstract,
+    \Agl\Core\Db\DbInterface,
     \Exception,
     \PDO,
     \PDOException;
@@ -16,10 +16,20 @@ use \Agl\Core\Agl,
  * @version 0.1.0
  */
 
-class Connection
-    extends ConnectionAbstract
-        implements ConnectionInterface
+class Db
+    extends DbAbstract
+        implements DbInterface
 {
+    /**
+     * Order ASC keyword.
+     */
+    const ORDER_ASC = 'ASC';
+
+    /**
+     * Order DESC keyword.
+     */
+    const ORDER_DESC = 'DESC';
+
     /**
      * Close the database connection.
      *

@@ -2,7 +2,7 @@
 namespace Agl\Core\Db\Query\Select;
 
 use \Agl\Core\Agl,
-	\Agl\Core\Db\Connection\ConnectionInterface,
+	\Agl\Core\Db\DbInterface,
 	\Agl\Core\Mysql\Query\Select as MysqlSelect,
 	\Exception;
 
@@ -16,7 +16,7 @@ use \Agl\Core\Agl,
  */
 
 switch(Agl::app()->getConfig('main/db/engine')) {
-    case ConnectionInterface::MYSQL:
+    case DbInterface::MYSQL:
         class Select extends MysqlSelect { }
         break;
     default:

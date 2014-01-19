@@ -3,7 +3,7 @@ namespace Agl\Core;
 
 use \Agl\Core\Config\Config,
     \Agl\Core\Data\Validation,
-    \Agl\Core\Db\Connection\Connection,
+    \Agl\Core\Db\Db,
     \Agl\Core\Db\Query\Conditions\Conditions,
     \Agl\Core\Debug\Debug,
     \Agl\Core\Loader\Loader,
@@ -53,7 +53,7 @@ final class Agl
     /**
      * Save the database instance.
      *
-     * @var Connection
+     * @var Db
      */
     private $_db = NULL;
 
@@ -422,7 +422,7 @@ final class Agl
     public function getDb()
     {
         if ($this->_db === NULL and $this->getConfig('main/db/engine')) {
-            $this->_db = new Connection();
+            $this->_db = new Db();
         }
 
         return $this->_db;

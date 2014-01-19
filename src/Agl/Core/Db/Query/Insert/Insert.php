@@ -2,7 +2,7 @@
 namespace Agl\Core\Db\Query\Insert;
 
 use \Agl\Core\Agl,
-	\Agl\Core\Db\Connection\ConnectionInterface,
+	\Agl\Core\Db\DbInterface,
 	\Agl\Core\Mysql\Query\Insert as MysqlInsert,
 	\Exception;
 
@@ -16,7 +16,7 @@ use \Agl\Core\Agl,
  */
 
 switch(Agl::app()->getConfig('main/db/engine')) {
-    case ConnectionInterface::MYSQL:
+    case DbInterface::MYSQL:
         class Insert extends MysqlInsert { }
         break;
     default:

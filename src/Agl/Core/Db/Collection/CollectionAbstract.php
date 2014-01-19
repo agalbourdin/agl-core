@@ -3,6 +3,8 @@ namespace Agl\Core\Db\Collection;
 
 use \Agl\Core\Agl,
     \Agl\Core\Data\String as StringData,
+    \Agl\Core\Db\Db,
+    \Agl\Core\Db\DbInterface,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Conditions\Conditions,
     \Agl\Core\Db\Query\Count\Count,
@@ -107,12 +109,12 @@ abstract class CollectionAbstract
     {
         $args = $pArgs;
 
-        if (! isset($args[static::FILTER_CONDITIONS])
-            or ! $args[static::FILTER_CONDITIONS] instanceof Conditions) {
-            $args[static::FILTER_CONDITIONS] = new Conditions();
+        if (! isset($args[DbInterface::FILTER_CONDITIONS])
+            or ! $args[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $args[DbInterface::FILTER_CONDITIONS] = new Conditions();
         }
 
-        $args[static::FILTER_CONDITIONS]->add(
+        $args[DbInterface::FILTER_CONDITIONS]->add(
             $pAttribute,
             Conditions::EQ,
             $pValue
@@ -150,20 +152,20 @@ abstract class CollectionAbstract
             ItemInterface::IDFIELD => true
         ));*/
 
-        if (isset($pArgs[static::FILTER_LIMIT])) {
-            $select->limit($pArgs[static::FILTER_LIMIT]);
+        if (isset($pArgs[DbInterface::FILTER_LIMIT])) {
+            $select->limit($pArgs[DbInterface::FILTER_LIMIT]);
         }
 
-        if (isset($pArgs[static::FILTER_ORDER])) {
-            $select->addOrder($pArgs[static::FILTER_ORDER]);
+        if (isset($pArgs[DbInterface::FILTER_ORDER])) {
+            $select->addOrder($pArgs[DbInterface::FILTER_ORDER]);
         } else {
             $select->addOrder(array(
-                $this->_dbContainer . ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD => Select::ORDER_DESC
+                $this->_dbContainer . ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD => Db::ORDER_DESC
             ));
         }
 
-        if (isset($pArgs[static::FILTER_CONDITIONS]) and  $pArgs[static::FILTER_CONDITIONS] instanceof Conditions) {
-            $select->loadConditions($pArgs[static::FILTER_CONDITIONS]);
+        if (isset($pArgs[DbInterface::FILTER_CONDITIONS]) and  $pArgs[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $select->loadConditions($pArgs[DbInterface::FILTER_CONDITIONS]);
         }
 
         $select->find();
@@ -184,8 +186,8 @@ abstract class CollectionAbstract
     public function loadLast($pNb = 1)
     {
         return $this->load(array(
-            static::FILTER_LIMIT => $pNb,
-            static::FILTER_ORDER => array(ItemInterface::IDFIELD => Select::ORDER_DESC)
+            DbInterface::FILTER_LIMIT => $pNb,
+            DbInterface::FILTER_ORDER => array(ItemInterface::IDFIELD => Db::ORDER_DESC)
         ));
     }
 
@@ -198,8 +200,8 @@ abstract class CollectionAbstract
     public function loadFirst($pNb = 1)
     {
         return $this->load(array(
-            static::FILTER_LIMIT => $pNb,
-            static::FILTER_ORDER => array(ItemInterface::IDFIELD => Select::ORDER_ASC)
+            DbInterface::FILTER_LIMIT => $pNb,
+            DbInterface::FILTER_ORDER => array(ItemInterface::IDFIELD => Db::ORDER_ASC)
         ));
     }
 
@@ -212,8 +214,8 @@ abstract class CollectionAbstract
     public function loadRandom($pNb = 1)
     {
         return $this->load(array(
-            static::FILTER_LIMIT => $pNb,
-            static::FILTER_ORDER => array(ItemInterface::IDFIELD => Select::ORDER_RAND)
+            DbInterface::FILTER_LIMIT => $pNb,
+            DbInterface::FILTER_ORDER => array(ItemInterface::IDFIELD => DbInterface::ORDER_RAND)
         ));
     }
 

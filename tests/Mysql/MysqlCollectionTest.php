@@ -136,32 +136,32 @@ class MysqlCollectionTest
     public function testLoadWithConditions()
     {
         $this->assertEquals(0, self::$_instance->load(array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::EQ, 'test@agl.io')
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::EQ, 'test@agl.io')
         ))->count());
     }
 
     public function testLoadWithLimit()
     {
-        $this->assertEquals(1, self::$_instance->load(array(Collection::FILTER_LIMIT => 1))->count());
+        $this->assertEquals(1, self::$_instance->load(array(Db::FILTER_LIMIT => 1))->count());
     }
 
     public function testLoadWithLimitArray()
     {
-        self::$_instance->load(array(Collection::FILTER_LIMIT => array(1, 1)));
+        self::$_instance->load(array(Db::FILTER_LIMIT => array(1, 1)));
         $this->assertEquals('test1@agl.io', self::$_instance->current()->getEmail());
     }
 
     public function testLoadWithOrder()
     {
-        self::$_instance->load(array(Collection::FILTER_ORDER => array('id' => Select::ORDER_ASC)));
+        self::$_instance->load(array(Db::FILTER_ORDER => array('id' => Db::ORDER_ASC)));
         $this->assertEquals('test1@agl.io', self::$_instance->current()->getEmail());
     }
 
     public function testLoadWithConditionsAndLimit()
     {
         self::$_instance->load(array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'test%'),
-            Collection::FILTER_LIMIT      => array(1, 1)
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'test%'),
+            Db::FILTER_LIMIT      => array(1, 1)
         ));
         $this->assertEquals('test1@agl.io', self::$_instance->current()->getEmail());
     }
@@ -169,8 +169,8 @@ class MysqlCollectionTest
     public function testLoadWithLimitAndOrder()
     {
         self::$_instance->load(array(
-            Collection::FILTER_LIMIT => 1,
-            Collection::FILTER_ORDER => array('email' => Select::ORDER_ASC)
+            Db::FILTER_LIMIT => 1,
+            Db::FILTER_ORDER => array('email' => Db::ORDER_ASC)
         ));
         $this->assertEquals('test1@agl.io', self::$_instance->current()->getEmail());
     }
@@ -178,8 +178,8 @@ class MysqlCollectionTest
     public function testLoadWithConditionsAndOrder()
     {
         self::$_instance->load(array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'test%'),
-            Collection::FILTER_ORDER      => array('id' => SELECT::ORDER_ASC)
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'test%'),
+            Db::FILTER_ORDER      => array('id' => Db::ORDER_ASC)
         ));
         $this->assertEquals('test1@agl.io', self::$_instance->current()->getEmail());
     }
@@ -187,9 +187,9 @@ class MysqlCollectionTest
     public function testLoadFull()
     {
         self::$_instance->load(array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'test%'),
-            Collection::FILTER_ORDER      => array('id' => SELECT::ORDER_ASC),
-            Collection::FILTER_LIMIT      => array(1, 1)
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'test%'),
+            Db::FILTER_ORDER      => array('id' => Db::ORDER_ASC),
+            Db::FILTER_LIMIT      => array(1, 1)
         ));
         $this->assertEquals('test2@agl.io', self::$_instance->current()->getEmail());
     }
@@ -197,7 +197,7 @@ class MysqlCollectionTest
     public function testLoadNoResultsWithConditions()
     {
         $this->assertEquals(0, self::$_instance->load(array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'testt%')
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('email', Conditions::LIKE, 'testt%')
         ))->count());
     }
 
@@ -208,7 +208,7 @@ class MysqlCollectionTest
     public function testLimitException($pLimit)
     {
         self::$_instance->load(array(
-            Collection::FILTER_LIMIT => $pLimit
+            Db::FILTER_LIMIT => $pLimit
         ));
     }
 
@@ -237,7 +237,7 @@ class MysqlCollectionTest
     public function testOrderException($pOrder)
     {
         self::$_instance->load(array(
-            Collection::FILTER_ORDER => $pOrder
+            Db::FILTER_ORDER => $pOrder
         ));
     }
 
@@ -263,7 +263,7 @@ class MysqlCollectionTest
     public function testLoadByWithConditions()
     {
         $this->assertEquals(0, self::$_instance->loadByEmail('test2@agl.io', array(
-            Collection::FILTER_CONDITIONS => Agl::newConditions()->add('id', Conditions::EQ, 10)
+            Db::FILTER_CONDITIONS => Agl::newConditions()->add('id', Conditions::EQ, 10)
         ))->count());
     }
 

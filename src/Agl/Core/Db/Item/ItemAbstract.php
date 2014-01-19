@@ -4,7 +4,8 @@ namespace Agl\Core\Db\Item;
 use \Agl\Core\Agl,
     \Agl\Core\Data\Date as DateData,
     \Agl\Core\Data\String as StringData,
-    \Agl\Core\Db\Collection\CollectionInterface,
+    \Agl\Core\Db\Db,
+    \Agl\Core\Db\DbInterface,
     \Agl\Core\Db\Id\Id,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Conditions\Conditions,
@@ -213,12 +214,12 @@ abstract class ItemAbstract
     {
         $args = $pArgs;
 
-        if (! isset($args[CollectionInterface::FILTER_CONDITIONS])
-            or ! $args[CollectionInterface::FILTER_CONDITIONS] instanceof Conditions) {
-            $args[CollectionInterface::FILTER_CONDITIONS] = new Conditions();
+        if (! isset($args[DbInterface::FILTER_CONDITIONS])
+            or ! $args[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $args[DbInterface::FILTER_CONDITIONS] = new Conditions();
         }
 
-        $args[CollectionInterface::FILTER_CONDITIONS]->add(
+        $args[DbInterface::FILTER_CONDITIONS]->add(
             $pAttribute,
             Conditions::EQ,
             $pValue
@@ -254,16 +255,16 @@ abstract class ItemAbstract
     {
         $select = new Select($this->_dbContainer);
 
-        if (isset($pArgs[CollectionInterface::FILTER_ORDER])) {
-            $select->addOrder($pArgs[CollectionInterface::FILTER_ORDER]);
+        if (isset($pArgs[DbInterface::FILTER_ORDER])) {
+            $select->addOrder($pArgs[DbInterface::FILTER_ORDER]);
         } else {
             $select->addOrder(array(
-                $this->getIdField() => Select::ORDER_DESC
+                $this->getIdField() => Db::ORDER_DESC
             ));
         }
 
-        if (isset($pArgs[CollectionInterface::FILTER_CONDITIONS]) and  $pArgs[CollectionInterface::FILTER_CONDITIONS] instanceof Conditions) {
-            $select->loadConditions($pArgs[CollectionInterface::FILTER_CONDITIONS]);
+        if (isset($pArgs[DbInterface::FILTER_CONDITIONS]) and  $pArgs[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $select->loadConditions($pArgs[DbInterface::FILTER_CONDITIONS]);
         }
 
         $select->findOne();

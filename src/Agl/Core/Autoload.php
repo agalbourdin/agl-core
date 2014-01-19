@@ -33,6 +33,7 @@ class Autoload
         'Conditions' => '\Agl\Core\Db\Query\Conditions\Conditions',
         'Controller' => '\Agl\Core\Mvc\Controller\Controller',
         'Date'       => '\Agl\Core\Data\Date',
+        'Db'         => '\Agl\Core\Db\Db',
         'Debug'      => '\Agl\Core\Debug\Debug',
         'Dir'        => '\Agl\Core\Data\Dir',
         'File'       => '\Agl\Core\Data\File',

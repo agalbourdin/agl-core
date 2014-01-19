@@ -2,6 +2,8 @@
 namespace Agl\Core\Db\Query\Select;
 
 use \Agl\Core\Agl,
+    \Agl\Core\Db\Db,
+    \Agl\Core\Db\DbInterface,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\QueryAbstract,
     \Agl\Core\Db\Query\Conditions\Conditions,
@@ -117,14 +119,14 @@ abstract class SelectAbstract
      */
     public function addOrder(array $pFields)
     {
-        if (in_array(static::ORDER_RAND, $pFields)) {
-            $this->_order[static::ORDER_RAND] = true;
+        if (in_array(DbInterface::ORDER_RAND, $pFields)) {
+            $this->_order[DbInterface::ORDER_RAND] = true;
             return $this;
         }
 
         $orders = array(
-            static::ORDER_ASC,
-            static::ORDER_DESC
+            Db::ORDER_ASC,
+            Db::ORDER_DESC
         );
 
         $fields = $this->_prefixFields($pFields);
