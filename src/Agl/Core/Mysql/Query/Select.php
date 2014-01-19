@@ -172,12 +172,17 @@ class Select
     /**
      * Fetch all the results as array.
      *
+     * @param bool $pSingle Return a single row or an array of rows.
      * @return array
      */
-    public function fetchAll()
+    public function fetchAll($pSingle = false)
     {
         if ($this->_stm === false) {
             return array();
+        }
+
+        if ($pSingle) {
+            return $this->_stm->fetch(PDO::FETCH_ASSOC);
         }
 
         return $this->_stm->fetchAll(PDO::FETCH_ASSOC);
@@ -186,9 +191,10 @@ class Select
     /**
      * Fetch all the results as array of items.
      *
-     * @return array
+     * @param bool $pSingle Return a single Item or an array of Items.
+     * @return array|Item
      */
-    public function fetchAllAsItems()
+    public function fetchAllAsItems($pSingle = false)
     {
         $data = array();
 
@@ -197,6 +203,10 @@ class Select
         }
 
         while ($row = $this->_stm->fetch(PDO::FETCH_ASSOC)) {
+            if ($pSingle) {
+                return Agl::getModel($this->_dbContainer, $row);
+            }
+
             $data[] = Agl::getModel($this->_dbContainer, $row);
         }
 

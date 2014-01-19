@@ -15,6 +15,5 @@ use \Agl\Core\Db\Query\Conditions\Conditions,
 interface UpdateInterface
 {
     public function __construct(ItemAbstract $pItem);
-    public function loadConditions(Conditions $pConditions);
     public function commit();
 }

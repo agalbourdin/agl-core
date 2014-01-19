@@ -41,7 +41,7 @@ interface ItemInterface
     public function __get($pVar);
     public function __set($pVar, $pValue);
     public function loadById($pId);
-    public function load($pConditions = NULL, $pOrder = NULL);
+    public function load(array $pArgs = array());
     public function setId($pValue);
     public function getIdField();
     public function getFields();

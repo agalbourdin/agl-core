@@ -100,8 +100,7 @@ abstract class CollectionAbstract
      *
      * @param string $pAttribute
      * @param mixed $pValue
-     * @param mixed $pLimit Limit the number of results
-     * @param null|array Order the select query
+     * @param array $pArgs
      * @return CollectionAbstract
      */
     protected function _loadByAttribute($pAttribute, $pValue, array $pArgs = array())

@@ -64,15 +64,6 @@ class Update
                     $toUpdate[$this->_item->getIdField()] = $this->_item->getId()->getOrig();
                 }
 
-                if ($this->_conditions !== NULL) {
-                    $additionalConditions = $this->_conditions->getPreparedConditions($this->_item->getDbContainer());
-                    if ($additionalConditions) {
-                        $query                      .= ' AND ' . $additionalConditions;
-                        $additionalConditionsValues = $this->_conditions->getPreparedValues();
-                        $toUpdate = array_merge($toUpdate, $additionalConditionsValues);
-                    }
-                }
-
                 $prepared = Agl::app()->getDb()->getConnection()->prepare($query);
 
                 if (! $prepared->execute(array_values($toUpdate))) {

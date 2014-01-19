@@ -32,11 +32,19 @@ class MysqlIdTest
     public function otherIdData()
     {
     	return array(
-    		array(1.33),
-    		array(NULL),
-    		array(true),
-    		array(array('key' => 'value', 'value')),
-            array(new stdClass())
-    	);
+            array(''),
+            array(1.33),
+            array(false),
+            array(true),
+            array(NULL),
+            array(new stdClass()),
+            array(array()),
+            array(array(1, 2, 3)),
+            array(array(1, 'test')),
+            array(array(1)),
+            array(array('0', '1')),
+            array(array(0, true)),
+            array(array('key' => 'value', 'value'))
+        );
     }
 }

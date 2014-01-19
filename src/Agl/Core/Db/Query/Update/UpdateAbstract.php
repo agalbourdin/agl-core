@@ -85,16 +85,4 @@ abstract class UpdateAbstract
 
         return $toDelete;
     }
-
-    /**
-     * Load conditions to filter the query (additionnally to the item ID).
-     *
-     * @param Conditions $pConditions
-     * @return UpdateAbstract
-     */
-    public function loadConditions(Conditions $pConditions)
-    {
-        $this->_conditions = $pConditions;
-        return $this;
-    }
 }

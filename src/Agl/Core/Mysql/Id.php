@@ -24,7 +24,7 @@ class Id
      */
     public function __construct($pId)
     {
-        if (is_string($pId)) {
+        if (is_string($pId) and ! empty($pId)) {
             $id = $pId;
         } else if (is_int($pId)) {
             $id = (string)$pId;

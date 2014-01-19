@@ -4,6 +4,7 @@ namespace Agl\Core\Db\Item;
 use \Agl\Core\Agl,
     \Agl\Core\Data\Date as DateData,
     \Agl\Core\Data\String as StringData,
+    \Agl\Core\Db\Collection\Collection,
     \Agl\Core\Db\Id\Id,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Conditions\Conditions,
@@ -97,18 +98,17 @@ abstract class ItemAbstract
             unset($this->$var);
             return true;
         } else if (preg_match('/^loadBy([a-zA-Z0-9]+)$/', $pMethod, $matches)) {
-            if (isset($matches[1]) and is_string($matches[1])
-                and ! empty($matches[1]) and isset($pArgs[0])) {
+            if (isset($pArgs[0])) {
                 $attribute = StringData::fromCamelCase($matches[1]);
-                if (! isset($pArgs[1])) {
-                    return $this->_loadByAttribute($attribute, $pArgs[0]);
+                if (isset($pArgs[1])) {
+                    return $this->_loadByAttribute($attribute, $pArgs[0], $pArgs[1]);
                 }
 
-                return $this->_loadByAttribute($attribute, $pArgs[0], $pArgs[1]);
+                return $this->_loadByAttribute($attribute, $pArgs[0]);
             }
         }
 
-        throw new \Exception("Undefined method '$pMethod'");
+        throw new Exception("Undefined method '$pMethod'");
     }
 
     /**
@@ -144,7 +144,7 @@ abstract class ItemAbstract
 
         /*$validation = \Agl\Core\Data\Attribute\Validation::validate($pVar);
         if (! $validation) {
-            throw new \Exception("Validation failed for attribute '$attribute'");
+            throw new Exception("Validation failed for attribute '$attribute'");
         }*/
 
         $this->_fields[$attribute] = $pValue;
@@ -206,35 +206,25 @@ abstract class ItemAbstract
      *
      * @param string $pAttribute
      * @param mixed $pValue
-     * @param null|array $pOrder Order the select query
+     * @param array $pArgs
      * @return ItemAbstract
      */
-    protected function _loadByAttribute($pAttribute, $pValue, $pOrder = NULL)
+    protected function _loadByAttribute($pAttribute, $pValue, array $pArgs = array())
     {
-        $select = new Select($this->_dbContainer);
+        $args = $pArgs;
 
-        if ($pOrder !== NULL) {
-            $select->addOrder($pOrder);
+        if (! isset($args[Collection::FILTER_CONDITIONS])
+            or ! $args[Collection::FILTER_CONDITIONS] instanceof Conditions) {
+            $args[Collection::FILTER_CONDITIONS] = new Conditions();
         }
 
-        $conditions = new Conditions();
-        $conditions->add(
+        $args[Collection::FILTER_CONDITIONS]->add(
             $pAttribute,
             Conditions::EQ,
             $pValue
         );
 
-        $select->loadConditions($conditions);
-
-        $select->findOne();
-        if ($select->count()) {
-            $fields            = $select->fetch(0);
-            $this->_fields     = $fields;
-            $this->_origFields = $fields;
-            $this->setId($this->_fields[$this->getIdField()]);
-        }
-
-        return $this;
+        return $this->load($args);
     }
 
     /**
@@ -257,61 +247,40 @@ abstract class ItemAbstract
     /**
      * Load an item with conditions filtering.
      *
-     * @param Conditions $pConditions
-     * @param null|array $pOrder Order the select query
+     * @param array $pArgs Optional arguments (Conditions, Limit, Order)
      * @return type
      */
-    public function load($pConditions = NULL, $pOrder = NULL)
+    public function load(array $pArgs = array())
     {
         $select = new Select($this->_dbContainer);
 
-        if ($pOrder !== NULL) {
-            $select->addOrder($pOrder);
+        if (isset($pArgs[Collection::FILTER_ORDER])) {
+            $select->addOrder($pArgs[Collection::FILTER_ORDER]);
+        } else {
+            $select->addOrder(array(
+                $this->getIdField() => Select::ORDER_DESC
+            ));
         }
 
-        if ($pConditions instanceof Conditions) {
-            $select->loadConditions($pConditions);
+        if (isset($pArgs[Collection::FILTER_CONDITIONS]) and  $pArgs[Collection::FILTER_CONDITIONS] instanceof Conditions) {
+            $select->loadConditions($pArgs[Collection::FILTER_CONDITIONS]);
         }
 
         $select->findOne();
         if ($select->count()) {
-            $fields            = $select->fetch(0);
-            $this->_fields     = $fields;
-            $this->_origFields = $fields;
+            $fields = $select->fetchAll(true);
+        } else {
+            $fields = array();
+        }
+
+        $this->_fields     = $fields;
+        $this->_origFields = $fields;
+
+        if (isset($this->_fields[$this->getIdField()])) {
             $this->setId($this->_fields[$this->getIdField()]);
         }
 
         return $this;
-    }
-
-    /**
-     * Load the last inserted element of the item's collection.
-     *
-     * @return ItemAbstract
-     */
-    public function loadLast()
-    {
-        return $this->load(NULL, array(ItemInterface::IDFIELD => Select::ORDER_DESC));
-    }
-
-    /**
-     * Load the first inserted element of the item's collection.
-     *
-     * @return ItemAbstract
-     */
-    public function loadFirst()
-    {
-        return $this->load(NULL, array(ItemInterface::IDFIELD => Select::ORDER_ASC));
-    }
-
-    /**
-     * Load a random element.
-     *
-     * @return ItemAbstract
-     */
-    public function loadRandom()
-    {
-        return $this->load(NULL, array(ItemInterface::IDFIELD => Select::ORDER_RAND));
     }
 
     /**
@@ -330,7 +299,8 @@ abstract class ItemAbstract
             $id = $pValue;
         }
 
-        $this->_fields[$idField] = $id;
+        $this->_fields[$idField]     = $id;
+        $this->_origFields[$idField] = $id;
         return $this;
     }
 
@@ -412,10 +382,9 @@ abstract class ItemAbstract
      * Save the item in the database.
      * By default the update query is conditioned to the item's ID.
      *
-     * @param Conditions $pConditions Add filters to the update query
      * @return Item
      */
-    public function save($pConditions = NULL)
+    public function save()
     {
         if (! $this->getOrigField(static::IDFIELD)) {
             throw new Exception("Cannot save an item without ID");
@@ -427,10 +396,6 @@ abstract class ItemAbstract
 
         $this->{static::DATEUPDATEFIELD} = DateData::now();
         $update = new Update($this);
-
-        if ($pConditions instanceof Conditions) {
-            $update->loadConditions($pConditions);
-        }
 
         $update->commit();
 
