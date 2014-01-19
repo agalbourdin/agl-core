@@ -4,7 +4,7 @@ namespace Agl\Core\Db\Item;
 use \Agl\Core\Agl,
     \Agl\Core\Data\Date as DateData,
     \Agl\Core\Data\String as StringData,
-    \Agl\Core\Db\Collection\Collection,
+    \Agl\Core\Db\Collection\CollectionInterface,
     \Agl\Core\Db\Id\Id,
     \Agl\Core\Db\Item\ItemInterface,
     \Agl\Core\Db\Query\Conditions\Conditions,
@@ -213,12 +213,12 @@ abstract class ItemAbstract
     {
         $args = $pArgs;
 
-        if (! isset($args[Collection::FILTER_CONDITIONS])
-            or ! $args[Collection::FILTER_CONDITIONS] instanceof Conditions) {
-            $args[Collection::FILTER_CONDITIONS] = new Conditions();
+        if (! isset($args[CollectionInterface::FILTER_CONDITIONS])
+            or ! $args[CollectionInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $args[CollectionInterface::FILTER_CONDITIONS] = new Conditions();
         }
 
-        $args[Collection::FILTER_CONDITIONS]->add(
+        $args[CollectionInterface::FILTER_CONDITIONS]->add(
             $pAttribute,
             Conditions::EQ,
             $pValue
@@ -254,16 +254,16 @@ abstract class ItemAbstract
     {
         $select = new Select($this->_dbContainer);
 
-        if (isset($pArgs[Collection::FILTER_ORDER])) {
-            $select->addOrder($pArgs[Collection::FILTER_ORDER]);
+        if (isset($pArgs[CollectionInterface::FILTER_ORDER])) {
+            $select->addOrder($pArgs[CollectionInterface::FILTER_ORDER]);
         } else {
             $select->addOrder(array(
                 $this->getIdField() => Select::ORDER_DESC
             ));
         }
 
-        if (isset($pArgs[Collection::FILTER_CONDITIONS]) and  $pArgs[Collection::FILTER_CONDITIONS] instanceof Conditions) {
-            $select->loadConditions($pArgs[Collection::FILTER_CONDITIONS]);
+        if (isset($pArgs[CollectionInterface::FILTER_CONDITIONS]) and  $pArgs[CollectionInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $select->loadConditions($pArgs[CollectionInterface::FILTER_CONDITIONS]);
         }
 
         $select->findOne();

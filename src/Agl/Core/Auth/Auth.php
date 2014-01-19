@@ -2,6 +2,7 @@
 namespace Agl\Core\Auth;
 
 use \Agl\Core\Agl,
+	\Agl\Core\Db\Collection\CollectionInterface,
 	\Agl\Core\Db\Item\ItemInterface,
 	\Agl\Core\Db\Query\Conditions\Conditions,
 	\Agl\Core\Mvc\Model\Model;
@@ -104,7 +105,9 @@ class Auth
 			$conditions->add($field, Conditions::EQ, $value);
 		}
 
-		$this->_user->load($conditions);
+		$this->_user->load(array(
+			CollectionInterface::FILTER_CONDITIONS => $conditions
+		));
 		if ($this->_user->getId()) {
 			$this->_session->userId = $this->_user->getId();
 			return true;
