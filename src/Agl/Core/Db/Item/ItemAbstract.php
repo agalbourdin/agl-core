@@ -4,6 +4,7 @@ namespace Agl\Core\Db\Item;
 use \Agl\Core\Agl,
     \Agl\Core\Data\Date as DateData,
     \Agl\Core\Data\String as StringData,
+    \Agl\Core\Data\Validation,
     \Agl\Core\Db\Db,
     \Agl\Core\Db\DbInterface,
     \Agl\Core\Db\Id\Id,
@@ -53,12 +54,21 @@ abstract class ItemAbstract
     protected $_dbContainer = NULL;
 
     /**
-     * Create a new item.
+     * Load model validations rules from configuration.
+     *
+     * @var array
+     */
+    protected $_validation = array();
+
+    /**
+     * Create a new item and load its Validation config.
      *
      * @param string $pDbContainer Database container
      * @param array $pFields Attributes to add to the item
+     * @param array $pValidationRules Custom validation rules. If empty, rules
+     * will be loaded from configuration.
      */
-    public function __construct($pDbContainer, array $pFields = array())
+    public function __construct($pDbContainer, array $pFields = array(), array $pValidationRules = array())
     {
         Agl::validateParams(array(
             'RewritedString' => $pDbContainer
@@ -70,6 +80,16 @@ abstract class ItemAbstract
 
         if (isset($this->_fields[$this->getIdField()])) {
             $this->setId($this->_fields[$this->getIdField()]);
+        }
+
+        if (! empty($pValidationRules)) {
+            $this->_validation = $pValidationRules;
+        } else {
+            $this->_validation = Agl::app()->getConfig('core-validation/' . $pDbContainer);
+
+            if ($this->_validation === NULL) {
+                $this->_validation = array();
+            }
         }
     }
 
@@ -138,15 +158,21 @@ abstract class ItemAbstract
      */
     public function __set($pVar, $pValue)
     {
-        $attribute = $this->_dbContainer . static::PREFIX_SEPARATOR . StringData::fromCamelCase($pVar);
-        /*if ($attribute == $this->getIdField()) {
-            $this->setId($pValue);
-        }*/
+        $attribute = StringData::fromCamelCase($pVar);
 
-        /*$validation = \Agl\Core\Data\Attribute\Validation::validate($pVar);
-        if (! $validation) {
-            throw new Exception("Validation failed for attribute '$attribute'");
-        }*/
+        if (isset($this->_validation[$attribute])) {
+            $func = $this->_validation[$attribute];
+
+            if (strpos($func, 'is') === 0) {
+                if (Validation::$func($pValue) === false) {
+                    throw new Exception("'$this->_dbContainer' model: validation failed for attribute '$attribute' ($func)");
+                }
+            } else if (Validation::isRegex($pValue, $func) === false) {
+                throw new Exception("'$this->_dbContainer' model: regex validation failed for attribute '$attribute' ($func)");
+            }
+        }
+
+        $attribute = $this->_dbContainer . static::PREFIX_SEPARATOR . $attribute;
 
         $this->_fields[$attribute] = $pValue;
         return $this->_fields[$attribute];

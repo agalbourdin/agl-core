@@ -1,4 +1,9 @@
 <?php
+/**
+ * Main AGL configuration file.
+ * Define application's timezone, DB info, Session storage and Cache type.
+ */
+
 return array(
 
 	/**

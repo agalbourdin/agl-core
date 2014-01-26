@@ -490,4 +490,16 @@ class ValidationTest
             array(new stdClass())
         );
     }
+
+    public function testRegexTrue()
+    {
+        $valid = \Agl\Core\Data\Validation::isRegex('A-123', '/^A-[0-9]{3}$/i');
+        $this->assertTrue($valid);
+    }
+
+    public function testRegexFalse()
+    {
+        $valid = \Agl\Core\Data\Validation::isRegex('B-123', '/^A-[0-9]{3}$/i');
+        $this->assertFalse($valid);
+    }
 }

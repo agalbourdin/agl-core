@@ -179,11 +179,11 @@ class Validation
     /**
      * Regex validation.
      *
-     * @param $pExpr PCRE expression
      * @param array|string $pValue
+     * @param $pExpr PCRE expression
      * @return bool
      */
-    public static function isRegex($pExpr, $pValue)
+    public static function isRegex($pValue, $pExpr)
     {
         if (is_array($pValue)) {
             foreach ($pValue as $value) {

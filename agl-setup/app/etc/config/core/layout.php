@@ -1,4 +1,10 @@
 <?php
+/**
+ * Layout configuration file.
+ * Define templates, CSS, JS, ACL and Cache configuration for a module, a view,
+ * a block or a specific action.
+ */
+
 return array(
 
 	'template' => array(
