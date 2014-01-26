@@ -32,11 +32,11 @@ class Url
      * Return a formated URL with module, view, action and parameters.
      *
      * @param string $pUrl URL to get (module/view)
-     * @param array $pParams Parameters to include into the request
+     * @param string|array $pParams Parameters to include into the request
      * @param bool $pRelative Create a relative URL
      * @return string
      */
-    public static function get($pUrl, array $pParams = array(), $pRelative = true)
+    public static function get($pUrl, $pParams = array(), $pRelative = true)
     {
         if (strpos($pUrl, '*/') !== false) {
             if (self::$_request === NULL) {
@@ -59,23 +59,23 @@ class Url
         }
 
         if (strpos($pUrl, Agl::APP_PUBLIC_DIR) === false) {
-            if (! empty($pParams)) {
+            if (is_array($pParams) and ! empty($pParams)) {
                 $params = array();
                 foreach ($pParams as $key => $value) {
                     $params[] = $key . DS . $value;
                 }
 
                 $url = $pUrl . DS . implode(DS, $params) . DS;
-                if ($pRelative) {
-                    return ROOT . $url;
-                }
-                return self::getHost(ROOT . $url);
+            } else if (is_string($pParams) and $pParams) {
+                $url = $pUrl . DS . $pParams . DS;
+            } else {
+                $url = $pUrl . DS;
             }
 
-            $url = $pUrl . DS;
             if ($pRelative) {
                 return ROOT . $url;
             }
+
             return self::getHost(ROOT . $url);
         }
 
@@ -88,20 +88,36 @@ class Url
     /**
      * Return the current URL with optional additional params.
      *
-     * @param array $pParams Parameters to add to the request (additional)
+     * @param bool $pRelative Return a relative URL or a full HTTP URL.
+     * @param array $pNewParams Parameters to add to the request (additional)
      * @return string
      */
-    public static function getCurrent(array $pNewParams = array(), $pRelative = true)
+    public static function getCurrent($pRelative = true, array $pNewParams = array())
     {
         if (self::$_request === NULL) {
             self::setRequest();
         }
 
-        $module = self::$_request->getModule();
-        $view   = self::$_request->getView();
-        $params = self::$_request->getParams();
+        $request = self::$_request;
 
-        $params = array_merge($params, $pNewParams);
+        $module = $request->getModule();
+        $view   = $request->getView();
+
+        $params = str_replace($module . DS . $view, '', $request->getReq());
+        if (! empty($pNewParams)) {
+            $newParams = array();
+            foreach ($pNewParams as $key => $value) {
+                $newParams[] = $key . DS . $value;
+            }
+
+            $params .= DS . implode(DS, $newParams);
+        }
+
+        $params = trim($params, DS);
+
+        if ($module == $request::DEFAULT_MODULE and $view == $request::DEFAULT_VIEW and ! $params) {
+            return self::get('', $params, $pRelative);
+        }
 
         return self::get($module . DS . $view, $params, $pRelative);
     }
@@ -180,9 +196,9 @@ class Url
      */
     public static function getProtocol()
     {
-        if (isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) === 'on' or $_SERVER['HTTPS'] === '1')) {
-            return 'https://';
-        } else if (isset($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443') {
+        if ((isset($_SERVER['HTTPS'])
+            and (strtolower($_SERVER['HTTPS']) === 'on' or $_SERVER['HTTPS'] === '1'))
+            or (isset($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443')) {
             return 'https://';
         }
 

@@ -1,7 +1,7 @@
 <?php
 class UrlTest extends PHPUnit_Framework_TestCase
 {
-    const REQUEST = 'home/index/param/value/action/ post';
+    const REQUEST = 'home/index/param/value/action/post';
     const DOMAIN  = 'domain.tld';
 
     public static function setUpBeforeClass()
@@ -44,7 +44,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCurrent($pNewParams, $pRelative, $pExpected)
     {
-        $this->assertEquals($pExpected, \Agl\Core\Url\Url::getCurrent($pNewParams, $pRelative));
+        $this->assertEquals($pExpected, \Agl\Core\Url\Url::getCurrent($pRelative, $pNewParams));
     }
 
     public function getCurrentData()
@@ -128,5 +128,24 @@ class UrlTest extends PHPUnit_Framework_TestCase
     public function testGetProtocol()
     {
         $this->assertEquals('http://', \Agl\Core\Url\Url::getProtocol());
+    }
+
+    /**
+     * @dataProvider getCurrentHomeData
+     */
+    public function testGetCurrentHome($pNewParams, $pRelative, $pExpected)
+    {
+        \Agl\Core\Url\Url::setRequest(new \Agl\Core\Request\Request(ROOT . 'home/index' . ROOT));
+        $this->assertEquals($pExpected, \Agl\Core\Url\Url::getCurrent($pRelative, $pNewParams));
+    }
+
+    public function getCurrentHomeData()
+    {
+        return array(
+            array(array(), true, '/'),
+            array(array('key' => 'value'), true, '/home/index/key/value/'),
+            array(array(), false, 'http://' . self::DOMAIN . DS),
+            array(array('key' => 'value'), false, 'http://' . self::DOMAIN . '/home/index/key/value/'),
+        );
     }
 }

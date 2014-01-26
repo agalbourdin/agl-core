@@ -58,11 +58,6 @@ class Request
 	const ACTION_PARAM = 'action';
 
 	/**
-	 * Default param name (when only one param value is passed).
-	 */
-	const DEFAULT_PARAM = 'id';
-
-	/**
      * The original request URI.
      *
      * @var string
@@ -98,9 +93,9 @@ class Request
 	private $_view = NULL;
 
 	/**
-     * The requested params.
+     * The request params.
      *
-     * @var string
+     * @var array
      */
 	private $_params = array();
 
@@ -165,6 +160,7 @@ class Request
 	{
 		if ($this->_requestUri !== NULL) {
             $this->_request = preg_replace('#(^/)|(^' . ROOT . ')|(/$)#', '', $this->_requestUri);
+
             if (! $this->_request) {
             	$this->_request = self::DEFAULT_MODULE . '/' . self::DEFAULT_VIEW;
             }
@@ -232,11 +228,22 @@ class Request
 		if ($nbElements > 3) {
 			$i = 2;
 			while ($i < $nbElements and $i + 1 < $nbElements) {
+				if (ctype_digit($this->_requestVars[$i])) {
+					$i += 2;
+					continue;
+				}
+
 				$this->_params[$this->_requestVars[$i]] = $this->_sanitize($this->_requestVars[$i + 1]);
 				$i += 2;
 			}
-		} else if ($nbElements == 3) {
-			$this->_params[self::DEFAULT_PARAM] = $this->_sanitize($this->_requestVars[2]);
+		}
+
+		if ($nbElements > 2) {
+			$i = 2;
+			while ($i < $nbElements) {
+				$this->_params[$i - 2] = $this->_sanitize($this->_requestVars[$i]);
+				$i++;
+			}
 		}
 
 		return $this;

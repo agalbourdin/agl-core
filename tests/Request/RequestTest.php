@@ -46,7 +46,11 @@ class RequestTest
     {
         $this->assertEquals(array(
             'param'  => 'value',
-            'action' => 'post'
+            'action' => 'post',
+            0        => 'param',
+            1        => 'value',
+            2        => 'action',
+            3        => 'post'
         ), self::$_instance->getParams());
     }
 
@@ -63,7 +67,9 @@ class RequestTest
     	return array(
     		array('action', 'post'),
     		array('param', 'value'),
-            array('test', '')
+            array('test', ''),
+            array(0, 'param'),
+            array(3, 'post')
     	);
     }
 
