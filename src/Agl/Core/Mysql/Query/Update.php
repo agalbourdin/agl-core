@@ -52,16 +52,18 @@ class Update
             $toUpdate = array_merge($this->getFieldsToUpdate(), $this->getFieldsToDelete());
 
             if (! empty($toUpdate)) {
+                $idField  = $this->_item->getIdField();
+
                 $query = "
                     UPDATE
                         `" . $this->getDbPrefix() . $this->_item->getDbContainer() . "`
                     SET
                         " . $this->_getPreparedFields($toUpdate) . "
                     WHERE
-                        `" . $this->_item->getDbContainer() . ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD . "` = ?";
+                        `$idField` = ?";
 
-                if (! array_key_exists($this->_item->getIdField(), $toUpdate)) {
-                    $toUpdate[$this->_item->getIdField()] = $this->_item->getId()->getOrig();
+                if (! array_key_exists($idField, $toUpdate)) {
+                    $toUpdate[$idField] = $this->_item->getId()->getOrig();
                 }
 
                 $prepared = Agl::app()->getDb()->getConnection()->prepare($query);

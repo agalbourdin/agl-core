@@ -45,7 +45,7 @@ class Item
      * joins
      * @return array
      */
-    public function getJoins($pDbContainer)
+    /*public function getJoins($pDbContainer)
     {
         $joinsField = $this->getField(static::JOINS_FIELD_PREFIX . $pDbContainer);
 
@@ -56,7 +56,7 @@ class Item
         }
 
         return explode(',', $joinsField);
-    }
+    }*/
 
     /**
      * Search for items in $pDbContainer with a join to the current item.
@@ -64,7 +64,7 @@ class Item
      * @param string $pDbContainer Database container
      * @return Collection
      */
-    public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL)
+    /*public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL)
     {
         if (! $this->getId()) {
             throw new Exception("The item must be existing in the database before childs can be retrieved.");
@@ -84,5 +84,5 @@ class Item
         $collection->load($conditions, $pLimit, $pOrder);
 
         return $collection;
-    }
+    }*/
 }

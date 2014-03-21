@@ -128,7 +128,7 @@ class MysqlCollectionTest
 
     public function testCountWithConditions()
     {
-        $this->assertEquals(1, self::$_instance->count(
+        $this->assertEquals(1, self::$_instance->countAll(
             Agl::newConditions()->add('email', Conditions::EQ, 'test1@agl.io')
         ));
     }

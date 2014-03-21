@@ -26,6 +26,11 @@ class MysqlItemTest
         $this->assertEquals('user_id', self::$_instance->getIdField());
     }
 
+    public function testGetIdFieldOtherContainer()
+    {
+        $this->assertEquals('comment_id', self::$_instance->getIdField('comment'));
+    }
+
     public function testGetFields()
     {
         $this->assertEquals(array('user_email' => 'test3@agl.io'), self::$_instance->getFields());
@@ -38,12 +43,12 @@ class MysqlItemTest
 
     public function testGetField()
     {
-        $this->assertEquals('test3@agl.io', self::$_instance->getField('email'));
+        $this->assertEquals('test3@agl.io', self::$_instance->getFieldValue('email'));
     }
 
     public function testGetOrigField()
     {
-        $this->assertEquals('test3@agl.io', self::$_instance->getOrigField('email'));
+        $this->assertEquals('test3@agl.io', self::$_instance->getOrigFieldValue('email'));
     }
 
     public function testLoadById()
@@ -123,6 +128,108 @@ class MysqlItemTest
 
     public function testSetOrigId()
     {
-        $this->assertTrue(self::$_instance->getId()->getOrig() == self::$_instance->getOrigField('id')->getOrig());
+        $this->assertTrue(self::$_instance->getId()->getOrig() == self::$_instance->getOrigFieldValue('id')->getOrig());
+    }
+
+    /**
+     * @dataProvider parentsIdData
+     */
+    public function testGetParents($pComment)
+    {
+        $comment = Agl::getModel('comment')->load($pComment);
+        $parents = $comment->getParents('user');
+
+        $this->assertInstanceOf('Agl\Core\Db\Collection\Collection', $parents);
+    }
+
+    /**
+     * @dataProvider parentsIdData
+     */
+    public function testGetParentsId($pComment, $pExpected)
+    {
+        $comment = Agl::getModel('comment')->load($pComment);
+        $parents = $comment->getParents('user');
+
+        $this->assertEquals($pExpected, $parents->count());
+    }
+
+    public function parentsIdData()
+    {
+        return array(
+            array(1, 1),
+            array(1, 1),
+            array(2, 0),
+        );
+    }
+
+    /**
+     * @dataProvider parentsIdExceptionData
+     * @expectedException Exception
+     */
+    public function testGetParentsException($pComment)
+    {
+        $comment = Agl::getModel('comment')->load($pComment);
+        $parents = $comment->getParents('user');
+    }
+
+    public function parentsIdExceptionData()
+    {
+        return array(
+            array(3),
+            array(''),
+            array(1.33),
+            array(false),
+            array(true),
+            array(NULL),
+            array(new stdClass())
+        );
+    }
+
+    /**
+     * @dataProvider parentIdData
+     */
+    public function testGetParent($pComment)
+    {
+        $comment = Agl::getModel('comment')->load($pComment);
+        $parent  = $comment->getParents('user', array(), true);
+
+        $this->assertInstanceOf('Agl\Core\Mvc\Model\Model', $parent);
+    }
+
+    /**
+     * @dataProvider parentIdData
+     */
+    public function testGetParentId($pComment, $pExpected)
+    {
+        $comment = Agl::getModel('comment')->load($pComment);
+        $parent  = $comment->getParents('user', array(), true);
+
+        $this->assertInstanceOf('\Agl\Core\Db\Id\Id', $parent->getId());
+    }
+
+    public function parentIdData()
+    {
+        return array(
+            array(1, 1),
+            array(1, 1)
+        );
+    }
+
+    /**
+     * @dataProvider parentIdNullData
+     */
+    public function testGetParentIdNull($pComment)
+    {
+        $comment = Agl::getModel('comment')->load($pComment);
+        $parent  = $comment->getParents('user', array(), true);
+
+        $this->assertEquals(NULL, $parent->getId());
+    }
+
+    public function parentIdNullData()
+    {
+        return array(
+            array(2)
+        );
     }
 }

@@ -28,7 +28,7 @@ abstract class CollectionAbstract
      *
      * @var null|int
      */
-    private $_count = NULL;
+    private $_count = 0;
 
     /**
      * Database container (table or collection depending of the
@@ -164,7 +164,7 @@ abstract class CollectionAbstract
             ));
         }
 
-        if (isset($pArgs[DbInterface::FILTER_CONDITIONS]) and  $pArgs[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+        if (isset($pArgs[DbInterface::FILTER_CONDITIONS]) and $pArgs[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
             $select->loadConditions($pArgs[DbInterface::FILTER_CONDITIONS]);
         }
 
@@ -230,18 +230,23 @@ abstract class CollectionAbstract
     }
 
     /**
-     * Return the number of items loaded in the collection, or count a
-     * collection without loading items.
+     * Return the number of items loaded in the collection.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->_count;
+    }
+
+    /**
+     * Count a collection without loading items.
      *
      * @param Conditions $pConditions Filter the results
      * @return int
      */
-    public function count($pConditions = NULL)
+    public function countAll($pConditions = NULL)
     {
-        if ($pConditions === NULL and $this->_count !== NULL) {
-            return $this->_count;
-        }
-
         $count = new Count($this->_dbContainer);
 
         if ($pConditions instanceof Conditions) {
@@ -286,15 +291,15 @@ abstract class CollectionAbstract
     /**
      * Delete all items from the database and reset the collection.
      *
-     * @param bool $withChilds Delete also all item's childs in other
+     * @param bool $pWithChilds Delete also all item's childs in other
      * collections
      * @return CollectionAbstract
      */
-    public function deleteItems($withChilds = false)
+    public function deleteItems($pWithChilds = false)
     {
         foreach ($this as $item) {
             if ($item->getId()) {
-                $item->delete($withChilds);
+                $item->delete($pWithChilds);
             }
         }
 

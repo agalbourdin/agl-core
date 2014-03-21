@@ -41,19 +41,26 @@ interface ItemInterface
     public function __get($pVar);
     public function __set($pVar, $pValue);
     public function loadById($pId);
-    public function load(array $pArgs = array());
+    public function load($pArgs = array());
     public function setId($pValue);
-    public function getIdField();
+    public function getIdField($pDbContainer = NULL);
     public function getFields();
     public function getOrigFields();
-    public function getField($pField);
-    public function getOrigField($pField);
+    public function getFieldValue($pField);
+    public function getOrigFieldValue($pField);
     public function getDbContainer();
     public function save($pConditions = NULL);
-    public function delete();
-    public function addParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
-    public function removeParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
-    public function getParents($pDbContainer, $pLimit = NULL, $pOrder = NULL);
-    public function removeJoinFromAllChilds();
-    public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL);
+    public function delete($pWithChilds = false);
+
+    //public function addParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    //public function removeParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    //public function getParents($pDbContainer, $pLimit = NULL, $pOrder = NULL);
+    //public function removeJoinFromAllChilds();
+    //public function getChilds($pDbContainer, $pLimit = NULL, $pOrder = NULL);
+
+    public function getParents($pDbContainer, array $pArgs = array(), $pSingle = false);
+    //public function getChilds($pDbContainer, array $pArgs = array(), $pSingle = false);
+    //public function addParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    //public function removeParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    //public function removeAllChilds($pDbContainer = NULL);
 }

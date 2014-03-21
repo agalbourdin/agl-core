@@ -25,7 +25,8 @@ interface CollectionInterface
     public function __call($pMethod, array $pArgs);
     public function load(array $pArgs);
     public function getDbContainer();
-    public function count($pConditions = NULL);
+    public function count();
+    public function countAll($pConditions = NULL);
     public function save();
     public function deleteItems();
     public function rewind();

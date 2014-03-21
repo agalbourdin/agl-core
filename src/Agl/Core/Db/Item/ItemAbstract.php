@@ -78,8 +78,9 @@ abstract class ItemAbstract
         $this->_origFields  = $this->_prefixFields($pFields);
         $this->_fields      = $this->_prefixFields($pFields);
 
-        if (isset($this->_fields[$this->getIdField()])) {
-            $this->setId($this->_fields[$this->getIdField()]);
+        $idField = $this->getIdField();
+        if (isset($this->_fields[$idField])) {
+            $this->setId($this->_fields[$idField]);
         }
 
         if (! empty($pValidationRules)) {
@@ -214,9 +215,15 @@ abstract class ItemAbstract
      * @param array $pFields Array of fields to prefix
      * @return array
      */
-    protected function _prefixFields(array $pFields)
+    protected function _prefixFields(array $pFields, $pDbContainer = NULL)
     {
-        $prefix = $this->_dbContainer . static::PREFIX_SEPARATOR;
+        if ($pDbContainer === NULL) {
+            $dbContainer = $this->_dbContainer;
+        } else {
+            $dbContainer = $pDbContainer;
+        }
+
+        $prefix = $dbContainer . static::PREFIX_SEPARATOR;
         foreach ($pFields as $key => $value) {
             if (strpos($key, $prefix) === false) {
                 $newKey           = $prefix . $key;
@@ -226,6 +233,23 @@ abstract class ItemAbstract
         }
 
         return $pFields;
+    }
+
+    /**
+     * Prefix field according to DB container.
+     *
+     * @param string $pField Field to prefix
+     * @return string
+     */
+    protected function _prefixField($pField, $pDbContainer = NULL)
+    {
+        if ($pDbContainer === NULL) {
+            $dbContainer = $this->_dbContainer;
+        } else {
+            $dbContainer = $pDbContainer;
+        }
+
+        return $dbContainer . static::PREFIX_SEPARATOR . $pField;
     }
 
     /**
@@ -277,8 +301,12 @@ abstract class ItemAbstract
      * @param array $pArgs Optional arguments (Conditions, Limit, Order)
      * @return type
      */
-    public function load(array $pArgs = array())
+    public function load($pArgs = array())
     {
+        if (! is_array($pArgs)) {
+            return $this->loadById($pArgs);
+        }
+
         $select = new Select($this->_dbContainer);
 
         if (isset($pArgs[DbInterface::FILTER_ORDER])) {
@@ -303,8 +331,9 @@ abstract class ItemAbstract
         $this->_fields     = $fields;
         $this->_origFields = $fields;
 
-        if (isset($this->_fields[$this->getIdField()])) {
-            $this->setId($this->_fields[$this->getIdField()]);
+        $idField = $this->getIdField();
+        if (isset($this->_fields[$idField])) {
+            $this->setId($this->_fields[$idField]);
         }
 
         return $this;
@@ -334,11 +363,16 @@ abstract class ItemAbstract
     /**
      * Return the prefixed ID field name.
      *
+     * @param string|null $pDbContainer
      * @return string
      */
-    public function getIdField()
+    public function getIdField($pDbContainer = NULL)
     {
-        return $this->_dbContainer . static::PREFIX_SEPARATOR . static::IDFIELD;
+        if ($pDbContainer === NULL) {
+            $pDbContainer = $this->_dbContainer;
+        }
+
+        return $pDbContainer . static::PREFIX_SEPARATOR . static::IDFIELD;
     }
 
     /**
@@ -365,11 +399,17 @@ abstract class ItemAbstract
      * Return the value corresponding to and attribute code, if exists.
      *
      * @param string $pField The attribute code
+     * @param bool $pRaw If raw is true, field will not be prefixed
      * @return mixed
      */
-    public function getField($pField)
+    public function getFieldValue($pField, $pRaw = false)
     {
-        $field = $this->_dbContainer . static::PREFIX_SEPARATOR . $pField;
+        if (! $pRaw) {
+            $field = $this->_dbContainer . static::PREFIX_SEPARATOR . $pField;
+        } else {
+            $field = $pField;
+        }
+
         if (isset($this->_fields[$field])) {
             return $this->_fields[$field];
         }
@@ -382,11 +422,16 @@ abstract class ItemAbstract
      * Search in the origFields array.
      *
      * @param string $pField The attribute code
+     * @param bool $pRaw If raw is true, field will not be prefixed
      * @return mixed
      */
-    public function getOrigField($pField)
+    public function getOrigFieldValue($pField, $pRaw = false)
     {
-        $field = $this->_dbContainer . static::PREFIX_SEPARATOR . $pField;
+        if (! $pRaw) {
+            $field = $this->_dbContainer . static::PREFIX_SEPARATOR . $pField;
+        } else {
+            $field = $pField;
+        }
 
         if (isset($this->_origFields[$field])) {
             return $this->_origFields[$field];
@@ -462,18 +507,18 @@ abstract class ItemAbstract
     /**
      * Delete the item from the database.
      *
-     * @param bool $withChilds Delete also all item's childs in other
+     * @param bool $pWithChilds Delete also all item's childs in other
      * collections
      * @return bool
      */
-    public function delete($withChilds = false)
+    public function delete($pWithChilds = false)
     {
         Observer::dispatch(Observer::EVENT_ITEM_DELETE_BEFORE, array(
             'item' => $this
         ));
 
         $delete = new Delete($this);
-        $delete->commit($withChilds);
+        $delete->commit($pWithChilds);
 
         Observer::dispatch(Observer::EVENT_ITEM_DELETE_AFTER, array(
             'item' => $this
@@ -489,10 +534,10 @@ abstract class ItemAbstract
      * @param array $pJoins Array of item IDs
      * @return array
      */
-    public function setJoins($pDbContainer, array $pJoins)
+    /*public function setJoins($pDbContainer, array $pJoins)
     {
         return $this->__set(static::JOINS_FIELD_PREFIX . $pDbContainer, $pJoins);
-    }
+    }*/
 
     /**
      * Delete all item's joins to a db container.
@@ -500,10 +545,10 @@ abstract class ItemAbstract
      * @param string $pDbContainer Joins database container
      * @return array
      */
-    public function unsetJoins($pDbContainer)
+    /*public function unsetJoins($pDbContainer)
     {
         return $this->__unset(static::JOINS_FIELD_PREFIX . $pDbContainer);
-    }
+    }*/
 
     /**
      * Create a join with an item from another collection.
@@ -511,7 +556,7 @@ abstract class ItemAbstract
      * @param Item $pItem The item to join
      * @return Item
      */
-    public function addParent(ItemAbstract $pItem)
+    /*public function addParent(ItemAbstract $pItem)
     {
         if (! $this->getId() or ! $pItem->getId()) {
             throw new Exception("The items must be existing in the database before being joined");
@@ -531,7 +576,7 @@ abstract class ItemAbstract
         }
 
         return $this;
-    }
+    }*/
 
     /**
      * Remove one or more joined items.
@@ -542,7 +587,7 @@ abstract class ItemAbstract
      * @param mixed $pId ID or array of IDs
      * @return Item
      */
-    public function removeParent(ItemAbstract $pItem)
+    /*public function removeParent(ItemAbstract $pItem)
     {
         if (! $this->getId() or ! $pItem->getId()) {
             throw new Exception("The items must be existing in the database before being joined");
@@ -562,37 +607,64 @@ abstract class ItemAbstract
         }
 
         return $this;
-    }
+    }*/
 
     /**
      * Search for all the joined items in the given database container.
      *
      * @param string $pDbContainer Database container
-     * @return Collection
+     * @param array $pArgs Loading arguments (Conditions, Order, Limit)
+     * @param bool $pSingle Return a single Item instead of a Collection
+     * @return Item|Collection
      */
-    public function getParents($pDbContainer, $pLimit = NULL, $pOrder = NULL)
+    public function getParents($pDbContainer, array $pArgs = array(), $pSingle = false)
     {
         Agl::validateParams(array(
             'RewritedString' => $pDbContainer
         ));
 
         if (! $this->getId()) {
-            throw new Exception("The item must be existing in the database before being joined");
+            throw new Exception("getParents: Item must exist in database");
         }
 
-        $collection = new \Agl\Core\Db\Collection\Collection($pDbContainer);
+        $args = $pArgs;
 
-        $joins = $this->getJoins($pDbContainer);
-
-        if (is_array($joins)) {
+        if (isset($args[DbInterface::FILTER_CONDITIONS]) and $args[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $conditions = $args[DbInterface::FILTER_CONDITIONS];
+        } else {
             $conditions = new Conditions();
-            $conditions->add(
-                static::IDFIELD,
-                Conditions::IN,
-                $joins
-            );
+        }
 
-            $collection->load($conditions, $pLimit, $pOrder);
+        $ids = $this->getFieldValue($this->_prefixField(static::IDFIELD, $pDbContainer), true);
+        if ($ids === NULL) {
+            if ($pSingle) {
+                return Agl::getModel($pDbContainer);
+            }
+
+            return Agl::getCollection($pDbContainer);
+        }
+
+        $conditions->add(
+            static::IDFIELD,
+            Conditions::IN,
+            array($ids)
+        );
+
+        $args[DbInterface::FILTER_CONDITIONS] = $conditions;
+
+        if ($pSingle) {
+            $args[DbInterface::FILTER_LIMIT] = array(0, 1);
+        }
+
+        $collection = Agl::getCollection($pDbContainer);
+        $collection->load($args);
+
+        if ($pSingle) {
+            if ($collection->count()) {
+                return $collection->current();
+            }
+
+            return Agl::getModel($pDbContainer);
         }
 
         return $collection;
@@ -604,7 +676,7 @@ abstract class ItemAbstract
      *
      * @return Item
      */
-    public function removeJoinFromAllChilds()
+    /*public function removeJoinFromAllChilds()
     {
         $field       = static::PREFIX_SEPARATOR . static::JOINS_FIELD_PREFIX . $this->_dbContainer;
         $collections = Agl::app()->getDb()->listCollections(array($field));
@@ -623,5 +695,5 @@ abstract class ItemAbstract
         }
 
         return $this;
-    }
+    }*/
 }

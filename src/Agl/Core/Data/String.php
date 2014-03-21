@@ -120,12 +120,12 @@ class String
     public static function truncate($pStr, $pLimit, $pEnd = '...')
     {
         $str    = strip_tags($pStr);
-        $length = strlen($str);
+        $length = mb_strlen($str);
         if ($length <= $pLimit) {
             return $str;
         }
 
-        return trim(substr($str, 0, $pLimit)) . $pEnd;
+        return trim(mb_substr($str, 0, $pLimit)) . $pEnd;
     }
 
 }

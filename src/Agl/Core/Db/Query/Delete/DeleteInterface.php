@@ -14,5 +14,5 @@ use \Agl\Core\Db\Item\ItemAbstract;
 interface DeleteInterface
 {
     public function __construct(ItemAbstract $pItem);
-    public function commit();
+    public function commit($pWithChilds = false);
 }
