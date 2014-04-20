@@ -18,6 +18,6 @@ before_script:
   - "mysql -D 'agl_core_tests' -e 'INSERT INTO `user` (`user_date_add`,`user_email`) VALUES (NOW(),\"test1@agl.io\");'"
   - "mysql -D 'agl_core_tests' -e 'INSERT INTO `user` (`user_date_add`,`user_email`) VALUES (NOW(),\"test2@agl.io\");'"
   - "mysql -D 'agl_core_tests' -e 'INSERT INTO `comment` (`comment_date_add`,`comment_text`,`user_id`) VALUES (NOW(),\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a tortor nec libero blandit tempus eu non tortor.\",1);'"
-  - "mysql -D 'agl_core_tests' -e 'INSERT INTO `comment` (`comment_date_add`,`comment_text``) VALUES (NOW(),\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a tortor nec libero blandit tempus eu non tortor.\",0);'"
+  - "mysql -D 'agl_core_tests' -e 'INSERT INTO `comment` (`comment_date_add`,`comment_text`) VALUES (NOW(),\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a tortor nec libero blandit tempus eu non tortor.\");'"
 
 script: phpunit

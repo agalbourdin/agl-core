@@ -610,14 +610,15 @@ abstract class ItemAbstract
     }*/
 
     /**
-     * Search for all the joined items in the given database container.
+     * Return a collection of parents, or a single parent, in the required
+     * collection.
      *
      * @param string $pDbContainer Database container
      * @param array $pArgs Loading arguments (Conditions, Order, Limit)
-     * @param bool $pSingle Return a single Item instead of a Collection
+     * @param bool $pFirst Return a single Item instead of a Collection
      * @return Item|Collection
      */
-    public function getParents($pDbContainer, array $pArgs = array(), $pSingle = false)
+    public function getParents($pDbContainer, array $pArgs = array(), $pFirst = false)
     {
         Agl::validateParams(array(
             'RewritedString' => $pDbContainer
@@ -637,7 +638,7 @@ abstract class ItemAbstract
 
         $ids = $this->getFieldValue($this->_prefixField(static::IDFIELD, $pDbContainer), true);
         if ($ids === NULL) {
-            if ($pSingle) {
+            if ($pFirst) {
                 return Agl::getModel($pDbContainer);
             }
 
@@ -652,14 +653,14 @@ abstract class ItemAbstract
 
         $args[DbInterface::FILTER_CONDITIONS] = $conditions;
 
-        if ($pSingle) {
+        if ($pFirst) {
             $args[DbInterface::FILTER_LIMIT] = array(0, 1);
         }
 
         $collection = Agl::getCollection($pDbContainer);
         $collection->load($args);
 
-        if ($pSingle) {
+        if ($pFirst) {
             if ($collection->count()) {
                 return $collection->current();
             }
@@ -668,6 +669,90 @@ abstract class ItemAbstract
         }
 
         return $collection;
+    }
+
+    /**
+     * Return a single parent, in the required collection.
+     *
+     * @param string $pDbContainer Database container
+     * @param array $pArgs Loading arguments (Conditions, Order, Limit)
+     * @return Item
+     */
+    public function getParent($pDbContainer, array $pArgs = array())
+    {
+        return $this->getParents($pDbContainer, $pArgs, true);
+    }
+
+    /**
+     * Return a collection of childs, or a single child, in the required
+     * collection.
+     *
+     * @param string $pDbContainer Database container
+     * @param array $pArgs Loading arguments (Conditions, Order, Limit)
+     * @param bool $pFirst Return a single Item instead of a Collection
+     * @return Item|Collection
+     */
+    public function getChilds($pDbContainer, array $pArgs = array(), $pFirst = false)
+    {
+        Agl::validateParams(array(
+            'RewritedString' => $pDbContainer
+        ));
+
+        if (! $this->getId()) {
+            throw new Exception("getChilds: Item must exist in database");
+        }
+
+        $args = $pArgs;
+
+        if (isset($args[DbInterface::FILTER_CONDITIONS]) and $args[DbInterface::FILTER_CONDITIONS] instanceof Conditions) {
+            $conditions = $args[DbInterface::FILTER_CONDITIONS];
+        } else {
+            $conditions = new Conditions();
+        }
+
+        $conditions->addGroup(
+            array(
+                $this->getIdField(),
+                Conditions::EQ,
+                $this->getId()
+            ),
+            array(
+                $this->getIdField(),
+                Conditions::INSET,
+                $this->getId()
+            )
+        );
+
+        $args[DbInterface::FILTER_CONDITIONS] = $conditions;
+
+        if ($pFirst) {
+            $args[DbInterface::FILTER_LIMIT] = array(0, 1);
+        }
+
+        $collection = Agl::getCollection($pDbContainer);
+        $collection->load($args);
+
+        if ($pFirst) {
+            if ($collection->count()) {
+                return $collection->current();
+            }
+
+            return Agl::getModel($pDbContainer);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Return a single child, in the required collection.
+     *
+     * @param string $pDbContainer Database container
+     * @param array $pArgs Loading arguments (Conditions, Order, Limit)
+     * @return Item
+     */
+    public function getChild($pDbContainer, array $pArgs = array())
+    {
+        return $this->getChilds($pDbContainer, $pArgs, true);
     }
 
     /**

@@ -44,22 +44,24 @@ class Conditions
      */
     private function _processTypeCondition($pField, $pType, $pValue)
     {
+        $escapedField = '`' . $pField . '`';
+
         switch ($pType) {
             case self::IN:
             case self::NOTIN:
                 if (is_array($pValue)) {
                     $markers = '?' . str_repeat(', ?', count($pValue) - 1);
-                    return sprintf($pType, $pField, $markers);
+                    return sprintf($pType, $escapedField, $markers);
                 }
                 break;
             case self::INSET:
-                return sprintf($pType, $pValue, $pField);
+                return sprintf($pType, '?', $escapedField);
                 break;
             default:
                 if ($pValue !== NULL) {
-                    return sprintf($pType, '`' . $pField . '`', '?');
+                    return sprintf($pType, $escapedField, '?');
                 } else {
-                    return sprintf($pType, $pField);
+                    return sprintf($pType, $escapedField);
                 }
         }
     }
@@ -99,18 +101,22 @@ class Conditions
                             foreach ($value as $subField => $subCondition) {
                                 if (is_array($subCondition)) {
                                     foreach ($subCondition as $type => $value) {
-                                        $subPrepared[] = $this->_processTypeCondition($pDbContainer . ItemInterface::PREFIX_SEPARATOR . $subField, $type, $value);
+                                        $prefixedField = (stripos($subField, ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD) !== false) ? $subField : $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $subField;
+                                        $subPrepared[] = $this->_processTypeCondition($prefixedField, $type, $value);
                                     }
                                 } else {
-                                    $subPrepared[] = '`' . $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $subField . '` = ?';
+                                    $prefixedField = (stripos($subField, ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD) !== false) ? $subField : $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $subField;
+                                    $subPrepared[] = '`' . $prefixedField . '` = ?';
                                 }
                             }
                         } else {
-                            $subPrepared[] = $this->_processTypeCondition($pDbContainer . ItemInterface::PREFIX_SEPARATOR . $field, $type, $value);
+                            $prefixedField = (stripos($field, ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD) !== false) ? $field : $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $field;
+                            $subPrepared[] = $this->_processTypeCondition($prefixedField, $type, $value);
                         }
                     }
                 } else {
-                    $prepared[] = '(`' . $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $field . '` = ?)';
+                    $prefixedField = (stripos($field, ItemInterface::PREFIX_SEPARATOR . ItemInterface::IDFIELD) !== false) ? $field : $pDbContainer . ItemInterface::PREFIX_SEPARATOR . $field;
+                    $prepared[]    = '(`' . $prefixedField . '` = ?)';
                 }
 
                 if (! empty($subPrepared)) {
