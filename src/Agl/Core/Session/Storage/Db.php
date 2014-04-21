@@ -79,7 +79,7 @@ class Db
     {
         if (! isset($this->_items[$pId])) {
             $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
-            $this->_items[$pId]->loadByRealId($pId);
+            $this->_items[$pId]->loadByRealid($pId);
         }
 
         if ($this->_items[$pId]->getId()) {
@@ -106,11 +106,11 @@ class Db
 
         if (! isset($this->_items[$pId])) {
             $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
-            $this->_items[$pId]->loadByRealId($pId);
+            $this->_items[$pId]->loadByRealid($pId);
         }
 
         $this->_items[$pId]
-            ->setRealId($pId)
+            ->setRealid($pId)
             ->setAccess($access)
             ->setData($pData);
 
@@ -133,7 +133,7 @@ class Db
     {
         if (! isset($this->_items[$pId])) {
             $this->_items[$pId] = Agl::getModel(self::DB_COLLECTION);
-            $this->_items[$pId]->loadByRealId($pId);
+            $this->_items[$pId]->loadByRealid($pId);
         }
 
         if ($this->_items[$pId]->getId()) {

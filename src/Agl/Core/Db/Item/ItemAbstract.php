@@ -65,10 +65,8 @@ abstract class ItemAbstract
      *
      * @param string $pDbContainer Database container
      * @param array $pFields Attributes to add to the item
-     * @param array $pValidationRules Custom validation rules. If empty, rules
-     * will be loaded from configuration.
      */
-    public function __construct($pDbContainer, array $pFields = array(), array $pValidationRules = array())
+    public function __construct($pDbContainer, array $pFields = array())
     {
         Agl::validateParams(array(
             'RewritedString' => $pDbContainer
@@ -83,14 +81,9 @@ abstract class ItemAbstract
             $this->setId($this->_fields[$idField]);
         }
 
-        if (! empty($pValidationRules)) {
-            $this->_validation = $pValidationRules;
-        } else {
-            $this->_validation = Agl::app()->getConfig('core-validation/' . $pDbContainer);
-
-            if ($this->_validation === NULL) {
-                $this->_validation = array();
-            }
+        $this->_validation = Agl::app()->getConfig('core-validation/' . $pDbContainer);
+        if ($this->_validation === NULL) {
+            $this->_validation = array();
         }
     }
 
@@ -276,6 +269,18 @@ abstract class ItemAbstract
         );
 
         return $this->load($args);
+    }
+
+    /**
+     * Manually set validation rules, override the previous rules.
+     *
+     * @param array $pRules
+     * @return Item
+     */
+    public function setValidationRules(array $pRules = array())
+    {
+        $this->_validation = $pRules;
+        return $this;
     }
 
     /**

@@ -9,6 +9,11 @@ class MysqlItemTest
     public static function setUpBeforeClass()
     {
         self::$_instance = Agl::getModel(self::TEST_TABLE, array('email' => 'test3@agl.io'));
+        self::$_instance->setValidationRules(array(
+            'zipcode'   => 'isInt',
+            'email'     => 'isEmail',
+            'promocode' => '/^A-[0-9]{3}$/i'
+        ));
     }
 
     public static function tearDownAfterClass()
@@ -424,5 +429,63 @@ class MysqlItemTest
 
         $childs = $user->getChilds('comment');
         $this->assertEquals(0, $childs->count());
+    }
+
+    /**
+     * @dataProvider setValidationData
+     */
+    public function testValidation($pField, $pValue)
+    {
+        self::$_instance->$pField = $pValue;
+        $this->assertEquals($pValue, self::$_instance->$pField);
+    }
+
+    public function setValidationData()
+    {
+        return array(
+            array('zipcode', 75002),
+            array('email', 'test@tld.com'),
+            array('promocode', 'A-123')
+        );
+    }
+
+    /**
+     * @dataProvider setValidationExceptionData
+     * @expectedException Exception
+     */
+    public function testValidationException($pField, $pValue)
+    {
+        self::$_instance->$pField = $pValue;
+    }
+
+    public function setValidationExceptionData()
+    {
+        return array(
+            array('zipcode', 'test'),
+            array('zipcode', ''),
+            array('zipcode', 1.33),
+            array('zipcode', false),
+            array('zipcode', true),
+            array('zipcode', NULL),
+            array('zipcode', new stdClass()),
+
+            array('email', 'test'),
+            array('email', 3),
+            array('email', ''),
+            array('email', 1.33),
+            array('email', false),
+            array('email', true),
+            array('email', NULL),
+            array('email', new stdClass()),
+
+            array('promocode', 'test'),
+            array('promocode', 3),
+            array('promocode', ''),
+            array('promocode', 1.33),
+            array('promocode', false),
+            array('promocode', true),
+            array('promocode', NULL),
+            array('promocode', new stdClass())
+        );
     }
 }

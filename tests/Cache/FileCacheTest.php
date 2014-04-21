@@ -1,8 +1,8 @@
 <?php
-require_once('TestAbstract.php');
+require_once('CacheTestAbstract.php');
 
 class FileCacheTest
-    extends TestAbstract
+    extends CacheTestAbstract
 {
     protected static $_className = '\Agl\Core\Cache\File';
 

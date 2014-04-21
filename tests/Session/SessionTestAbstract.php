@@ -1,14 +1,8 @@
 <?php
-class FileSessionTest
+class SessionTestAbstract
     extends PHPUnit_Framework_TestCase
 {
     protected static $_instance = NULL;
-
-    public static function setUpBeforeClass()
-    {
-        self::$_instance      = new \Agl\Core\Session\Storage\File();
-        self::$_instance->key = 'value';
-    }
 
     public function getData()
     {

@@ -1,5 +1,5 @@
 <?php
-class TestAbstract
+class CacheTestAbstract
     extends PHPUnit_Framework_TestCase
 {
     protected static $_instance = NULL;
