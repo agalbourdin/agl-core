@@ -334,4 +334,79 @@ class MysqlItemTest
             array(2)
         );
     }
+
+    /**
+     * @dataProvider addParentData
+     */
+    public function testAddParent($pId, $pExpected)
+    {
+        $user    = Agl::getModel('user')->load($pId);
+        $comment = Agl::getModel('comment')->load(2);
+        $comment->addParent($user)->save();
+
+        $this->assertEquals($pExpected, $comment->getFieldValue($user->getIdField(), true));
+    }
+
+    public function addParentData()
+    {
+        return array(
+            array(2, '2'),
+            array(1, '2,1')
+        );
+    }
+
+    /**
+     * @dataProvider removeParentData
+     */
+    public function testRemoveParent($pId, $pExpected)
+    {
+        $user    = Agl::getModel('user')->load($pId);
+        $comment = Agl::getModel('comment')->load(2);
+        $comment->removeParent($user)->save();
+
+        $this->assertEquals($pExpected, $comment->getFieldValue($user->getIdField(), true));
+    }
+
+    public function removeParentData()
+    {
+        return array(
+            array(2, '1'),
+            array(1, NULL)
+        );
+    }
+
+    /**
+     * @dataProvider addRemoveParentIdExceptionData
+     * @expectedException Exception
+     */
+    public function testAddParentException($pUser)
+    {
+        $user    = Agl::getModel('user')->load($pUser);
+        $comment = Agl::getModel('comment')->load(2);
+        $comment->addParent($user);
+    }
+
+    /**
+     * @dataProvider addRemoveParentIdExceptionData
+     * @expectedException Exception
+     */
+    public function testRemoveParentException($pUser)
+    {
+        $user    = Agl::getModel('user')->load($pUser);
+        $comment = Agl::getModel('comment')->load(2);
+        $comment->removeParent($user);
+    }
+
+    public function addRemoveParentIdExceptionData()
+    {
+        return array(
+            array(3),
+            array(''),
+            array(1.33),
+            array(false),
+            array(true),
+            array(NULL),
+            array(new stdClass())
+        );
+    }
 }

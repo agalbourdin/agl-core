@@ -62,7 +62,7 @@ interface ItemInterface
     public function getParent($pDbContainer, array $pArgs = array());
     public function getChilds($pDbContainer, array $pArgs = array(), $pFirst = false);
     public function getChild($pDbContainer, array $pArgs = array());
-    //public function addParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
-    //public function removeParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    public function addParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
+    public function removeParent(\Agl\Core\Db\Item\ItemAbstract $pItem);
     //public function removeAllChilds($pDbContainer = NULL);
 }

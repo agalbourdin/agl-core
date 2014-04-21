@@ -458,7 +458,7 @@ abstract class ItemAbstract
      */
     public function save()
     {
-        if (! $this->getOrigField(static::IDFIELD)) {
+        if (! $this->getOrigFieldValue(static::IDFIELD)) {
             throw new Exception("Cannot save an item without ID");
         }
 
@@ -753,6 +753,66 @@ abstract class ItemAbstract
     public function getChild($pDbContainer, array $pArgs = array())
     {
         return $this->getChilds($pDbContainer, $pArgs, true);
+    }
+
+    /**
+     * Add a parent relation to the current Item.
+     *
+     * @param ItemAbstract $pItem
+     * @return Item
+     */
+    public function addParent(ItemAbstract $pItem)
+    {
+        if (! $pItem->getId()) {
+            throw new Exception("addParent: Parent must exist in database");
+        }
+
+        $parentsValue = $this->getFieldValue($pItem->getIdField(), true);
+        if (! $parentsValue) {
+            $parents = array();
+        } else {
+            $parents = explode(',', $parentsValue);
+        }
+
+        $parents[] = $pItem->getId()->getOrig();
+        $parents   = array_unique($parents);
+
+        $this->_fields[$pItem->getIdField()] = implode(',', $parents);
+
+        return $this;
+    }
+
+    /**
+     * Remove a parent relation to the current Item.
+     *
+     * @param ItemAbstract $pItem
+     * @return Item
+     */
+    public function removeParent(ItemAbstract $pItem)
+    {
+        if (! $pItem->getId()) {
+            throw new Exception("addParent: Parent must exist in database");
+        }
+
+        $parentsValue = $this->getFieldValue($pItem->getIdField(), true);
+        if (! $parentsValue) {
+            $parents = array();
+        } else {
+            $parents = explode(',', $parentsValue);
+        }
+
+        $key = array_search($pItem->getId()->getOrig(), $parents);
+        if ($key !== false) {
+            unset($parents[$key]);
+        }
+
+        if (empty($parents)) {
+            $this->_fields[$pItem->getIdField()] = NULL;
+        } else {
+            $this->_fields[$pItem->getIdField()] = implode(',', $parents);
+        }
+
+        return $this;
     }
 
     /**
