@@ -11,6 +11,13 @@ class MysqlItemTest
         self::$_instance = Agl::getModel(self::TEST_TABLE, array('email' => 'test3@agl.io'));
     }
 
+    public static function tearDownAfterClass()
+    {
+        $user    = Agl::getModel('user')->load(1);
+        $comment = Agl::getModel('comment')->load(1);
+        $comment->addParent($user)->save();
+    }
+
     public function testGetDbContainer()
     {
         $this->assertEquals(self::TEST_TABLE, self::$_instance->getDbContainer());
@@ -408,5 +415,14 @@ class MysqlItemTest
             array(NULL),
             array(new stdClass())
         );
+    }
+
+    public function testRemoveChilds()
+    {
+        $user = Agl::getModel('user')->load(1);
+        $user->removeChilds();
+
+        $childs = $user->getChilds('comment');
+        $this->assertEquals(0, $childs->count());
     }
 }

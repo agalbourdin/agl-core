@@ -816,29 +816,30 @@ abstract class ItemAbstract
     }
 
     /**
-     * Remove the joins to the current item in all items from all collections
-     * (except in the item's collection).
+     * Remove Item's childs in the given DB container, or in all containers.
      *
+     * @param string|null $pDbContainer
      * @return Item
      */
-    /*public function removeJoinFromAllChilds()
+    public function removeChilds($pDbContainer = NULL)
     {
-        $field       = static::PREFIX_SEPARATOR . static::JOINS_FIELD_PREFIX . $this->_dbContainer;
-        $collections = Agl::app()->getDb()->listCollections(array($field));
+        if ($pDbContainer === NULL) {
+            $containers = Agl::app()->getDb()->listCollections(array($this->getIdField()));
+        } else {
+            $containers = array($pDbContainer);
+        }
 
-        foreach ($collections as $collection) {
-            if ($collection == $this->_dbContainer) {
+        foreach ($containers as $container) {
+            if ($container === $this->getDbContainer()) {
                 continue;
             }
 
-            $childs = $this->getChilds($collection);
-            while ($item = $childs->next()) {
-                $item
-                    ->removeParent($this)
-                    ->save();
+            $childs = $this->getChilds($container);
+            foreach ($childs as $child) {
+                $child->removeParent($this)->save();
             }
         }
 
         return $this;
-    }*/
+    }
 }

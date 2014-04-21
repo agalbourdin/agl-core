@@ -84,9 +84,10 @@ class Db
                 $table = str_replace($this->getDbPrefix(), '', current($row));
 
                 foreach ($pWithFields as $field) {
-                    $preparedJoin = $this->getConnection()->prepare('SHOW COLUMNS FROM `' . current($row) . '` LIKE "' . $table . $field . '"');
+                    $preparedJoin = $this->getConnection()->prepare('SHOW COLUMNS FROM `' . current($row) . '` LIKE "' . $field . '"');
+                    $preparedJoin->execute();
                     if ($preparedJoin->execute() and ! $preparedJoin->rowCount()) {
-                        continue 1;
+                        continue 2;
                     }
                 }
 
