@@ -10,7 +10,7 @@ define('MYSQL_PASSWORD', '');
 /**
  * You shouldn't have to edit following lines.
  */
-define('AGL_PATH', dirname(__DIR__) . '/src/Agl/Core/');
+define('AGL_PATH', dirname(__DIR__) . '/src/');
 define('APP_PATH', dirname(__DIR__) . '/');
 define('COMPOSER_DIR', dirname(__DIR__) . '/vendor/');
 define('DS', DIRECTORY_SEPARATOR);
