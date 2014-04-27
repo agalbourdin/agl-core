@@ -24,7 +24,7 @@ return array(
 		 *
 		 * The file must be located into "app/template/".
 		 */
-		'file' => 'default',
+		'file' => 'main',
 
 		/**
 		 * Array of CSS file names ("public/skin/css/").
@@ -60,6 +60,13 @@ return array(
 		 * For the "home" module.
 		 */
 		'home' => array(
+
+			/**
+			 * Set to true to reset all previously defined CSS or JS files
+			 * (template configuration will not be applied to this module).
+			 */
+			'reset-css' => false,
+			'reset-js'  => false,
 
 			/**
 			 * We add a CSS file to every view and actions of this module.

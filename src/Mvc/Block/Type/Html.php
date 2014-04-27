@@ -25,9 +25,9 @@ class Html
         return $this->getView()->getCss();
     }
 
-    public function getJs()
+    public function getJs($pFooter = false)
     {
-        return $this->getView()->getJs();
+        return $this->getView()->getJs($pFooter);
     }
 
     public function getTitle()

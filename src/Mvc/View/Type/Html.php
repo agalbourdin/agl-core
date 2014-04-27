@@ -26,7 +26,9 @@ class Html
 	/**
 	 * JavaScript Marker identifier.
 	 */
-	const JS_MARKER = 'HTML_JS';
+	const JS_MARKER        = 'HTML_JS::';
+	const JS_MARKER_FOOTER = 'footer';
+	const JS_MARKER_HEADER = 'header';
 
 	/**
 	 * HTML Title Marker identifier.
@@ -118,11 +120,14 @@ class Html
 	/**
 	 * Return the HTML JS Marker tag.
 	 *
+	 * @param bool $pFooter Generate header or footer marker
 	 * @return string
 	 */
-	public static function getJsMarker()
+	public static function getJsMarker($pFooter = false)
 	{
-		return '/' . static::VIEW_MARKER . self::JS_MARKER . '/';
+		return ($pFooter) ?
+			'/' . static::VIEW_MARKER . self::JS_MARKER . self::JS_MARKER_FOOTER . '/' :
+			'/' . static::VIEW_MARKER . self::JS_MARKER . self::JS_MARKER_HEADER . '/';
 	}
 
 	/**
@@ -179,16 +184,17 @@ class Html
 	 * Replace the AGL JS Marker in the buffer.
 	 *
 	 * @param $pBuffer string
+	 * @param string $pId JS belong to header or footer ID
 	 * @return string
 	 */
-	private function _processHtmlJsMarker(&$pBuffer)
+	private function _processHtmlJsMarker(&$pBuffer, $pId)
 	{
-		$this->loadJs();
-		$this->_js = array_unique($this->_js);
+		$this->loadJs($pId);
+		$this->_js[$pId] = array_unique($this->_js[$pId]);
 
 		$skinPath = $this->_getSkinRelativePath();
 		$jsTags = array();
-		foreach ($this->_js as $js) {
+		foreach ($this->_js[$pId] as $js) {
 			if (! filter_var($js, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED) and strpos($js, '//') === false) {
 				$filePath = $skinPath
 					. self::APP_HTTP_JS_DIR
@@ -200,7 +206,8 @@ class Html
 			$jsTags[] = '<script src="' . $filePath . '" type="text/javascript"></script>';
 		}
 
-		$pBuffer = str_replace(self::getJsMarker(), implode("\n", $jsTags) . "\n", $pBuffer);
+		$footer  = ($pId === self::JS_MARKER_FOOTER) ? true : false;
+		$pBuffer = str_replace(self::getJsMarker($footer), implode("\n", $jsTags) . "\n", $pBuffer);
 		return $this;
 	}
 
@@ -265,13 +272,14 @@ class Html
 	 * Load JS files registered in the configuration array $pArray.
 	 *
 	 * @param array $pArray
+	 * @param strong $pId JS belong to header or footer ID
 	 * @return Html
 	 */
-	private function _loadJsFromArray($pArray)
+	private function _loadJsFromArray($pArray, $pId)
 	{
 		if (is_array($pArray)) {
 			foreach ($pArray as $js) {
-				$this->_js[] = $js;
+				$this->_js[$pId][] = $js;
 			}
 		}
 
@@ -286,12 +294,12 @@ class Html
 	 */
 	protected function _prepareRender($pBuffer)
 	{
-		$hasMarkers = preg_match_all('#(/' . static::VIEW_MARKER . '([A-Z0-9_]+)/)#', $pBuffer, $matches);
+		$hasMarkers = preg_match_all('#(/' . static::VIEW_MARKER . '([A-Z0-9_]+)(::([a-z]+))?/)#', $pBuffer, $matches);
 		if ($hasMarkers !== false) {
-			foreach ($matches[2] as $marker) {
+			foreach ($matches[2] as $i => $marker) {
 				$method = '_process' . StringData::toCamelCase($marker) . 'Marker';
 				if (method_exists($this, $method)) {
-					$this->$method($pBuffer);
+					$this->$method($pBuffer, $matches[4][$i]);
 				}
 			}
 		}
@@ -314,9 +322,12 @@ class Html
 		$view    = $request->getView();
 		$action  = $request->getAction();
 
-		$templateConfig = self::getTemplateConfig();
-		if ($templateConfig and isset($templateConfig['css'])) {
-			$this->_loadCssFromArray($templateConfig['css']);
+		$resetCss = Agl::app()->getConfig('core-layout/modules/' . $module . '/reset-css');
+		if (! $resetCss) {
+			$templateConfig = self::getTemplateConfig();
+			if ($templateConfig and isset($templateConfig['css'])) {
+				$this->_loadCssFromArray($templateConfig['css']);
+			}
 		}
 
 		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/css'));
@@ -334,28 +345,32 @@ class Html
 	 * Load the JS from the configuration of the view and of all the blocks
 	 * that have been included in the view.
 	 *
+	 * @param string $pId JS belong to header or footer ID
 	 * @return Html
 	 */
-	public function loadJs()
+	public function loadJs($pId)
 	{
-		$this->_js = array();
+		$this->_js[$pId] = array();
 
 		$request = Agl::getRequest();
 		$module  = $request->getModule();
 		$view    = $request->getView();
 		$action  = $request->getAction();
 
-		$templateConfig = self::getTemplateConfig();
-		if ($templateConfig and isset($templateConfig['js'])) {
-			$this->_loadJsFromArray($templateConfig['js']);
+		$resetJs = Agl::app()->getConfig('core-layout/modules/' . $module . '/reset-js');
+		if (! $resetJs) {
+			$templateConfig = self::getTemplateConfig();
+			if ($templateConfig and isset($templateConfig['js'][$pId])) {
+				$this->_loadJsFromArray($templateConfig['js'][$pId], $pId);
+			}
 		}
 
-		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/js'));
-		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/js'));
-		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '/js'));
+		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/js/' . $pId), $pId);
+		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/js/' . $pId), $pId);
+		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '/js/' . $pId), $pId);
 
 		foreach ($this->_blocks as $block) {
-			$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/blocks/' . $block['group'] . '#' . $block['block'] . '/js'));
+			$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/blocks/' . $block['group'] . '#' . $block['block'] . '/js/' . $pId), $pId);
 		}
 
 		return $this;
@@ -376,11 +391,12 @@ class Html
 	 * Display the JS Marker in the page. It will be replaced by JS tags
 	 * when the buffer will be rendered.
 	 *
+	 * @param bool $pFooter Generate header or footer marker
 	 * @return string
 	 */
-	public function getJs()
+	public function getJs($pFooter = false)
 	{
-		return self::getJsMarker();
+		return self::getJsMarker($pFooter);
 	}
 
 	/**
