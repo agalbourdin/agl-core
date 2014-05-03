@@ -7,7 +7,7 @@ class DirTest
     public function testListDirs()
     {
         $list = Agl\Core\Data\Dir::listDirs('./');
-        $this->assertContains('src', $list);
+        $this->assertContains('./src/', $list);
     }
 
     public function testCreate()
