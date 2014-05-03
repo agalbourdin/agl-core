@@ -96,4 +96,22 @@ class File
 
         return (file_put_contents($pFile, $pContent, LOCK_EX));
     }
+
+    /**
+     * CHMOD a file.
+     *
+     * @param string $pFile
+     * @param mixed $pMode
+     * @return bool
+     */
+    public static function chmod($pFile, $pMode)
+    {
+        if (strpos($pMode, '0') !== 0) {
+            $mode = octdec('0' . $pMode);
+        } else {
+            $mode = octdec($pMode);
+        }
+
+        return chmod($pFile, $mode);
+    }
 }

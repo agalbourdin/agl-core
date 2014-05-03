@@ -63,13 +63,18 @@ class Dir
      */
     public static function listDirs($pDir)
     {
+        if (substr($pDir, -1) !== DS) {
+            $pDir .= DS;
+        }
+
         $content = glob($pDir . '*', GLOB_ONLYDIR);
         if ($content === false) {
             return array();
         }
 
         $content = array_map(function($el) use ($pDir) {
-            return str_replace($pDir, '', $el);
+            //return str_replace($pDir, '', $el);
+            return $el . DS;
         }, $content);
 
         return $content;
@@ -86,10 +91,10 @@ class Dir
     public static function listFilesRecursive($pDir, $pRegex = '(.*)')
     {
         $content   = array();
-        $Directory = new RecursiveDirectoryIterator($pDir);
-        $Iterator  = new RecursiveIteratorIterator($Directory);
-        $Regex     = new RegexIterator($Iterator, '/^(.*)' . $pRegex . '$/i', RecursiveRegexIterator::GET_MATCH);
-        foreach ($Regex as $file) {
+        $directory = new RecursiveDirectoryIterator($pDir);
+        $iterator  = new RecursiveIteratorIterator($directory);
+        $regex     = new RegexIterator($iterator, '/^(.*)' . $pRegex . '$/i', RecursiveRegexIterator::GET_MATCH);
+        foreach ($regex as $file) {
             $content[] = $file[0];
         }
 
@@ -109,5 +114,23 @@ class Dir
         }
 
         return true;
+    }
+
+    /**
+     * CHMOD a directory.
+     *
+     * @param string $pDir
+     * @param mixed $pMode
+     * @return bool
+     */
+    public static function chmod($pDir, $pMode)
+    {
+        if (strpos($pMode, '0') !== 0) {
+            $mode = octdec('0' . $pMode);
+        } else {
+            $mode = octdec($pMode);
+        }
+
+        return chmod($pDir, $mode);
     }
 }
