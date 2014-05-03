@@ -182,4 +182,16 @@ abstract class BlockAbstract
 
 		require($path);
 	}
+
+    /**
+     * Forward call to getBlock().
+     *
+     * @param string $pBlock
+     * @param array $pVars
+     * @return string
+     */
+    public function getBlock($pBlock, array $pVars = array())
+    {
+        return $this->getView()->getBlock($pBlock, $pVars);
+    }
 }

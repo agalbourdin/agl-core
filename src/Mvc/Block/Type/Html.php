@@ -16,32 +16,5 @@ class Html
 	extends BlockAbstract
 		implements BlockInterface
 {
-	/**
-     * Forwarded calls.
-     */
 
-    public function getCss()
-    {
-        return $this->getView()->getCss();
-    }
-
-    public function getJs($pFooter = false)
-    {
-        return $this->getView()->getJs($pFooter);
-    }
-
-    public function getTitle()
-    {
-        return $this->getView()->getTitle();
-    }
-
-    public function getMeta()
-    {
-        return $this->getView()->getMeta();
-    }
-
-    public function getBlock($pBlock, array $pVars = array())
-    {
-        return $this->getView()->getBlock($pBlock, $pVars);
-    }
 }

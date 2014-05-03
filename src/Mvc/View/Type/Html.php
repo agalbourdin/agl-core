@@ -56,16 +56,6 @@ class Html
 	const FILE_EXT = '.phtml';
 
 	/**
-     * CSS file extension.
-     */
-    const CSS_EXT = '.css';
-
-    /**
-     * JS file extension.
-     */
-    const JS_EXT = '.js';
-
-	/**
 	 * The list of the CSS files to include into the HTML page.
 	 *
 	 * @var array
@@ -158,7 +148,6 @@ class Html
 	 */
 	private function _processHtmlCssMarker(&$pBuffer)
 	{
-		$this->loadCss();
 		$this->_css = array_unique($this->_css);
 
 		$skinPath = $this->_getSkinRelativePath();
@@ -189,7 +178,6 @@ class Html
 	 */
 	private function _processHtmlJsMarker(&$pBuffer, $pId)
 	{
-		$this->loadJs($pId);
 		$this->_js[$pId] = array_unique($this->_js[$pId]);
 
 		$skinPath = $this->_getSkinRelativePath();
@@ -252,41 +240,6 @@ class Html
 	}
 
 	/**
-	 * Load CSS files registered in the configuration array $pArray.
-	 *
-	 * @param array $pArray
-	 * @return Html
-	 */
-	private function _loadCssFromArray($pArray)
-	{
-		if (is_array($pArray)) {
-			foreach ($pArray as $css) {
-				$this->_css[] = $css;
-			}
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Load JS files registered in the configuration array $pArray.
-	 *
-	 * @param array $pArray
-	 * @param strong $pId JS belong to header or footer ID
-	 * @return Html
-	 */
-	private function _loadJsFromArray($pArray, $pId)
-	{
-		if (is_array($pArray)) {
-			foreach ($pArray as $js) {
-				$this->_js[$pId][] = $js;
-			}
-		}
-
-		return $this;
-	}
-
-	/**
 	 * Replace the AGL Markers in the buffer before rendering it.
 	 *
 	 * @param $pBuffer string
@@ -308,71 +261,14 @@ class Html
 	}
 
 	/**
-	 * Load the CSS from the configuration of the view and of all the blocks
-	 * that have been included in the view.
+	 * Add CSS to page.
 	 *
+	 * @param string $pFile CSS file, relative to public/skin/css/
 	 * @return Html
 	 */
-	public function loadCss()
+	public function addCss($pFile)
 	{
-		$this->_css = array();
-
-		$request = Agl::getRequest();
-		$module  = $request->getModule();
-		$view    = $request->getView();
-		$action  = $request->getAction();
-
-		$resetCss = Agl::app()->getConfig('core-layout/modules/' . $module . '/reset-css');
-		if (! $resetCss) {
-			$templateConfig = self::getTemplateConfig();
-			if ($templateConfig and isset($templateConfig['css'])) {
-				$this->_loadCssFromArray($templateConfig['css']);
-			}
-		}
-
-		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/css'));
-		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/css'));
-		$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '/css'));
-
-		foreach ($this->_blocks as $block) {
-			$this->_loadCssFromArray(Agl::app()->getConfig('core-layout/blocks/' . $block['group'] . '#' . $block['block'] . '/css'));
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Load the JS from the configuration of the view and of all the blocks
-	 * that have been included in the view.
-	 *
-	 * @param string $pId JS belong to header or footer ID
-	 * @return Html
-	 */
-	public function loadJs($pId)
-	{
-		$this->_js[$pId] = array();
-
-		$request = Agl::getRequest();
-		$module  = $request->getModule();
-		$view    = $request->getView();
-		$action  = $request->getAction();
-
-		$resetJs = Agl::app()->getConfig('core-layout/modules/' . $module . '/reset-js');
-		if (! $resetJs) {
-			$templateConfig = self::getTemplateConfig();
-			if ($templateConfig and isset($templateConfig['js'][$pId])) {
-				$this->_loadJsFromArray($templateConfig['js'][$pId], $pId);
-			}
-		}
-
-		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '#action#' . $action . '/js/' . $pId), $pId);
-		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '#' . $view . '/js/' . $pId), $pId);
-		$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/modules/' . $module . '/js/' . $pId), $pId);
-
-		foreach ($this->_blocks as $block) {
-			$this->_loadJsFromArray(Agl::app()->getConfig('core-layout/blocks/' . $block['group'] . '#' . $block['block'] . '/js/' . $pId), $pId);
-		}
-
+		$this->_css[] = $pFile;
 		return $this;
 	}
 
@@ -385,6 +281,24 @@ class Html
 	public function getCss()
 	{
 		return self::getCssMarker();
+	}
+
+	/**
+	 * Add JS to page.
+	 *
+	 * @param string $pFile JS file, relative to public/skin/js/
+	 * @param bool $pFooter Add JS file in header or footer section
+	 * @return Html
+	 */
+	public function addJs($pFile, $pFooter = false)
+	{
+		if (! $pFooter) {
+			$this->_js[self::JS_MARKER_HEADER][] = $pFile;
+		} else {
+			$this->_js[self::JS_MARKER_FOOTER][] = $pFile;
+		}
+
+		return $this;
 	}
 
 	/**

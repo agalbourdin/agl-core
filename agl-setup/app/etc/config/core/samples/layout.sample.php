@@ -24,26 +24,7 @@ return array(
 		 *
 		 * The file must be located into "app/template/".
 		 */
-		'file' => 'main',
-
-		/**
-		 * Array of CSS file names ("public/skin/css/").
-		 */
-		'css' => array(
-			'normalize.css',
-			'preset.css',
-			'main.css'
-		),
-
-		/**
-		 * Array of JS file names ("public/skin/js/")
-		 */
-		'js' => array(
-			'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-			'vendor/modernizr-2.6.2.min.js',
-			'plugins.js',
-			'main.js'
-		)
+		'file' => 'main'
 	),
 
 	/**
@@ -61,40 +42,12 @@ return array(
 		 */
 		'home' => array(
 
-			/**
-			 * Set to true to reset all previously defined CSS or JS files
-			 * (template configuration will not be applied to this module).
-			 */
-			'reset-css' => false,
-			'reset-js'  => false,
-
-			/**
-			 * We add a CSS file to every view and actions of this module.
-			 */
-			'css' => array(
-				'home.css'
-			),
-
-			/**
-			 * We add a JS file to every view and actions of this module.
-			 */
-			'js' => array(
-				'home.js'
-			)
-
 		),
 
 		/**
 		 * For the "index" view of the "home" module.
 		 */
 		'home/index' => array(
-
-			/**
-			 * We add a CSS file to this view.
-			 */
-			'css' => array(
-				'home-index.css'
-			),
 
 			/**
 			 * The view will be cached with a TTL of 3600 sec.
@@ -155,20 +108,6 @@ return array(
 		 * For the "product/bestsellers" block.
 		 */
 		'product/bestsellers' => array(
-
-			/**
-			 * We add a CSS file to the view containing the block.
-			 */
-			'css' => array(
-				'bestsellers.css'
-			),
-
-			/**
-			 * We add a JS file to the view containing the block.
-			 */
-			'js' => array(
-				'slideshow.js'
-			),
 
 			/**
 			 * We set ACL: only users with the "stats" resource will see the
