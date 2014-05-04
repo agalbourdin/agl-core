@@ -51,11 +51,6 @@ class Html
 	const APP_HTTP_JS_DIR = 'js';
 
 	/**
-	 * HTML type: template file extension.
-	 */
-	const FILE_EXT = '.phtml';
-
-	/**
 	 * The list of the CSS files to include into the HTML page.
 	 *
 	 * @var array

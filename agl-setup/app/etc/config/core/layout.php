@@ -8,7 +8,6 @@
 return array(
 
 	'template' => array(
-		'type' => 'html',
 		'file' => 'main'
 	),
 

@@ -41,6 +41,23 @@ class Controller
 	const APP_PHP_DIR = 'controller';
 
 	/**
+	 * Store JSON flag.
+	 *
+	 * @var bool
+	 */
+	protected $_json = false;
+
+	/**
+	 * Is Controller rendering JSON instead of View?
+	 *
+	 * @return bool
+	 */
+	public function isJson()
+	{
+		return $this->_json;
+	}
+
+	/**
 	 * Return a TTL and a cache key composed of the module, the view, the
 	 * actions and of the locale code and the request string if required.
 	 *

@@ -8,6 +8,7 @@ use \Agl\Core\Agl,
 	\Agl\Core\Mvc\Block\Block,
 	\Agl\Core\Mvc\Block\BlockAbstract,
 	\Agl\Core\Mvc\Block\BlockInterface,
+	\Agl\Core\Mvc\View\ViewInterface,
 	\Agl\Core\Observer\Observer,
 	\Agl\Core\Request\Request,
 	\Exception;
@@ -85,6 +86,10 @@ abstract class ViewAbstract
 			}
 		}
 
+		if (! isset(self::$_templateConfig['type'])) {
+			self::$_templateConfig['type'] = ViewInterface::TYPE_HTML;
+		}
+
 		return self::$_templateConfig;
 	}
 
@@ -121,7 +126,7 @@ abstract class ViewAbstract
 	 */
 	public function setFile($pFile)
 	{
-        $this->_file = $pFile . static::FILE_EXT;
+        $this->_file = $pFile . Agl::PHP_EXT;
 
         return $this;
 	}
@@ -189,7 +194,7 @@ abstract class ViewAbstract
 			$template = APP_PATH
 				        . Agl::APP_TEMPLATE_DIR
 				        . $template['file']
-				        . static::FILE_EXT;
+				        . Agl::PHP_EXT;
 
 			require($template);
 		} else {
@@ -279,7 +284,7 @@ abstract class ViewAbstract
         ob_start();
 
         $blockModel
-			->setFile($blockPathInfos[1] . DS . $blockPathInfos[2] . static::FILE_EXT)
+			->setFile($blockPathInfos[1] . DS . $blockPathInfos[2] . Agl::PHP_EXT)
 			->setVars($pVars)
 			->render();
 

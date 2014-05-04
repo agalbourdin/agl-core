@@ -17,11 +17,6 @@ interface ViewInterface
     const TYPE_HTML = 'html';
 
     /**
-     *View type : JSON.
-     */
-    const TYPE_JSON = 'json';
-
-    /**
      * The suffix used by the application's View class names.
      */
     const APP_VIEW_SUFFIX = 'View';
@@ -65,7 +60,7 @@ interface ViewInterface
     /**
      * Static error page path.
      */
-    const ERROR_STATIC = 'public/error_static.phtml';
+    const ERROR_STATIC = 'public/error_static.php';
 
     /**
      * 403 error page path.

@@ -7,10 +7,10 @@ use \Agl\Core\Agl,
     \Agl\Core\Mvc\View\ViewInterface;
 
 /**
- * Access the JSON configuration files.
+ * Access configuration files.
  *
  * @category Agl_Core
- * @package Agl_Core_Config_Json
+ * @package Agl_Core_Config
  * @version 0.1.0
  */
 
@@ -136,7 +136,7 @@ class Config
     }
 
     /**
-     * Search all events.json files and get config value.
+     * Search all events config files and get config value.
      *
      * @return array
      */
@@ -209,7 +209,7 @@ class Config
     }
 
     /**
-     * Retrieve a value in the Agl JSON configuration file.
+     * Retrieve a value in the configuration files.
      *
      * @param string $pPath The configuration path to retrieve
      * @param array $pForceGlobalArray Return the results in a multidimensional

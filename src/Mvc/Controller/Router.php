@@ -5,6 +5,7 @@ use \Agl\Core\Agl,
 	\Agl\Core\Data\String as StringData,
 	\Agl\Core\Mvc\Controller\Controller,
 	\Agl\Core\Observer\Observer,
+	\Agl\Core\Request\Request,
 	\Exception;
 
 /**
@@ -128,6 +129,13 @@ class Router
 	 */
 	public function route()
 	{
-		echo $this->_controller->{$this->_actionMethod}();
+		$content = $this->_controller->{$this->_actionMethod}();
+
+		if ($this->_controller->isJson()) {
+			Request::setHeader(Request::HEADER_JSON);
+			echo json_encode($content);
+		} else {
+			echo $content;
+		}
 	}
 }

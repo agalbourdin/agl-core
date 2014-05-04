@@ -8,21 +8,8 @@ return array(
 	'template' => array(
 
 		/**
-		 * Template's type.
-		 *
-		 * Correct values are:
-		 * - html
-		 * - json
-		 */
-		'type' => 'html',
-
-		/**
-		 * Template's file name, without extension.
-		 * Extension depends of the template's type previously defined:
-		 * - html: .phtml
-		 * - json: .php
-		 *
-		 * The file must be located into "app/template/".
+		 * Template's file used to render views, without extension (.php).
+		 * Must be located into "app/template/".
 		 */
 		'file' => 'main'
 	),
@@ -42,6 +29,12 @@ return array(
 		 */
 		'home' => array(
 
+			/**
+			 * Use a specific template for the "home" module.
+			 */
+			'template' => array(
+				'file' => 'main_home'
+			)
 		),
 
 		/**
@@ -61,21 +54,6 @@ return array(
 			'cache' => array(
 				'type' => 'static',
 				'ttl'  => 3600
-			)
-
-		),
-
-		/**
-		 * For the "api" view of the "home" module.
-		 */
-		'home/api' => array(
-
-			/**
-			 * We set a specific template for this view, with a JSON type.
-			 */
-			'template' => array(
-				'type' => 'json',
-				'file' => 'api'
 			)
 
 		),
