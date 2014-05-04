@@ -72,7 +72,7 @@ class Router
 
 		$controllerPath = APP_PATH
                           . Agl::APP_PHP_DIR
-                          . Controller::APP_PHP_CONTROLLER_DIR
+                          . Controller::APP_PHP_DIR
                           . DS
                           . $this->_module
                           . DS
@@ -80,7 +80,7 @@ class Router
                           . Agl::PHP_EXT;
 
         if (file_exists($controllerPath)) {
-            $className = $this->_module . ucfirst($this->_view) . Controller::APP_CONTROLLER_SUFFIX;
+            $className = $this->_module . ucfirst($this->_view) . Controller::APP_SUFFIX;
             $this->_controller = Agl::getInstance($className);
         } else {
             $this->_controller = new Controller();

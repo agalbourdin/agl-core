@@ -14,12 +14,12 @@ interface ModelInterface
 	/**
      * The suffix used by the application's model class names.
      */
-    const APP_MODEL_SUFFIX = 'Model';
+    const APP_SUFFIX = 'Model';
 
     /**
      * The application directory to search a Model class.
      */
-    const APP_PHP_MODEL_DIR = 'model';
+    const APP_PHP_DIR = 'model';
 
     /**
      * The suffix used by the application's helper class names.

@@ -187,8 +187,7 @@ abstract class ViewAbstract
 
 		if (isset($template['file'])) {
 			$template = APP_PATH
-				        . static::APP_HTTP_TEMPLATE_DIR
-				        . DS
+				        . Agl::APP_TEMPLATE_DIR
 				        . $template['file']
 				        . static::FILE_EXT;
 
@@ -263,7 +262,7 @@ abstract class ViewAbstract
 
 		$blockPath = APP_PATH
 					. Agl::APP_PHP_DIR
-                    . BlockInterface::APP_PHP_BLOCK_DIR
+                    . BlockInterface::APP_PHP_DIR
                     . DS
                     . $blockPathInfos[1]
                     . DS
@@ -271,7 +270,7 @@ abstract class ViewAbstract
                     . Agl::PHP_EXT;
 
         if (file_exists($blockPath)) {
-            $className = $blockPathInfos[1] . ucfirst($blockPathInfos[2]) . BlockInterface::APP_BLOCK_SUFFIX;
+            $className = $blockPathInfos[1] . ucfirst($blockPathInfos[2]) . BlockInterface::APP_SUFFIX;
             $blockModel = Agl::getInstance($className);
         } else {
             $blockModel = new Block();
@@ -311,9 +310,8 @@ abstract class ViewAbstract
 	public function getPath()
 	{
 		return APP_PATH
-	           . static::APP_HTTP_TEMPLATE_DIR
-	           . DS
-	           . static::APP_HTTP_VIEW_DIR
+	           . Agl::APP_TEMPLATE_DIR
+	           . static::APP_HTTP_DIR
 	           . DS
 	           . $this->_file;
 	}

@@ -29,12 +29,12 @@ interface ViewInterface
     /**
 	 * The application directory to search a View class.
 	 */
-	const APP_PHP_VIEW_DIR = 'view';
+	const APP_PHP_DIR = 'view';
 
     /**
      *  The default Web Modules directory.
      */
-    const APP_HTTP_VIEW_DIR = 'view';
+    const APP_HTTP_DIR = 'view';
 
     /**
      *  The Web module config file name.
@@ -71,11 +71,6 @@ interface ViewInterface
      * 403 error page path.
      */
     const ERROR_403 = 'error/auth';
-
-    /**
-     * HTTP layouts directory.
-     */
-    const APP_HTTP_TEMPLATE_DIR = 'app/template';
 
     public function setFile($pFile);
     public function startBuffer();

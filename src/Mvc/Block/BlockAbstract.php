@@ -174,9 +174,8 @@ abstract class BlockAbstract
 		extract($this->_vars);
 
 		$path = APP_PATH
-		        . ViewInterface::APP_HTTP_TEMPLATE_DIR
-		        . DS
-		        . static::APP_HTTP_BLOCK_DIR
+		        . Agl::APP_TEMPLATE_DIR
+		        . static::APP_HTTP_DIR
 		        . DS
 		        . $this->_file;
 

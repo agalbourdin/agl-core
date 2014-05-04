@@ -59,8 +59,8 @@ class Loader
             }
         } else if (strpos($pClass, ModelInterface::APP_PHP_HELPER_DIR) === 0) {
             return self::getHelper(str_replace(ModelInterface::APP_PHP_HELPER_DIR . '/', '', $pClass));
-        } else if (strpos($pClass, ModelInterface::APP_PHP_MODEL_DIR) === 0) {
-            return self::getModel(str_replace(ModelInterface::APP_PHP_MODEL_DIR . '/', '', $pClass));
+        } else if (strpos($pClass, ModelInterface::APP_PHP_DIR) === 0) {
+            return self::getModel(str_replace(ModelInterface::APP_PHP_DIR . '/', '', $pClass));
         } else if (strpos($pClass, CollectionInterface::APP_PHP_DIR) === 0) {
             return self::getCollection(str_replace(CollectionInterface::APP_PHP_DIR . '/', '', $pClass));
         }
@@ -114,12 +114,12 @@ class Loader
     public static function getModel($pModel, array $pFields = array())
     {
         $fileName  = strtolower($pModel);
-        $className = $fileName . ModelInterface::APP_MODEL_SUFFIX;
+        $className = $fileName . ModelInterface::APP_SUFFIX;
 
         if (Agl::isInitialized()) {
             $modelPath = APP_PATH
                          . Agl::APP_PHP_DIR
-                         . ModelInterface::APP_PHP_MODEL_DIR
+                         . ModelInterface::APP_PHP_DIR
                          . DS
                          . $fileName
                          . Agl::PHP_EXT;

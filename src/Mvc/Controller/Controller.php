@@ -33,12 +33,12 @@ class Controller
 	/**
 	 * The suffix used by the application's controller class names.
 	 */
-	const APP_CONTROLLER_SUFFIX = 'Controller';
+	const APP_SUFFIX = 'Controller';
 
 	/**
 	 * The application directory to search a Controller class.
 	 */
-	const APP_PHP_CONTROLLER_DIR = 'controller';
+	const APP_PHP_DIR = 'controller';
 
 	/**
 	 * Return a TTL and a cache key composed of the module, the view, the
@@ -117,7 +117,7 @@ class Controller
 
 		$viewPath = APP_PATH
                     . Agl::APP_PHP_DIR
-                    . ViewInterface::APP_PHP_VIEW_DIR
+                    . ViewInterface::APP_PHP_DIR
                     . DS
                     . $module
                     . DS

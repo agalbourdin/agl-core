@@ -14,17 +14,17 @@ interface BlockInterface
 	/**
      * The suffix used in the application's Blocks class names.
      */
-    const APP_BLOCK_SUFFIX = 'Block';
+    const APP_SUFFIX = 'Block';
 
     /**
      * The application's block directory.
      */
-    const APP_PHP_BLOCK_DIR = 'block';
+    const APP_PHP_DIR = 'block';
 
     /**
      * The application's HTTP block directory.
      */
-    const APP_HTTP_BLOCK_DIR = 'block';
+    const APP_HTTP_DIR = 'block';
 
     /**
      * Prefix for the cache files.
