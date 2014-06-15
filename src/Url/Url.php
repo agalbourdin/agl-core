@@ -143,7 +143,6 @@ class Url
     public static function getSkin($pUrl, $pRelative = true)
     {
         $url = Agl::APP_PUBLIC_DIR
-               . DS
                . ViewInterface::APP_HTTP_SKIN_DIR
                . DS
                . $pUrl;
@@ -165,7 +164,6 @@ class Url
     public static function getPublic($pUrl, $pRelative = true)
     {
         $url = Agl::APP_PUBLIC_DIR
-               . DS
                . $pUrl;
 
         if ($pRelative) {

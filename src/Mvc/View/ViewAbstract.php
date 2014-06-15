@@ -113,7 +113,6 @@ abstract class ViewAbstract
 	{
 		return ROOT
 			   . Agl::APP_PUBLIC_DIR
-			   . DS
 			   . static::APP_HTTP_SKIN_DIR
 			   . DS;
 	}
